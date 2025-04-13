@@ -1,6 +1,9 @@
 import streamlit as st
 from PIL import Image
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 import os
+import io
 
 # --- Functions ---
 def calculate_bsa(height_cm, weight_kg):
@@ -36,7 +39,6 @@ def calculate_heparin_dose(weight_kg):
 
 # --- Streamlit UI ---
 st.title("🫀 Pre-CPB Planning Tool")
-st.markdown("Built for perfusionists – enter patient data to instantly calculate flows, Hct, DO₂, and more.")
 
 # --- Patient Info ---
 st.header("Patient Data")
@@ -49,6 +51,9 @@ with col2:
     pre_hgb = st.number_input("Pre-op Hemoglobin (g/dL)", value=pre_hct * 0.34)
 
 prime_vol = st.number_input("Circuit Prime Volume (mL)", value=1400)
+base_prime = st.selectbox("Base Prime Fluid", ["None", "Plasmalyte A", "Normosol-R"])
+prime_additives = st.multiselect("Prime Additives", ["Albumin", "Mannitol", "Heparin", "Bicarb", "Calcium", "Magnesium"])
+
 target_hct = st.number_input("Target Hematocrit (%)", value=25.0)
 
 # --- Comorbidities ---
@@ -69,8 +74,6 @@ if "Dissection Repair – Stanford Type A" in procedure or "Full Arch" in proced
     arrest_temp = st.number_input("Target Arrest Temperature (°C)", value=18)
     arrest_duration = st.number_input("Expected Arrest Duration (min)", value=30)
     neuro_strategy = st.selectbox("Neuroprotection Strategy", ["None", "RCP", "ACP"])
-    if neuro_strategy == "ACP":
-        delivery_site = st.selectbox("ACP Delivery Site", ["Right SVC", "Innominate Artery", "Axillary Artery"])
 
 # --- Cardioplegia ---
 st.subheader("Cardioplegia Selection")
@@ -78,65 +81,94 @@ cardioplegia_type = st.selectbox("Cardioplegia Type", [
     "Del Nido", "Buckberg", "Custodial (HTK)", "Blood Cardioplegia", "Custom"
 ])
 delivery_routes = st.multiselect("Delivery Routes", ["Antegrade", "Retrograde", "Ostial"])
+
 if cardioplegia_type == "Custom":
-    custom_ratio = st.text_input("Enter Custom Ratio (e.g., 4:1)")
-    custom_volume = st.number_input("Enter Custom Volume (mL)", value=1000)
+    st.text_input("Custom Ratio (Blood:Crystalloid)", value="4:1")
+    st.number_input("Custom Volume (mL)", value=1000)
+    with st.expander("Additives"):
+        st.number_input("K⁺ [mEq]", value=0)
+        st.number_input("Mg²⁺ [mEq]", value=0)
+        st.number_input("HCO₃⁻ [mEq]", value=0)
 
 # --- CABG Graft Planner ---
 if procedure == "CABG":
     st.subheader("CABG Graft Planner")
     num_grafts = st.number_input("Number of Grafts", min_value=1, max_value=5, step=1)
-
+    image_dir = "images"
     for i in range(int(num_grafts)):
-        st.markdown(f"**Graft {i+1}**")
-        origin = st.selectbox(f"Graft {i+1} Origin", ["LIMA", "RIMA", "SVG", "Radial"], key=f"origin_{i}")
         target = st.selectbox(f"Graft {i+1} Target", ["LAD", "LCx", "OM1", "OM2", "PDA", "RCA"], key=f"target_{i}")
-        graft_type = st.selectbox(f"Graft Type", ["in situ", "free", "composite", "none"], key=f"type_{i}")
+        images = [img for img in os.listdir(image_dir) if target.lower() in img.lower()]
+        if images:
+            for img in images:
+                st.image(os.path.join(image_dir, img), width=200, caption=img)
+        uploaded_file = st.file_uploader(f"Optional: Upload custom diagram for Graft {i+1}", type=["png", "jpg", "jpeg"], key=f"upload_{i}")
+        if uploaded_file:
+            st.image(uploaded_file, width=200, caption="Custom Upload")
 
-        filename = None
-        if graft_type == "composite" and origin == "RIMA" and target == "LCx":
-            filename = "composite_lima_rima_lcx.png"
-        elif origin == "Radial" and target == "RCA":
-            filename = "radial_rca.png"
-        elif origin == "RIMA" and target == "LCx" and graft_type == "free":
-            filename = "rima_lcx_free.png"
-        elif origin == "RIMA" and target == "LCx" and graft_type == "in situ":
-            filename = "rima_lcx_insitu.png"
-        elif origin == "RIMA" and target == "RCA":
-            filename = "rima_rca.png"
-        elif origin == "SVG" and target == "LAD":
-            filename = "graft_overview_before_after.png"
-
-        if filename and os.path.exists(filename):
-            image = Image.open(filename)
-            st.image(image, caption=f"{origin} → {target} ({graft_type})", use_column_width=True)
-        else:
-            st.warning(f"No diagram found for {origin} → {target} ({graft_type})")
+# --- Phenylephrine Calculator ---
+st.subheader("Phenylephrine Dilution")
+neo_dose = st.number_input("Total Drug Dose (mg)", value=10.0)
+neo_vol = st.number_input("Total Volume (mL)", value=100.0)
+if neo_vol > 0:
+    neo_conc = round((neo_dose * 1000) / neo_vol, 1)
+    st.write(f"**Concentration:** {neo_conc} mcg/mL")
+    st.write("**Bolus Dose:** 40–100 mcg | **Infusion:** 0.2–1 mcg/kg/min")
 
 # --- Calculations ---
 bsa = calculate_bsa(height, weight)
 blood_vol = calculate_blood_volume(weight)
 post_hct = calculate_post_dilution_hct(pre_hct, blood_vol, prime_vol)
 rbc_units = calculate_rbc_units_needed(post_hct, target_hct)
-flow_1_8 = calculate_flow(1.8, bsa)
-flow_2_4 = calculate_flow(2.4, bsa)
-flow_3_0 = calculate_flow(3.0, bsa)
-do2 = calculate_do2(flow_2_4, pre_hgb)
+flow = calculate_flow(2.4, bsa)
+do2 = calculate_do2(flow, pre_hgb)
+do2i = round(do2 / bsa, 1)
 map_target = get_map_target(comorbidities)
 heparin_dose = calculate_heparin_dose(weight)
 
+# --- Recommendation ---
+if "Albumin" not in prime_additives and (pre_hct < 30 or weight < 60 or any(x in comorbidities for x in ["CKD", "Jehovah’s Witness", "Anemia"])):
+    st.warning("💡 Consider Albumin in prime for volume support and oncotic pressure.")
+
 # --- Results ---
 st.header("📊 Calculated Outputs")
-st.write(f"**BSA:** {bsa} m²")
-st.write(f"**Estimated Blood Volume:** {blood_vol} mL")
-st.write(f"**Post-Dilution Hematocrit:** {post_hct}%")
-st.write(f"**Estimated RBC Units Needed to Reach {target_hct}% Hct:** {rbc_units}")
-st.write("---")
-st.write("**Flow Targets:**")
-st.write(f"- CI 1.8 = {flow_1_8} L/min")
-st.write(f"- CI 2.4 = {flow_2_4} L/min")
-st.write(f"- CI 3.0 = {flow_3_0} L/min")
-st.write("---")
-st.write(f"**Estimated DO₂ @ CI 2.4:** {do2} mL/min")
-st.write(f"**Suggested MAP Target:** {map_target}")
-st.write(f"**Heparin Dose (400 units/kg):** {heparin_dose} units")
+st.write(f"BSA: {bsa} m²")
+st.write(f"Estimated Blood Volume: {blood_vol} mL")
+st.write(f"Post-Dilution Hct: {post_hct}%")
+st.write(f"RBC Units Needed: {rbc_units}")
+st.write(f"DO₂: {do2} mL/min | DO₂i: {do2i} mL/min/m²")
+st.write(f"MAP Target: {map_target} | Heparin Dose: {heparin_dose} units")
+
+# --- Perfusion Guidelines ---
+st.subheader("🧠 Perfusion Guidelines")
+if procedure.startswith("Dissection") or procedure.startswith("Full Arch"):
+    if neuro_strategy == "ACP":
+        st.info(f"ACP Flow: {int(weight*10)} mL/min | Pressure: 50–70 mmHg")
+    if neuro_strategy == "RCP":
+        st.info("RCP Max Sinus Pressure: ≤ 25 mmHg")
+if "Retrograde" in delivery_routes:
+    st.info("Retrograde Plegia: Sinus pressure ≤ 40 mmHg")
+if "Antegrade" in delivery_routes:
+    st.info("Antegrade Plegia: ≈ 200 mmHg line pressure")
+if "Ostial" in delivery_routes:
+    st.info("Ostial: 1 = 100–150 mmHg | 2 = ≈ 200 mmHg")
+if procedure == "CABG":
+    st.info("Vein Graft Test Flow: 50–70 mL/min @ ≈100 mmHg")
+
+# --- Lab Reference Chart ---
+st.subheader("🧪 Normal ABG & Electrolyte Ranges")
+st.table({
+    "Parameter": ["pH", "pCO₂", "pO₂", "HCO₃⁻", "Base Excess", "Lactate", "Ionized Ca²⁺", "Na⁺", "K⁺", "Cl⁻", "Mg²⁺", "Glucose"],
+    "Range": ["7.35–7.45", "35–45 mmHg", "80–100 mmHg", "22–26 mmol/L", "-2 to +2", "0.5–2.0", "1.0–1.3 mmol/L", "135–145", "3.5–5.0", "95–105", "1.7–2.2", "110–180 (on bypass)"]
+})
+
+# --- PDF Report Download ---
+st.subheader("📥 Download Report")
+pdf_buffer = io.BytesIO()
+pdf = canvas.Canvas(pdf_buffer, pagesize=letter)
+pdf.drawString(50, 750, "Pre-CPB Summary Report")
+pdf.drawString(50, 730, f"BSA: {bsa} m² | DO₂i: {do2i} mL/min/m²")
+pdf.drawString(50, 710, f"Hct: {post_hct}% | RBC Units: {rbc_units}")
+pdf.drawString(50, 690, f"MAP Target: {map_target}")
+pdf.drawString(50, 670, f"Prime: {base_prime} + {', '.join(prime_additives)}")
+pdf.save()
+st.download_button("Download PDF", data=pdf_buffer.getvalue(), file_name="pre_cpb_summary.pdf", mime="application/pdf")
