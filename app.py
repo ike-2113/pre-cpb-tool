@@ -1,7 +1,9 @@
 import streamlit as st
 from PIL import Image
-from reportlab.pdfgen import canvas
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image as RLImage
+from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
 import os
 import io
 
@@ -43,7 +45,6 @@ def calculate_heparin_dose(weight_kg):
 # --- UI ---
 st.title("🫀 Pre-CPB Planning Tool")
 
-# --- Patient Info ---
 st.header("Patient Data")
 col1, col2 = st.columns(2)
 with col1:
@@ -70,26 +71,22 @@ valve_issues = st.multiselect("Valve Pathology", [
     "Mitral Regurgitation", "Tricuspid Regurgitation", "Valve Prolapse"
 ])
 
-# --- Procedure Type ---
 procedure = st.selectbox("Procedure Type", [
     "CABG", "AVR", "MVR", "Transplant", "Hemiarch", "Bentall", 
     "Full Arch", "Dissection Repair – Stanford Type A", "Dissection Repair – Stanford Type B",
     "LVAD", "Off-pump CABG", "ECMO Cannulation", "Standby", "Other"
 ])
 
-# --- Arrest Strategy ---
 if "Dissection Repair – Stanford Type A" in procedure or "Full Arch" in procedure:
     st.subheader("Circulatory Arrest Planning")
     arrest_temp = st.number_input("Target Arrest Temperature (°C)", value=18)
     arrest_duration = st.number_input("Expected Arrest Duration (min)", value=30)
     neuro_strategy = st.selectbox("Neuroprotection Strategy", ["None", "RCP", "ACP"])
 
-# --- Cardioplegia ---
 st.subheader("Cardioplegia Selection")
 cardioplegia_type = st.selectbox("Cardioplegia Type", ["Del Nido", "Buckberg", "Custodial (HTK)", "Blood Cardioplegia", "Custom"])
 delivery_routes = st.multiselect("Delivery Routes", ["Antegrade", "Retrograde", "Ostial"])
 
-# --- Custom Plegia ---
 if cardioplegia_type == "Custom":
     st.text_input("Custom Ratio (Blood:Crystalloid)", value="4:1")
     st.number_input("Custom Volume (mL)", value=1000)
@@ -98,7 +95,6 @@ if cardioplegia_type == "Custom":
         st.number_input("Mg²⁺ [mEq]", value=0)
         st.number_input("HCO₃⁻ [mEq]", value=0)
 
-# --- CABG Graft Planner ---
 selected_graft_images = []
 if procedure == "CABG":
     st.subheader("CABG Graft Planner")
@@ -124,7 +120,6 @@ if procedure == "CABG":
         if uploaded_file:
             st.image(uploaded_file, width=250, caption=f"Custom Upload for {target}")
 
-# --- Phenylephrine ---
 st.subheader("Phenylephrine Dilution")
 neo_dose = st.number_input("Total Drug Dose (mg)", value=10.0)
 neo_vol = st.number_input("Total Volume (mL)", value=100.0)
@@ -132,7 +127,6 @@ if neo_vol > 0:
     conc = round((neo_dose * 1000) / neo_vol, 1)
     st.write(f"**Concentration:** {conc} mcg/mL")
 
-# --- Calculations ---
 blood_vol = calculate_blood_volume(weight)
 post_hct = calculate_post_dilution_hct(pre_hct, blood_vol, prime_vol)
 rbc_units = calculate_rbc_units_needed(post_hct, target_hct)
@@ -144,7 +138,6 @@ do2i = round(do2 / bsa, 1)
 map_target = get_map_target(comorbidities)
 heparin_dose = calculate_heparin_dose(weight)
 
-# --- Output ---
 st.header("📊 Calculated Outputs")
 st.write(f"BMI: {bmi} | BSA: {bsa} m²")
 st.write(f"Estimated Blood Volume: {blood_vol} mL")
@@ -156,20 +149,69 @@ st.write(f"DO₂: {do2} mL/min | DO₂i: {do2i} mL/min/m²")
 st.write(f"MAP Target: {map_target}")
 st.write(f"Heparin Dose: {heparin_dose} units")
 
-# --- PDF Export ---
 pdf_buffer = io.BytesIO()
-pdf = canvas.Canvas(pdf_buffer, pagesize=letter)
-pdf.drawString(50, 750, "🫀 Pre-CPB Summary Report")
-pdf.drawString(50, 735, f"BMI: {bmi} | BSA: {bsa} m² | DO₂i: {do2i} mL/min/m²")
-pdf.drawString(50, 720, f"Hct: {post_hct}% | RBC Units: {rbc_units}")
-pdf.drawString(50, 705, f"Flow CI 1.8: {flow_1_8}  2.4: {flow_2_4}  3.0: {flow_3_0}")
-pdf.drawString(50, 690, f"MAP Target: {map_target} | Heparin: {heparin_dose} units")
-pdf.drawString(50, 675, f"EF: {ef}% | Valve: {', '.join(valve_issues)}")
-pdf.drawString(50, 660, f"Comorbidities: {', '.join(comorbidities)}")
-pdf.drawString(50, 645, f"Cardioplegia: {cardioplegia_type} via {', '.join(delivery_routes)}")
-pdf.drawString(50, 630, f"Prime: {base_prime} + {', '.join(prime_additives)}")
-for i, img in enumerate(selected_graft_images):
-    pdf.drawString(50, 615 - (i * 15), f"Graft {i+1} Diagram: {img}")
-pdf.save()
+doc = SimpleDocTemplate(pdf_buffer, pagesize=letter, rightMargin=50, leftMargin=50, topMargin=50, bottomMargin=50)
+styles = getSampleStyleSheet()
+story = []
 
-st.download_button("📥 Download PDF", data=pdf_buffer.getvalue(), file_name="pre_cpb_summary.pdf", mime="application/pdf")
+story.append(Paragraph("🫀 <b>Pre-CPB Summary Report</b>", styles['Title']))
+story.append(Spacer(1, 12))
+
+story.append(Paragraph("<b>Patient Data</b>", styles['Heading2']))
+story.append(Paragraph(f"BMI: {bmi} | BSA: {bsa} m² | EF: {ef}%", styles['Normal']))
+story.append(Paragraph(f"Valve Pathologies: {', '.join(valve_issues) or 'None'}", styles['Normal']))
+story.append(Paragraph(f"Comorbidities: {', '.join(comorbidities) or 'None'}", styles['Normal']))
+story.append(Spacer(1, 12))
+
+story.append(Paragraph("<b>Perfusion Parameters</b>", styles['Heading2']))
+perf_table = Table([
+    ["Flow (CI)", "Value (L/min)"],
+    ["1.8", flow_1_8],
+    ["2.4", flow_2_4],
+    ["3.0", flow_3_0],
+])
+perf_table.setStyle(TableStyle([
+    ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+    ("GRID", (0, 0), (-1, -1), 1, colors.black),
+    ("ALIGN", (1, 1), (-1, -1), "CENTER"),
+]))
+story.append(perf_table)
+story.append(Spacer(1, 12))
+
+story.append(Paragraph(f"Estimated Blood Volume: {blood_vol} mL", styles['Normal']))
+story.append(Paragraph(f"Post-Dilution Hematocrit: {post_hct}% | Target: {target_hct}%", styles['Normal']))
+story.append(Paragraph(f"Estimated RBC Units Needed: {rbc_units}", styles['Normal']))
+story.append(Paragraph(f"DO₂: {do2} mL/min | DO₂i: {do2i} mL/min/m²", styles['Normal']))
+story.append(Paragraph(f"MAP Target: {map_target}", styles['Normal']))
+story.append(Paragraph(f"Heparin Dose: {heparin_dose} units", styles['Normal']))
+story.append(Spacer(1, 12))
+
+story.append(Paragraph("<b>Cardioplegia</b>", styles['Heading2']))
+story.append(Paragraph(f"Type: {cardioplegia_type} via {', '.join(delivery_routes)}", styles['Normal']))
+story.append(Spacer(1, 12))
+
+story.append(Paragraph("<b>Prime Strategy</b>", styles['Heading2']))
+story.append(Paragraph(f"Base: {base_prime} | Additives: {', '.join(prime_additives) or 'None'}", styles['Normal']))
+story.append(Spacer(1, 12))
+
+if "arrest_temp" in locals():
+    story.append(Paragraph("<b>Circulatory Arrest</b>", styles['Heading2']))
+    story.append(Paragraph(f"Target Temperature: {arrest_temp}°C", styles['Normal']))
+    story.append(Paragraph(f"Planned Duration: {arrest_duration} min", styles['Normal']))
+    story.append(Paragraph(f"Neuroprotection Strategy: {neuro_strategy}", styles['Normal']))
+    story.append(Spacer(1, 12))
+
+if selected_graft_images:
+    story.append(Paragraph("<b>Graft Diagrams</b>", styles['Heading2']))
+    for i, img in enumerate(selected_graft_images):
+        story.append(Paragraph(f"Graft {i+1}: {img}", styles['Normal']))
+        try:
+            graft_img_path = os.path.join("images", img)
+            story.append(RLImage(graft_img_path, width=200, height=150))
+        except Exception as e:
+            story.append(Paragraph(f"(Image failed to load: {e})", styles['Italic']))
+        story.append(Spacer(1, 10))
+
+doc.build(story)
+
+st.download_button("📅 Download PDF", data=pdf_buffer.getvalue(), file_name="pre_cpb_summary.pdf", mime="application/pdf")
