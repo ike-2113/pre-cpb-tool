@@ -53,7 +53,6 @@ with col2:
 prime_vol = st.number_input("Circuit Prime Volume (mL)", value=1400)
 base_prime = st.selectbox("Base Prime Fluid", ["None", "Plasmalyte A", "Normosol-R"])
 prime_additives = st.multiselect("Prime Additives", ["Albumin", "Mannitol", "Heparin", "Bicarb", "Calcium", "Magnesium"])
-
 target_hct = st.number_input("Target Hematocrit (%)", value=25.0)
 
 # --- Comorbidities ---
@@ -97,11 +96,22 @@ if procedure == "CABG":
     image_dir = "images"
     for i in range(int(num_grafts)):
         target = st.selectbox(f"Graft {i+1} Target", ["LAD", "LCx", "OM1", "OM2", "PDA", "RCA"], key=f"target_{i}")
-        images = [img for img in os.listdir(image_dir) if target.lower() in img.lower()]
-        if images:
-            for img in images:
-                st.image(os.path.join(image_dir, img), width=200, caption=img)
-        uploaded_file = st.file_uploader(f"Optional: Upload custom diagram for Graft {i+1}", type=["png", "jpg", "jpeg"], key=f"upload_{i}")
+        
+        if os.path.isdir(image_dir):
+            images = [img for img in os.listdir(image_dir) if target.lower() in img.lower()]
+            if images:
+                for img in images:
+                    st.image(os.path.join(image_dir, img), width=200, caption=img)
+            else:
+                st.info("No matching diagrams found. Upload your own below.")
+        else:
+            st.warning("⚠️ Diagram folder not found. Upload a custom image below.")
+        
+        uploaded_file = st.file_uploader(
+            f"Optional: Upload custom diagram for Graft {i+1}",
+            type=["png", "jpg", "jpeg"],
+            key=f"upload_{i}"
+        )
         if uploaded_file:
             st.image(uploaded_file, width=200, caption="Custom Upload")
 
