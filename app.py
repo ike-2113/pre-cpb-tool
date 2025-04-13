@@ -107,15 +107,22 @@ if procedure == "CABG":
 
     for i in range(int(num_grafts)):
         target = st.selectbox(f"Graft {i+1} Target", ["LAD", "LCx", "OM1", "OM2", "PDA", "RCA"], key=f"target_{i}")
+        selected_file = None
+
         if os.path.isdir(image_dir):
-            matched = [img for img in os.listdir(image_dir) if target.lower() in img.lower()]
-            selected = st.selectbox(f"Select Diagram for {target}", matched, key=f"select_{i}") if matched else None
-            if selected:
-                selected_graft_images.append(selected)
-                st.image(os.path.join(image_dir, selected), width=200, caption=selected)
+            matched_images = [img for img in os.listdir(image_dir) if target.lower() in img.lower()]
+            if matched_images:
+                selected_file = matched_images[0]
+                selected_graft_images.append(selected_file)
+                st.image(os.path.join(image_dir, selected_file), width=250, caption=f"{target} Graft Diagram")
+            else:
+                st.info(f"No diagram found for {target}. You can upload one below.")
+        else:
+            st.warning("⚠️ Diagram folder not found.")
+
         uploaded_file = st.file_uploader(f"Or upload custom image for Graft {i+1}", type=["png", "jpg"], key=f"upload_{i}")
         if uploaded_file:
-            st.image(uploaded_file, width=200, caption="Custom Upload")
+            st.image(uploaded_file, width=250, caption=f"Custom Upload for {target}")
 
 # --- Phenylephrine ---
 st.subheader("Phenylephrine Dilution")
