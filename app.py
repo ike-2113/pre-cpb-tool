@@ -1,11 +1,14 @@
+# app.py
+
 import streamlit as st
+import os
+import io
+import pathlib
 from PIL import Image
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image as RLImage
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
-import os
-import io
 
 # --- Functions ---
 def calculate_bsa(height_cm, weight_kg):
@@ -45,6 +48,7 @@ def calculate_heparin_dose(weight_kg):
 # --- UI ---
 st.title("Pre-CPB Planning Tool")
 
+# --- Patient Info ---
 st.header("Patient Data")
 col1, col2 = st.columns(2)
 with col1:
@@ -77,14 +81,15 @@ procedure = st.selectbox("Procedure Type", [
     "LVAD", "Off-pump CABG", "ECMO Cannulation", "Standby", "Other"
 ])
 
-cooling_temp = None
 if "Dissection Repair – Stanford Type A" in procedure or "Full Arch" in procedure:
     st.subheader("Circulatory Arrest Planning")
     arrest_temp = st.number_input("Target Arrest Temperature (°C)", value=18)
-    cooling_temp = arrest_temp
     arrest_duration = st.number_input("Expected Arrest Duration (min)", value=30)
     neuro_strategy = st.selectbox("Neuroprotection Strategy", ["None", "RCP", "ACP"])
+else:
+    arrest_temp = None
 
+# --- Cardioplegia ---
 st.subheader("Cardioplegia Selection")
 cardioplegia_type = st.selectbox("Cardioplegia Type", ["Del Nido", "Buckberg", "Custodial (HTK)", "Blood Cardioplegia", "Custom"])
 delivery_routes = st.multiselect("Delivery Routes", ["Antegrade", "Retrograde", "Ostial"])
@@ -97,31 +102,26 @@ if cardioplegia_type == "Custom":
         st.number_input("Mg²⁺ [mEq]", value=0)
         st.number_input("HCO₃⁻ [mEq]", value=0)
 
+# --- CABG ---
 selected_graft_images = []
 if procedure == "CABG":
     st.subheader("CABG Graft Planner")
     num_grafts = st.number_input("Number of Grafts", min_value=1, max_value=5, step=1)
-    image_dir = "images"
+    image_dir = pathlib.Path(__file__).parent / "images"
 
     for i in range(int(num_grafts)):
         target = st.selectbox(f"Graft {i+1} Target", ["LAD", "LCx", "OM1", "OM2", "PDA", "RCA"], key=f"target_{i}")
-        selected_file = None
-
-        if os.path.isdir(image_dir):
-            matched_images = [img for img in os.listdir(image_dir) if target.lower() in img.lower()]
-            if matched_images:
-                selected_file = matched_images[0]
-                selected_graft_images.append(selected_file)
-                st.image(os.path.join(image_dir, selected_file), width=250, caption=f"{target} Graft Diagram")
-            else:
-                st.info(f"No diagram found for {target}. You can upload one below.")
-        else:
-            st.warning("⚠️ Diagram folder not found.")
+        matched_images = [img for img in os.listdir(image_dir) if target.lower() in img.lower()] if image_dir.exists() else []
+        if matched_images:
+            selected_file = matched_images[0]
+            selected_graft_images.append(selected_file)
+            st.image(image_dir / selected_file, width=250, caption=f"{target} Graft Diagram")
 
         uploaded_file = st.file_uploader(f"Or upload custom image for Graft {i+1}", type=["png", "jpg"], key=f"upload_{i}")
         if uploaded_file:
             st.image(uploaded_file, width=250, caption=f"Custom Upload for {target}")
 
+# --- Phenylephrine ---
 st.subheader("Phenylephrine Dilution")
 neo_dose = st.number_input("Total Drug Dose (mg)", value=10.0)
 neo_vol = st.number_input("Total Volume (mL)", value=100.0)
@@ -129,61 +129,108 @@ if neo_vol > 0:
     conc = round((neo_dose * 1000) / neo_vol, 1)
     st.write(f"**Concentration:** {conc} mcg/mL")
 
-# --- Smart CI/DO2 Targeting Logic ---
-ci_recommendation = 2.4
-if ef < 35:
-    ci_recommendation = 2.6
-elif ef > 60:
-    ci_recommendation = 2.2
-if "CKD" in comorbidities or "Anemia" in comorbidities:
-    ci_recommendation += 0.2
-if cooling_temp and cooling_temp < 22:
-    ci_recommendation -= 0.2
-ci_recommendation = max(1.8, min(ci_recommendation, 3.0))
-flow_suggested = calculate_flow(ci_recommendation, bsa)
-
+# --- Calculations ---
 blood_vol = calculate_blood_volume(weight)
 post_hct = calculate_post_dilution_hct(pre_hct, blood_vol, prime_vol)
 rbc_units = calculate_rbc_units_needed(post_hct, target_hct)
+
 flow_1_8 = calculate_flow(1.8, bsa)
 flow_2_4 = calculate_flow(2.4, bsa)
 flow_3_0 = calculate_flow(3.0, bsa)
+
+# Suggested CI based on EF + arrest temp
+suggested_ci = 2.4
+if ef < 40:
+    suggested_ci = 2.6
+elif ef < 30:
+    suggested_ci = 2.8
+if arrest_temp and arrest_temp < 22:
+    suggested_ci -= 0.2
+
+flow_suggested = calculate_flow(suggested_ci, bsa)
 do2 = calculate_do2(flow_suggested, pre_hgb)
 do2i = round(do2 / bsa, 1)
+
 map_target = get_map_target(comorbidities)
 heparin_dose = calculate_heparin_dose(weight)
 
-# --- Warnings ---
-if do2i < 280:
-    st.warning(f"DO₂i is low ({do2i} mL/min/m²). Consider increasing flow or Hgb.")
-if post_hct < 21:
-    st.warning(f"Post-dilution Hct is critically low ({post_hct}%). Consider transfusion.")
-
+# --- Output ---
 st.header("📊 Calculated Outputs")
 st.write(f"BMI: {bmi} | BSA: {bsa} m²")
 st.write(f"Flow @ CI 1.8: {flow_1_8} L/min")
 st.write(f"Flow @ CI 2.4: {flow_2_4} L/min")
 st.write(f"Flow @ CI 3.0: {flow_3_0} L/min")
-st.write(f"Target Flow (based on patient condition): {flow_suggested} L/min (CI {ci_recommendation:.1f})")
+st.write(f"Target Flow (based on patient condition): {flow_suggested} L/min (CI {suggested_ci})")
 st.write(f"Estimated Blood Volume: {blood_vol} mL")
 st.write(f"Post-Dilution Hct: {post_hct}% | RBC Units Needed: {rbc_units}")
 st.write(f"DO₂: {do2} mL/min | DO₂i: {do2i} mL/min/m²")
 st.write(f"MAP Target: {map_target}")
 st.write(f"Heparin Dose: {heparin_dose} units")
-if cooling_temp:
-    st.write(f"Target Cooling Temp: {cooling_temp}°C")
 
-# Append to PDF summary (new block)
-pdf_summary = [
-    Paragraph(f"<b>CI-Based Flow Target:</b> {flow_suggested} L/min (CI {ci_recommendation:.1f})", styles['Normal']),
-    Paragraph(f"<b>DO₂i:</b> {do2i} mL/min/m²", styles['Normal'])
-]
+# Alerts
 if do2i < 280:
-    pdf_summary.append(Paragraph("<font color='red'><b>⚠️ DO₂i below safe threshold. Consider increasing flow or Hgb.</b></font>", styles['Normal']))
+    st.warning(f"⚠️ DO₂i below safe threshold: {do2i} mL/min/m²")
 if post_hct < 21:
-    pdf_summary.append(Paragraph("<font color='red'><b>⚠️ Post-dilution Hct is critically low. Consider transfusion.</b></font>", styles['Normal']))
+    st.warning("⚠️ Post-dilution Hct is critically low")
 
-story.extend(pdf_summary)
+# --- PDF Export ---
+pdf_buffer = io.BytesIO()
+doc = SimpleDocTemplate(pdf_buffer, pagesize=letter, rightMargin=50, leftMargin=50, topMargin=50, bottomMargin=50)
+styles = getSampleStyleSheet()
+story = []
 
-# rest of PDF generation continues...
-# (existing doc.build(...) line stays unchanged)
+story.append(Paragraph(f"<b>Pre-CPB Summary Report</b> - {procedure}", styles['Title']))
+story.append(Spacer(1, 12))
+story.append(Paragraph("<b>Patient Data</b>", styles['Heading2']))
+story.append(Paragraph(f"BMI: {bmi} | BSA: {bsa} m² | EF: {ef}%", styles['Normal']))
+story.append(Paragraph(f"Valve Pathologies: {', '.join(valve_issues) or 'None'}", styles['Normal']))
+story.append(Paragraph(f"Comorbidities: {', '.join(comorbidities) or 'None'}", styles['Normal']))
+story.append(Spacer(1, 12))
+
+story.append(Paragraph("<b>Perfusion Parameters</b>", styles['Heading2']))
+perf_table = Table([
+    ["Flow (CI)", "Value (L/min)"],
+    ["1.8", flow_1_8],
+    ["2.4", flow_2_4],
+    ["3.0", flow_3_0],
+])
+perf_table.setStyle(TableStyle([
+    ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
+    ("GRID", (0, 0), (-1, -1), 1, colors.black),
+    ("ALIGN", (1, 1), (-1, -1), "CENTER"),
+]))
+story.append(perf_table)
+story.append(Spacer(1, 12))
+
+story.append(Paragraph(f"<b>Target Flow (CI-Based):</b> {flow_suggested} L/min (CI {suggested_ci})", styles['Normal']))
+story.append(Paragraph(f"Estimated Blood Volume: {blood_vol} mL", styles['Normal']))
+story.append(Paragraph(f"Post-Dilution Hct: {post_hct}% | Target: {target_hct}% | RBC Units: {rbc_units}", styles['Normal']))
+story.append(Paragraph(f"DO₂: {do2} mL/min | DO₂i: {do2i} mL/min/m²", styles['Normal']))
+story.append(Paragraph(f"MAP Target: {map_target}", styles['Normal']))
+story.append(Paragraph(f"Heparin Dose: {heparin_dose} units", styles['Normal']))
+if arrest_temp:
+    story.append(Paragraph(f"Cooling Temp Target: {arrest_temp}°C", styles['Normal']))
+story.append(Spacer(1, 12))
+
+story.append(Paragraph("<b>Cardioplegia</b>", styles['Heading2']))
+story.append(Paragraph(f"Type: {cardioplegia_type} via {', '.join(delivery_routes)}", styles['Normal']))
+story.append(Spacer(1, 12))
+
+story.append(Paragraph("<b>Prime Strategy</b>", styles['Heading2']))
+story.append(Paragraph(f"Base: {base_prime} | Additives: {', '.join(prime_additives) or 'None'}", styles['Normal']))
+story.append(Spacer(1, 12))
+
+if selected_graft_images:
+    story.append(Paragraph("<b>Graft Diagrams</b>", styles['Heading2']))
+    for i, img in enumerate(selected_graft_images):
+        story.append(Paragraph(f"Graft {i+1}: {img}", styles['Normal']))
+        try:
+            graft_img_path = image_dir / img
+            story.append(RLImage(str(graft_img_path), width=200, height=150))
+        except Exception as e:
+            story.append(Paragraph(f"(Image failed to load: {e})", styles['Italic']))
+        story.append(Spacer(1, 10))
+
+doc.build(story)
+
+st.download_button("Download PDF Summary", data=pdf_buffer.getvalue(), file_name="pre_cpb_summary.pdf", mime="application/pdf")
