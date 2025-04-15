@@ -54,7 +54,9 @@ def calculate_heparin_dose(weight_kg):
     return round(weight_kg * 400)
 
 # --- UI ---
-st.image(streamlit_logo_path, width=300)
+with open(streamlit_logo_path, "rb") as img_file:
+    st.image(img_file.read(), width=300)
+
 st.title("Pre-CPB Planning Tool")
 
 # --- Section Toggles ---
