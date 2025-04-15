@@ -3,6 +3,7 @@
 import streamlit as st
 import os
 import io
+import pytz
 from datetime import datetime
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image as RLImage
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -35,7 +36,7 @@ with open(streamlit_logo_path, "rb") as img_file:
 
 st.title("Pre-CPB Planning Tool")
 
-# Sidebar
+# Sidebar toggles
 with st.sidebar:
     st.markdown("## PDF Includes")
     pdf_patient = st.checkbox("Patient Data", True)
@@ -46,6 +47,7 @@ with st.sidebar:
     pdf_pre_hct = st.checkbox("Pre-op Hct", True)
     pdf_pre_hgb = st.checkbox("Pre-op Hgb", True)
     pdf_prime_vol = st.checkbox("Prime Vol", True)
+    pdf_prime_add = st.checkbox("Prime Additives", True)
     pdf_target_hct = st.checkbox("Target Hct", True)
     pdf_ef = st.checkbox("Ejection Fraction", True)
     pdf_comorbid = st.checkbox("Comorbidities / Pathology", True)
@@ -59,6 +61,12 @@ weight = st.number_input("Weight (kg)", value=70)
 pre_hct = st.number_input("Pre-op Hematocrit (%)", value=38.0)
 pre_hgb = st.number_input("Pre-op Hemoglobin (g/dL)", value=pre_hct * 0.34)
 prime_vol = st.number_input("Circuit Prime Volume (mL)", value=1400)
+
+# Prime Additives if Prime Vol checked
+prime_additives = []
+if pdf_prime_add:
+    prime_additives = st.multiselect("Prime Additives", ["Albumin", "Mannitol", "Heparin", "Bicarb", "Calcium", "Magnesium"])
+
 target_hct = st.number_input("Target Hematocrit (%)", value=25.0)
 ef = st.number_input("Ejection Fraction (%)", value=55)
 
@@ -66,7 +74,6 @@ bsa = calculate_bsa(height, weight)
 bmi = calculate_bmi(height, weight)
 
 base_prime = st.selectbox("Base Prime Fluid", ["None", "Plasmalyte A", "Normosol-R"])
-prime_additives = st.multiselect("Prime Additives", ["Albumin", "Mannitol", "Heparin", "Bicarb", "Calcium", "Magnesium"])
 comorbidities = st.multiselect("Comorbidities", ["CKD", "Hypertension", "Jehovah’s Witness", "Anemia", "Aortic Disease", "Diabetes", "Redo Sternotomy", "None"])
 valve_issues = st.multiselect("Valve Pathology", ["Aortic Stenosis", "Aortic Insufficiency", "Mitral Stenosis", "Mitral Regurgitation", "Tricuspid Regurgitation", "Valve Prolapse"])
 procedure = st.selectbox("Procedure Type", ["CABG", "AVR", "MVR", "Transplant", "Hemiarch", "Bentall", "Full Arch", "Dissection Repair – Stanford Type A", "Dissection Repair – Stanford Type B", "LVAD", "Off-pump CABG", "ECMO Cannulation", "Standby", "Other"])
@@ -133,6 +140,7 @@ story = []
 story.append(RLImage(pdf_logo_path, width=200, height=200))
 story.append(Paragraph("Perfusion Sentinel Report", styles['Title']))
 story.append(Spacer(1, 12))
+story.append(Paragraph(f"Procedure: {procedure}", styles["Normal"]))
 
 if pdf_patient:
     story.append(Paragraph("Patient Data", styles['Heading2']))
@@ -142,7 +150,10 @@ if pdf_patient:
     if pdf_bsa: story.append(Paragraph(f"BSA: {bsa} m²", styles['Normal']))
     if pdf_pre_hct: story.append(Paragraph(f"Pre-op Hct: {pre_hct}%", styles['Normal']))
     if pdf_pre_hgb: story.append(Paragraph(f"Pre-op Hgb: {pre_hgb} g/dL", styles['Normal']))
-    if pdf_prime_vol: story.append(Paragraph(f"Prime Volume: {prime_vol} mL", styles['Normal']))
+    if pdf_prime_vol:
+        story.append(Paragraph(f"Prime Volume: {prime_vol} mL", styles['Normal']))
+        if pdf_prime_add:
+            story.append(Paragraph(f"Additives: {', '.join(prime_additives) or 'None'}", styles['Normal']))
     if pdf_target_hct: story.append(Paragraph(f"Target Hct: {target_hct}%", styles['Normal']))
     if pdf_ef: story.append(Paragraph(f"Ejection Fraction: {ef}%", styles['Normal']))
     story.append(Spacer(1, 12))
@@ -171,9 +182,10 @@ story.append(Paragraph(f"MAP Target: {map_target}", styles["Normal"]))
 story.append(Paragraph(f"Heparin Dose: {heparin_dose}", styles["Normal"]))
 story.append(Paragraph(f"Post Hct: {post_hct}% | RBC Units: {rbc_units}", styles["Normal"]))
 
+timestamp = datetime.now(pytz.timezone("US/Eastern")).strftime('%Y-%m-%d %I:%M %p')
 footer_style = ParagraphStyle(name='Footer', fontSize=8, textColor=colors.grey, alignment=1)
 story.append(Spacer(1, 20))
-story.append(Paragraph(f"Generated {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", footer_style))
+story.append(Paragraph(f"Generated {timestamp}", footer_style))
 
 doc.build(story)
 st.download_button("Download PDF", data=pdf_buffer.getvalue(), file_name="precpb_summary.pdf", mime="application/pdf")
