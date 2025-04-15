@@ -19,7 +19,6 @@ pdfmetrics.registerFont(TTFont("DejaVuSans", "/usr/share/fonts/truetype/dejavu/D
 streamlit_logo_path = "streamlit_logo.png"
 pdf_logo_path = "pdf_logo.png"
 
-# Calculations
 def calculate_bsa(height_cm, weight_kg): return round(0.007184 * (height_cm ** 0.725) * (weight_kg ** 0.425), 2)
 def calculate_bmi(height_cm, weight_kg): return round(weight_kg / ((height_cm / 100) ** 2), 1)
 def calculate_blood_volume(weight_kg): return round(weight_kg * 70)
@@ -41,7 +40,6 @@ with open(streamlit_logo_path, "rb") as img_file:
 
 st.title("Pre-CPB Planning Tool")
 
-# Sidebar toggles
 with st.sidebar:
     st.markdown("## PDF Includes")
     pdf_patient = st.checkbox("Patient Data", True)
@@ -67,7 +65,6 @@ pre_hct = st.number_input("Pre-op Hematocrit (%)", value=38.0)
 pre_hgb = st.number_input("Pre-op Hemoglobin (g/dL)", value=pre_hct * 0.34)
 prime_vol = st.number_input("Circuit Prime Volume (mL)", value=1400) if pdf_prime_vol else 0
 
-# Base Prime + Additives
 base_prime = None
 prime_additives = []
 if pdf_prime_vol:
@@ -85,7 +82,6 @@ comorbidities = st.multiselect("Comorbidities", ["CKD", "Hypertension", "Jehovah
 valve_issues = st.multiselect("Valve Pathology", ["Aortic Stenosis", "Aortic Insufficiency", "Mitral Stenosis", "Mitral Regurgitation", "Tricuspid Regurgitation", "Valve Prolapse"])
 procedure = st.selectbox("Procedure Type", ["CABG", "AVR", "MVR", "Transplant", "Hemiarch", "Bentall", "Full Arch", "Dissection Repair – Stanford Type A", "Dissection Repair – Stanford Type B", "LVAD", "Off-pump CABG", "ECMO Cannulation", "Standby", "Other"])
 
-# Arrest Planning
 if procedure in ["Dissection Repair – Stanford Type A", "Full Arch"] and pdf_arrest:
     arrest_temp = st.number_input("Target Arrest Temperature (°C)", value=18)
     arrest_duration = st.number_input("Expected Arrest Duration (min)", value=30)
@@ -93,12 +89,10 @@ if procedure in ["Dissection Repair – Stanford Type A", "Full Arch"] and pdf_a
 else:
     arrest_temp = arrest_duration = neuro_strategy = None
 
-# Cardioplegia
 if pdf_cardio:
     cardioplegia_type = st.selectbox("Cardioplegia Type", ["Del Nido", "Buckberg", "Custodial (HTK)", "Blood Cardioplegia", "Custom"])
     delivery_routes = st.multiselect("Delivery Routes", ["Antegrade", "Retrograde", "Ostial"])
 
-# CABG Grafts
 selected_graft_images = []
 if procedure == "CABG" and pdf_cabg:
     num_grafts = st.number_input("Number of Grafts", 1, 5)
@@ -117,7 +111,6 @@ if procedure == "CABG" and pdf_cabg:
             st.image(image_path, width=250)
             selected_graft_images.append(image_path)
 
-# Calculations
 blood_vol = calculate_blood_volume(weight)
 post_hct = calculate_post_dilution_hct(pre_hct, blood_vol, prime_vol)
 rbc_units = calculate_rbc_units_needed(post_hct, target_hct)
@@ -130,7 +123,6 @@ do2i = round(do2 / bsa, 1)
 map_target = get_map_target(comorbidities)
 heparin_dose = calculate_heparin_dose(weight)
 
-# Outputs
 st.subheader("Outputs")
 st.write(f"BMI: {bmi} | BSA: {bsa} m²")
 st.write(f"Flow @ CI {suggested_ci}: {flow_suggested} L/min")
@@ -138,15 +130,15 @@ st.write(f"Post Hct: {post_hct}% | RBC Units Needed: {rbc_units}")
 st.write(f"DO₂: {do2} | DO₂i: {do2i}")
 st.write(f"MAP Target: {map_target} | Heparin Dose: {heparin_dose} units")
 
-# PDF generation
 pdf_buffer = io.BytesIO()
 doc = SimpleDocTemplate(pdf_buffer, pagesize=letter)
 styles = getSampleStyleSheet()
-story = []
 
+story = []
 story.append(RLImage(pdf_logo_path, width=200, height=200))
 story.append(Paragraph("Perfusion Sentinel Report", styles['Title']))
 story.append(Spacer(1, 12))
+
 story.append(Paragraph(f"Procedure: {procedure}", styles["Normal"]))
 
 if pdf_patient:
@@ -184,15 +176,31 @@ if pdf_cabg and selected_graft_images:
         story.append(RLImage(img, width=200, height=150))
         story.append(Spacer(1, 10))
 
-story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
-story.append(Paragraph(f"Flow: {flow_suggested} L/min (CI {suggested_ci})", styles["Normal"]))
-story.append(Paragraph(f"DO<sub>2</sub>: {do2} | DO<sub>2</sub>i: {do2i}", styles["Normal"]))
-story.append(Paragraph(f"MAP Target: {map_target}", styles["Normal"]))
-story.append(Paragraph(f"Heparin Dose: {heparin_dose}", styles["Normal"]))
-story.append(Paragraph(f"Post Hct: {post_hct}% | RBC Units: {rbc_units}", styles["Normal"]))
+def formula_paragraph(label, value, formula_str, inputs_str):
+    return [
+        Paragraph(f"<b>{label}:</b> {value}", styles["Normal"]),
+        Paragraph(f"<font size=9>{formula_str}</font>", styles["Normal"]),
+        Paragraph(f"<font size=9><i>{inputs_str}</i></font>", styles["Normal"]),
+        Spacer(1, 6),
+    ]
 
-timestamp = datetime.now(pytz.timezone("US/Eastern")).strftime('%Y-%m-%d %I:%M %p')
+story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
+
+story.extend(formula_paragraph("BSA", f"{bsa} m²", "BSA = 0.007184 × Height^0.725 × Weight^0.425", f"= 0.007184 × {height}^0.725 × {weight}^0.425"))
+story.extend(formula_paragraph("BMI", f"{bmi}", "BMI = Weight / (Height / 100)^2", f"= {weight} / ({height}/100)^2"))
+story.extend(formula_paragraph("Blood Volume", f"{blood_vol} mL", "BV = Weight × 70", f"= {weight} × 70"))
+story.extend(formula_paragraph("Post Hct", f"{post_hct}%", "Post Hct = [(Hct × BV) + (PrimeHct × PV)] / (BV + PV)", f"= [({pre_hct}% × {blood_vol}) + (0% × {prime_vol})] / ({blood_vol} + {prime_vol})"))
+story.extend(formula_paragraph("RBC Units Needed", f"{rbc_units}", "RBC Units = (Target Hct − Post Hct) ÷ 3", f"= ({target_hct} − {post_hct}) ÷ 3"))
+story.extend(formula_paragraph("Flow", f"{flow_suggested} L/min", "Flow = CI × BSA", f"= {suggested_ci} × {bsa}"))
+story.extend(formula_paragraph("DO₂", f"{do2}", "DO₂ = Flow × 10 × (1.34 × Hgb × 0.98 + 0.003 × PaO₂)", f"= {flow_suggested} × 10 × (1.34 × {pre_hgb:.2f} × 0.98 + 0.003 × 100)"))
+story.extend(formula_paragraph("DO₂i", f"{do2i}", "DO₂i = DO₂ ÷ BSA", f"= {do2} ÷ {bsa}"))
+story.extend(formula_paragraph("Heparin Dose", f"{heparin_dose} units", "Heparin Dose = Weight × 400", f"= {weight} × 400"))
+
+story.append(Spacer(1, 12))
+story.append(Paragraph(f"<b>MAP Target:</b> {map_target}", styles["Normal"]))
+
 footer_style = ParagraphStyle(name='Footer', fontSize=8, textColor=colors.grey, alignment=1)
+timestamp = datetime.now(pytz.timezone("US/Eastern")).strftime('%Y-%m-%d %I:%M %p')
 story.append(Spacer(1, 20))
 story.append(Paragraph(f"Generated {timestamp}", footer_style))
 
