@@ -1,22 +1,25 @@
-# app.py
+# app.py — Final Version with PDF, CABG, Clean Layout
 
 import streamlit as st
 import os
 import io
 import pytz
 from datetime import datetime
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image as RLImage
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image as RLImage, Table
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
+# Font setup
 pdfmetrics.registerFont(TTFont("DejaVuSans", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"))
 
+# Paths
 streamlit_logo_path = "streamlit_logo.png"
 pdf_logo_path = "pdf_logo.png"
 
+# ---- Functions ----
 def calculate_bsa(height_cm, weight_kg): return round(((height_cm * weight_kg) / 3600) ** 0.5, 2)
 def calculate_bmi(height_cm, weight_kg): return round(weight_kg / ((height_cm / 100) ** 2), 1)
 def calculate_blood_volume(weight_kg): return round(weight_kg * 70)
@@ -42,11 +45,13 @@ def calculate_prime_osmolality(additives):
         if "Heparin" in item: osmo += 1
     return osmo
 
+# ---- UI ----
 with open(streamlit_logo_path, "rb") as img_file:
     st.image(img_file.read(), width=300)
 
 st.title("Pre-CPB Planning Tool")
 
+# Sidebar: PDF toggles
 with st.sidebar:
     st.markdown("## PDF Includes")
     pdf_patient = st.checkbox("Patient Data", True)
@@ -65,12 +70,11 @@ with st.sidebar:
     pdf_cabg = st.checkbox("CABG Grafts", True)
     pdf_arrest = st.checkbox("Arrest Plan", True)
 
+# Units toggle
 unit_system = st.radio("Units", ["Metric (cm/kg)", "Imperial (in/lb)"])
 if unit_system == "Imperial (in/lb)":
-    height_in = st.number_input("Height (in)", value=67)
-    weight_lb = st.number_input("Weight (lb)", value=154)
-    height = round(height_in * 2.54, 2)
-    weight = round(weight_lb * 0.453592, 2)
+    height = round(st.number_input("Height (in)", value=67) * 2.54, 2)
+    weight = round(st.number_input("Weight (lb)", value=154) * 0.453592, 2)
 else:
     height = st.number_input("Height (cm)", value=170)
     weight = st.number_input("Weight (kg)", value=70)
@@ -79,6 +83,7 @@ pre_hct = st.number_input("Pre-op Hematocrit (%)", value=38.0)
 pre_hgb = st.number_input("Pre-op Hemoglobin (g/dL)", value=pre_hct * 0.34)
 prime_vol = st.number_input("Circuit Prime Volume (mL)", value=1400) if pdf_prime_vol else 0
 
+# Prime setup
 base_prime = None
 prime_additives = []
 prime_osmo = 290
@@ -101,59 +106,62 @@ if pdf_prime_vol:
         else:
             st.success(f"Osmolality normal: {prime_osmo} mOsm/kg")
 
+# Comorbidities and procedure
 target_hct = st.number_input("Target Hematocrit (%)", value=25.0)
 ef = st.number_input("Ejection Fraction (%)", value=55)
+comorbidities = st.multiselect("Comorbidities", ["CKD", "Hypertension", "Jehovah’s Witness", "Anemia", "Aortic Disease", "Diabetes", "Redo Sternotomy", "None"])
+procedure = st.selectbox("Procedure Type", ["CABG", "AVR", "MVR", "Transplant", "Hemiarch", "Bentall", "Full Arch", "Dissection Repair – Stanford Type A", "Dissection Repair – Stanford Type B", "LVAD", "Off-pump CABG", "ECMO Cannulation", "Standby", "Other"])
 
+# CABG grafts
+selected_graft_images = []
+if procedure == "CABG" and pdf_cabg:
+    st.subheader("CABG Graft Planner")
+    num_grafts = st.number_input("Number of Grafts", min_value=1, max_value=5, step=1)
+    graft_image_map = {
+        "LAD": "graft_overview_before_after.png",
+        "LCx": "rima_lcx_free.png",
+        "OM1": "rima_lcx_insitu.png",
+        "OM2": "composite_lima_rima_lcx.png",
+        "PDA": "rima_rca.png",
+        "RCA": "radial_rca.png",
+    }
+    for i in range(int(num_grafts)):
+        target = st.selectbox(f"Graft {i+1} Target", list(graft_image_map), key=f"target_{i}")
+        images = [img for img in os.listdir("images") if target.lower() in img.lower()]
+        if images:
+            for img in images:
+                full_path = os.path.join("images", img)
+                st.image(full_path, width=200, caption=img)
+                selected_graft_images.append(full_path)
+        uploaded_file = st.file_uploader(f"Optional: Upload custom diagram for Graft {i+1}", type=["png", "jpg", "jpeg"], key=f"upload_{i}")
+        if uploaded_file:
+            st.image(uploaded_file, width=200, caption="Custom Upload")
+            selected_graft_images.append(uploaded_file)
+
+# Calculations
 bsa = calculate_bsa(height, weight)
 bmi = calculate_bmi(height, weight)
 blood_vol = calculate_blood_volume(weight)
 post_hct = calculate_post_dilution_hct(pre_hct, blood_vol, prime_vol)
 rbc_units = calculate_rbc_units_needed(post_hct, target_hct)
-suggested_ci = 2.4
-if ef < 40: suggested_ci = 2.6
-if ef < 30: suggested_ci = 2.8
+suggested_ci = 2.4 if ef >= 40 else 2.6 if ef >= 30 else 2.8
 flow_suggested = calculate_flow(suggested_ci, bsa)
 do2 = calculate_do2(flow_suggested, pre_hgb)
 do2i = round(do2 / bsa, 1)
-map_target = get_map_target(st.multiselect("Comorbidities", ["CKD", "Hypertension", "Jehovah’s Witness", "Anemia", "Aortic Disease", "Diabetes", "Redo Sternotomy", "None"]))
+map_target = get_map_target(comorbidities)
 heparin_dose = calculate_heparin_dose(weight)
 
-st.subheader("Outputs")
-st.write(f"BMI: {bmi} | BSA: {bsa} m²")
-st.write(f"Flow @ CI {suggested_ci}: {flow_suggested} L/min")
-st.write(f"Post Hct: {post_hct}% | RBC Units Needed: {rbc_units}")
-st.write(f"DO2: {do2} | DO2i: {do2i}")
-st.write(f"MAP Target: {map_target} | Heparin Dose: {heparin_dose} units")
-
+# PDF generation
 pdf_buffer = io.BytesIO()
 doc = SimpleDocTemplate(pdf_buffer, pagesize=letter)
 styles = getSampleStyleSheet()
-header_style = ParagraphStyle(name='Header', fontSize=14, spaceAfter=10, textColor=colors.darkblue)
 formula_style = ParagraphStyle(name='Formula', fontSize=9)
-
 story = []
-story.append(RLImage(pdf_logo_path, width=200, height=200))
-story.append(Paragraph("Perfusion Sentinel Report", styles['Title']))
-story.append(Spacer(1, 12))
-story.append(Paragraph(f"<b>Procedure:</b> {st.selectbox('Procedure Type', ['CABG', 'AVR', 'MVR', 'Transplant', 'Hemiarch', 'Bentall', 'Full Arch', 'Dissection Repair – Stanford Type A', 'Dissection Repair – Stanford Type B', 'LVAD', 'Off-pump CABG', 'ECMO Cannulation', 'Standby', 'Other'])}", header_style))
 
-if pdf_patient:
-    story.append(Paragraph("Patient Data", styles['Heading2']))
-    if pdf_height: story.append(Paragraph(f"Height: {height} cm", styles['Normal']))
-    if pdf_weight: story.append(Paragraph(f"Weight: {weight} kg", styles['Normal']))
-    if pdf_bmi: story.append(Paragraph(f"BMI: {bmi}", styles['Normal']))
-    if pdf_bsa: story.append(Paragraph(f"BSA: {bsa} m²", styles['Normal']))
-    if pdf_pre_hct: story.append(Paragraph(f"Pre-op Hct: {pre_hct}%", styles['Normal']))
-    if pdf_pre_hgb: story.append(Paragraph(f"Pre-op Hgb: {pre_hgb:.2f} g/dL", styles['Normal']))
-    if pdf_prime_vol:
-        story.append(Paragraph(f"Prime Volume: {prime_vol} mL", styles['Normal']))
-        story.append(Paragraph(f"Prime Osmolality Estimate: {prime_osmo} mOsm/kg", styles['Normal']))
-        if base_prime: story.append(Paragraph(f"Base Prime: {base_prime}", styles['Normal']))
-        if pdf_prime_add and prime_additives:
-            story.append(Paragraph(f"Additives: {', '.join(prime_additives)}", styles['Normal']))
-    if pdf_target_hct: story.append(Paragraph(f"Target Hct: {target_hct}%", styles['Normal']))
-    if pdf_ef: story.append(Paragraph(f"Ejection Fraction: {ef}%", styles['Normal']))
-    story.append(Spacer(1, 12))
+story.append(RLImage(pdf_logo_path, width=200, height=200))
+story.append(Paragraph("Perfusion Sentinel Report", styles["Title"]))
+story.append(Spacer(1, 12))
+story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
 
 def formula_paragraph(label, value, formula_str, inputs_str):
     return [
@@ -163,22 +171,51 @@ def formula_paragraph(label, value, formula_str, inputs_str):
         Spacer(1, 6),
     ]
 
-story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
 story.extend(formula_paragraph("BSA", f"{bsa} m²", "BSA = √(Height × Weight / 3600)", f"= √({height} × {weight} / 3600)"))
 story.extend(formula_paragraph("BMI", f"{bmi}", "BMI = Weight / (Height / 100)^2", f"= {weight} / ({height}/100)^2"))
 story.extend(formula_paragraph("Blood Volume", f"{blood_vol} mL", "BV = Weight × 70", f"= {weight} × 70"))
-story.extend(formula_paragraph("Post Hct", f"{post_hct}%", "= [(Hct × BV) + (0 × PV)] / (BV + PV)", f"= ({pre_hct}% × {blood_vol}) / ({blood_vol} + {prime_vol})"))
+story.extend(formula_paragraph("Post Hct", f"{post_hct}%", "= [(Hct × BV)] / (BV + PV)", f"= ({pre_hct}% × {blood_vol}) / ({blood_vol} + {prime_vol})"))
 story.extend(formula_paragraph("RBC Units", f"{rbc_units}", "= (Target − Post) ÷ 3", f"= ({target_hct} − {post_hct}) ÷ 3"))
 story.extend(formula_paragraph("Flow", f"{flow_suggested} L/min", "= CI × BSA", f"= {suggested_ci} × {bsa}"))
 story.extend(formula_paragraph("DO2", f"{do2}", "= Flow × 10 × (1.34 × Hgb × 0.98 + 0.003 × 100)", f"= {flow_suggested} × 10 × (1.34 × {pre_hgb:.2f} × 0.98 + 0.3)"))
 story.extend(formula_paragraph("DO2i", f"{do2i}", "= DO2 ÷ BSA", f"= {do2} ÷ {bsa}"))
 story.extend(formula_paragraph("Heparin Dose", f"{heparin_dose} units", "= Weight × 400", f"= {weight} × 400"))
-
 story.append(Paragraph(f"<b>MAP Target:</b> {map_target}", styles["Normal"]))
 
+# ABG table (PDF only)
+story.append(Spacer(1, 12))
+story.append(Paragraph("Normal ABG & Electrolyte Ranges", styles['Heading2']))
+abg_data = [
+    ["Parameter", "Range"],
+    ["pH", "7.35–7.45"],
+    ["pCO₂", "35–45 mmHg"],
+    ["pO₂", "80–100 mmHg"],
+    ["HCO₃⁻", "22–26 mmol/L"],
+    ["Base Excess", "-2 to +2"],
+    ["Lactate", "0.5–2.0"],
+    ["Ionized Ca²⁺", "1.0–1.3 mmol/L"],
+    ["Na⁺", "135–145"],
+    ["K⁺", "3.5–5.0"],
+    ["Cl⁻", "95–105"],
+    ["Mg²⁺", "1.7–2.2"],
+    ["Glucose", "110–180 (on bypass)"]
+]
+story.append(Table(abg_data, hAlign='LEFT', colWidths=[150, 200]))
+
+# PDF footer
 story.append(Spacer(1, 12))
 timestamp = datetime.now(pytz.timezone("US/Eastern")).strftime('%Y-%m-%d %I:%M %p')
 story.append(Paragraph(f"Generated {timestamp}", ParagraphStyle(name='Footer', fontSize=8, textColor=colors.grey, alignment=1)))
 
+# Build PDF
 doc.build(story)
+
+# ---- Final Outputs (below everything) ----
+st.subheader("Outputs")
+st.write(f"BMI: {bmi} | BSA: {bsa} m²")
+st.write(f"Flow @ CI {suggested_ci}: {flow_suggested} L/min")
+st.write(f"Post Hct: {post_hct}% | RBC Units Needed: {rbc_units}")
+st.write(f"DO2: {do2} | DO2i: {do2i}")
+st.write(f"MAP Target: {map_target} | Heparin Dose: {heparin_dose} units")
+
 st.download_button("Download PDF", data=pdf_buffer.getvalue(), file_name="precpb_summary.pdf", mime="application/pdf")
