@@ -120,14 +120,26 @@ selected_graft_images = []
 if show_cabg and procedure == "CABG":
     st.subheader("CABG Graft Planner")
     num_grafts = st.number_input("Number of Grafts", min_value=1, max_value=5, step=1)
-    image_dir = pathlib.Path(__file__).parent / "images"
+
+    # Hardcoded map from target to image
+    graft_image_map = {
+        "LAD": "graft_overview_before_after.png",
+        "LCx": "rima_lcx_free.png",
+        "OM1": "rima_lcx_insitu.png",
+        "OM2": "composite_lima_rima_lcx.png",
+        "PDA": "rima_rca.png",
+        "RCA": "radial_rca.png",
+    }
+
     for i in range(int(num_grafts)):
-        target = st.selectbox(f"Graft {i+1} Target", ["LAD", "LCx", "OM1", "OM2", "PDA", "RCA"], key=f"target_{i}")
-        matched_images = [img for img in os.listdir(image_dir) if target.lower() in img.lower()] if image_dir.exists() else []
-        if matched_images:
-            selected_file = matched_images[0]
+        target = st.selectbox(f"Graft {i+1} Target", list(graft_image_map.keys()), key=f"target_{i}")
+        selected_file = graft_image_map.get(target)
+        if selected_file and os.path.exists(selected_file):
+            st.image(selected_file, width=250, caption=f"{target} Graft Diagram")
             selected_graft_images.append(selected_file)
-            st.image(image_dir / selected_file, width=250, caption=f"{target} Graft Diagram")
+        else:
+            st.info(f"No image found for {target}")
+        
         uploaded_file = st.file_uploader(f"Or upload custom image for Graft {i+1}", type=["png", "jpg"], key=f"upload_{i}")
         if uploaded_file:
             st.image(uploaded_file, width=250, caption=f"Custom Upload for {target}")
