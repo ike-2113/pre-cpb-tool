@@ -15,8 +15,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 
 # --- Logo Paths ---
-streamlit_logo_path = "/mnt/data/Screenshot 2025-04-01 at 2.42.36 PM.png"
-pdf_logo_path = "/mnt/data/Screenshot 2025-04-01 at 2.42.36 PM-modified.png"
+streamlit_logo_path = "streamlit_logo.png"
+pdf_logo_path = "pdf_logo.png"
 
 # --- Functions ---
 def calculate_bsa(height_cm, weight_kg):
