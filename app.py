@@ -9,6 +9,11 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image as RL
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+# Register subscript-compatible font
+pdfmetrics.registerFont(TTFont("DejaVuSans", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"))
 
 # Paths
 streamlit_logo_path = "streamlit_logo.png"
@@ -60,12 +65,15 @@ height = st.number_input("Height (cm)", value=170)
 weight = st.number_input("Weight (kg)", value=70)
 pre_hct = st.number_input("Pre-op Hematocrit (%)", value=38.0)
 pre_hgb = st.number_input("Pre-op Hemoglobin (g/dL)", value=pre_hct * 0.34)
-prime_vol = st.number_input("Circuit Prime Volume (mL)", value=1400)
+prime_vol = st.number_input("Circuit Prime Volume (mL)", value=1400) if pdf_prime_vol else 0
 
-# Prime Additives if Prime Vol checked
+# Base Prime + Additives
+base_prime = None
 prime_additives = []
-if pdf_prime_add:
-    prime_additives = st.multiselect("Prime Additives", ["Albumin", "Mannitol", "Heparin", "Bicarb", "Calcium", "Magnesium"])
+if pdf_prime_vol:
+    base_prime = st.selectbox("Base Prime Fluid", ["", "Plasmalyte A", "Normosol-R", "LR", "Other"])
+    if base_prime:
+        prime_additives = st.multiselect("Prime Additives", ["Albumin", "Mannitol", "Heparin", "Bicarb", "Calcium", "Magnesium"]) if pdf_prime_add else []
 
 target_hct = st.number_input("Target Hematocrit (%)", value=25.0)
 ef = st.number_input("Ejection Fraction (%)", value=55)
@@ -73,7 +81,6 @@ ef = st.number_input("Ejection Fraction (%)", value=55)
 bsa = calculate_bsa(height, weight)
 bmi = calculate_bmi(height, weight)
 
-base_prime = st.selectbox("Base Prime Fluid", ["None", "Plasmalyte A", "Normosol-R"])
 comorbidities = st.multiselect("Comorbidities", ["CKD", "Hypertension", "Jehovah’s Witness", "Anemia", "Aortic Disease", "Diabetes", "Redo Sternotomy", "None"])
 valve_issues = st.multiselect("Valve Pathology", ["Aortic Stenosis", "Aortic Insufficiency", "Mitral Stenosis", "Mitral Regurgitation", "Tricuspid Regurgitation", "Valve Prolapse"])
 procedure = st.selectbox("Procedure Type", ["CABG", "AVR", "MVR", "Transplant", "Hemiarch", "Bentall", "Full Arch", "Dissection Repair – Stanford Type A", "Dissection Repair – Stanford Type B", "LVAD", "Off-pump CABG", "ECMO Cannulation", "Standby", "Other"])
@@ -149,11 +156,13 @@ if pdf_patient:
     if pdf_bmi: story.append(Paragraph(f"BMI: {bmi}", styles['Normal']))
     if pdf_bsa: story.append(Paragraph(f"BSA: {bsa} m²", styles['Normal']))
     if pdf_pre_hct: story.append(Paragraph(f"Pre-op Hct: {pre_hct}%", styles['Normal']))
-    if pdf_pre_hgb: story.append(Paragraph(f"Pre-op Hgb: {pre_hgb} g/dL", styles['Normal']))
+    if pdf_pre_hgb: story.append(Paragraph(f"Pre-op Hgb: {pre_hgb:.2f} g/dL", styles['Normal']))
     if pdf_prime_vol:
         story.append(Paragraph(f"Prime Volume: {prime_vol} mL", styles['Normal']))
-        if pdf_prime_add:
-            story.append(Paragraph(f"Additives: {', '.join(prime_additives) or 'None'}", styles['Normal']))
+        if base_prime:
+            story.append(Paragraph(f"Base Prime: {base_prime}", styles['Normal']))
+        if pdf_prime_add and prime_additives:
+            story.append(Paragraph(f"Additives: {', '.join(prime_additives)}", styles['Normal']))
     if pdf_target_hct: story.append(Paragraph(f"Target Hct: {target_hct}%", styles['Normal']))
     if pdf_ef: story.append(Paragraph(f"Ejection Fraction: {ef}%", styles['Normal']))
     story.append(Spacer(1, 12))
@@ -177,7 +186,7 @@ if pdf_cabg and selected_graft_images:
 
 story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
 story.append(Paragraph(f"Flow: {flow_suggested} L/min (CI {suggested_ci})", styles["Normal"]))
-story.append(Paragraph(f"DO₂: {do2} | DO₂i: {do2i}", styles["Normal"]))
+story.append(Paragraph(f"DO<sub>2</sub>: {do2} | DO<sub>2</sub>i: {do2i}", styles["Normal"]))
 story.append(Paragraph(f"MAP Target: {map_target}", styles["Normal"]))
 story.append(Paragraph(f"Heparin Dose: {heparin_dose}", styles["Normal"]))
 story.append(Paragraph(f"Post Hct: {post_hct}% | RBC Units: {rbc_units}", styles["Normal"]))
