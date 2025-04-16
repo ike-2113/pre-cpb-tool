@@ -159,6 +159,14 @@ st.write(f"Flow @ CI {suggested_ci}: {flow} L/min")
 st.write(f"Post Hct: {post_hct}% | RBC Units Needed: {rbc_units}")
 st.write(f"DO2: {do2} | DO2i: {do2i}")
 st.write(f"MAP Target: {map_target} | Heparin Dose: {heparin_dose} units")
+st.markdown("### CI Comparison")
+
+for ci in [1.8, 2.4, 3.0]:
+    flow_ci = calculate_flow(ci, bsa)
+    do2_ci = calculate_do2(flow_ci, pre_hgb)
+    do2i_ci = round(do2_ci / bsa, 1)
+
+    st.write(f"**CI {ci}** → Flow: {flow_ci} L/min | DO₂: {do2_ci} | DO₂i: {do2i_ci}")
 # ---- PDF Export ----
 pdf_buffer = io.BytesIO()
 doc = SimpleDocTemplate(pdf_buffer, pagesize=letter)
@@ -172,11 +180,19 @@ def formula_block(label, value, formula, calc):
     story.append(Paragraph(f"<font size=9><i>{calc}</i></font>", formula_style))
     story.append(Spacer(1, 6))
 
-story.append(RLImage(pdf_logo_path, width=100, height=100, hAlign='LEFT'))
-story.append(Paragraph("<b>Perfusion Sentinel Report</b>", ParagraphStyle(
-    name="LeftTitle", fontSize=16, leftIndent=0, alignment=0)))  # alignment=0 is LEFT
+from reportlab.platypus import Table, TableStyle
+
+title_block = Table([
+    [RLImage(pdf_logo_path, width=80, height=80), Paragraph("<b>Perfusion Sentinel Report</b>", styles['Title'])]
+], colWidths=[90, 400])
+title_block.setStyle(TableStyle([
+    ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+]))
+
+story.append(title_block)
 story.append(Spacer(1, 12))
 story.append(Paragraph(f"<b>Procedure:</b> {procedure}", styles["Heading2"]))
+story.append(Spacer(1, 8))  # consistent spacing
 
 # Always include patient section if any of its sub-fields are selected
 if any([pdf_height, pdf_weight, pdf_bmi, pdf_bsa, pdf_pre_hct, pdf_pre_hgb,
