@@ -242,6 +242,7 @@ story.append(title_block)
 story.append(Spacer(1, 12))
 story.append(Paragraph(f"<b>Procedure:</b> {procedure}", styles["Heading2"]))
 story.append(Spacer(1, 8))  # consistent spacing
+build_parameter_table(story, "CRITICAL PERFUSION PARAMETERS – CASE SUMMARY", perfusion_table)
 
 build_all_summary_tables(story)
 story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
@@ -263,22 +264,6 @@ perfusion_table = [
     ["Post Dilutional Hct", f"{post_hct}%", "(Hct × BV) / (BV + PV)"],
     ["RBC Units", f"{rbc_units}", "(Target − Post) ÷ 3"],
 ]
-
-build_parameter_table(story, "CRITICAL PERFUSION PARAMETERS – CASE SUMMARY", perfusion_table)
-# Additional CI comparison block
-ci_list = [1.8, 2.4, 3.0]
-story.append(Spacer(1, 12))
-story.append(Paragraph("<b>Flow / DO2 / DO2i @ Multiple Cardiac Indexes</b>", styles["Normal"]))
-
-for ci in ci_list:
-    flow_ci = calculate_flow(ci, bsa)
-    do2_ci = calculate_do2(flow_ci, pre_hgb)
-    do2i_ci = round(do2_ci / bsa, 1)
-
-    story.append(Paragraph(f"Target Flow @ CI {ci}: {flow_ci} L/min", styles["Normal"]))
-    story.append(Paragraph(f"DO2: {do2_ci} | DO2i: {do2i_ci}", styles["Normal"]))
-    story.append(Spacer(1, 6))
-story.append(Paragraph(f"<b>MAP Target:</b> {map_target}", styles["Normal"]))
 
 timestamp = datetime.now(pytz.timezone("US/Eastern")).strftime('%Y-%m-%d %I:%M %p')
 story.append(Spacer(1, 12))
