@@ -156,7 +156,7 @@ heparin_dose = calculate_heparin_dose(weight)
 st.subheader("Outputs")
 st.write(f"BMI: {bmi} | BSA: {bsa} m²")
 st.write(f"Flow @ CI {suggested_ci}: {flow} L/min")
-st.write(f"Post Hct: {post_hct}% | RBC Units Needed: {rbc_units}")
+st.write(f"Post Dilutional Hct: {post_hct}% | RBC Units Needed: {rbc_units}")
 st.write(f"DO2: {do2} | DO2i: {do2i}")
 st.write(f"MAP Target: {map_target} | Heparin Dose: {heparin_dose} units")
 st.markdown("### CI Comparison")
@@ -173,12 +173,6 @@ doc = SimpleDocTemplate(pdf_buffer, pagesize=letter)
 styles = getSampleStyleSheet()
 formula_style = ParagraphStyle(name='Formula', fontSize=9)
 story = []
-
-def formula_block(label, value, formula, calc):
-    story.append(Paragraph(f"<b>{label}:</b> {value}", styles["Normal"]))
-    story.append(Paragraph(f"<font size=9>{formula}</font>", formula_style))
-    story.append(Paragraph(f"<font size=9><i>{calc}</i></font>", formula_style))
-    story.append(Spacer(1, 6))
 
 from reportlab.platypus import Table, TableStyle
 
@@ -230,12 +224,47 @@ from reportlab.platypus import Table
 
 if pdf_cabg and selected_graft_images:
     story.append(Paragraph("CABG Grafts", styles["Heading2"]))
-    image_cells = [RLImage(img, width=120, height=99) for img in selected_graft_images]
+    image_cells = [RLImage(img, width=120, height=106) for img in selected_graft_images]
     graft_table = Table([image_cells], hAlign='LEFT')  # 1 row, N columns
     story.append(graft_table)
     story.append(Spacer(1, 12))
 
 story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
+# -- Perfusion Summary Table Style Block --
+from reportlab.platypus import Table, TableStyle, Paragraph, Spacer
+
+def build_parameter_table(story, title, rows):
+    story.append(Spacer(1, 12))
+    story.append(Paragraph(f"<b>{title}</b>", styles["Heading2"]))
+    story.append(Spacer(1, 6))
+
+    table = Table(rows, colWidths=[170, 150, 230], hAlign="LEFT")
+    table.setStyle(TableStyle([
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("TEXTCOLOR", (1, 1), (1, -1), colors.red),
+        ("FONTSIZE", (0, 0), (-1, -1), 9),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+    ]))
+    story.append(table)
+
+# -- Define Your Table Rows --
+perfusion_table = [
+    ["PARAMETER", "VALUE", "NOTES / FORMULAS"],
+    ["BSA", f"{bsa} m²", "√(Height × Weight / 3600)"],
+    ["MAP Target", map_target, "Based on comorbidities"],
+    ["Heparin Dose", f"{heparin_dose} units", "Weight × 400"],
+    ["Flow @ CI 1.8", f"{calculate_flow(1.8, bsa)} L/min", "CI × BSA"],
+    ["Flow @ CI 2.4", f"{calculate_flow(2.4, bsa)} L/min", "–"],
+    ["Flow @ CI 3.0", f"{calculate_flow(3.0, bsa)} L/min", "–"],
+    ["DO2/DO2i @ CI 1.8", f"{calculate_do2(calculate_flow(1.8, bsa), pre_hgb)} / {round(calculate_do2(calculate_flow(1.8, bsa), pre_hgb) / bsa, 1)}", "Flow × CaO2 / ÷ BSA"],
+    ["DO2/DO2i @ CI 2.4", f"{do2} / {do2i}", "–"],
+    ["DO2/DO2i @ CI 3.0", f"{calculate_do2(calculate_flow(3.0, bsa), pre_hgb)} / {round(calculate_do2(calculate_flow(3.0, bsa), pre_hgb) / bsa, 1)}", "–"],
+    ["Post Dilutional Hct", f"{post_hct}%", "(Hct × BV) / (BV + PV)"],
+    ["RBC Units", f"{rbc_units}", "(Target − Post) ÷ 3"],
+]
+
+build_parameter_table(story, "CRITICAL PERFUSION PARAMETERS – CASE SUMMARY", perfusion_table)
 # Additional CI comparison block
 ci_list = [1.8, 2.4, 3.0]
 story.append(Spacer(1, 12))
@@ -246,16 +275,9 @@ for ci in ci_list:
     do2_ci = calculate_do2(flow_ci, pre_hgb)
     do2i_ci = round(do2_ci / bsa, 1)
 
-    story.append(Paragraph(f"Flow @ CI {ci}: {flow_ci} L/min", styles["Normal"]))
+    story.append(Paragraph(f"Target Flow @ CI {ci}: {flow_ci} L/min", styles["Normal"]))
     story.append(Paragraph(f"DO2: {do2_ci} | DO2i: {do2i_ci}", styles["Normal"]))
     story.append(Spacer(1, 6))
-formula_block("Blood Volume", f"{blood_vol} mL", "BV = Weight × 70", f"{weight} × 70")
-formula_block("Post Hct", f"{post_hct}%", "[(Hct × BV) + (0 × PV)] / (BV + PV)", f"({pre_hct}% × {blood_vol}) / ({blood_vol} + {prime_vol})")
-formula_block("RBC Units", f"{rbc_units}", "(Target − Post) ÷ 3", f"({target_hct} − {post_hct}) ÷ 3")
-formula_block("Flow", f"{flow} L/min", "CI × BSA", f"{suggested_ci} × {bsa}")
-formula_block("DO2", f"{do2}", "Flow × 10 × (1.34 × Hgb × 0.98 + 0.003 × 100)", f"{flow} × 10 × (1.34 × {pre_hgb:.2f} × 0.98 + 0.3)")
-formula_block("DO2i", f"{do2i}", "DO2 ÷ BSA", f"{do2} ÷ {bsa}")
-formula_block("Heparin Dose", f"{heparin_dose} units", "Weight × 400", f"{weight} × 400")
 story.append(Paragraph(f"<b>MAP Target:</b> {map_target}", styles["Normal"]))
 
 timestamp = datetime.now(pytz.timezone("US/Eastern")).strftime('%Y-%m-%d %I:%M %p')
