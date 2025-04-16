@@ -194,8 +194,10 @@ if any([pdf_height, pdf_weight, pdf_bmi, pdf_bsa, pdf_pre_hct, pdf_pre_hgb,
     story.append(Paragraph("Patient Data", styles['Heading2']))
     if pdf_height: story.append(Paragraph(f"Height: {height} cm", styles["Normal"]))
     if pdf_weight: story.append(Paragraph(f"Weight: {weight} kg", styles["Normal"]))
-    if pdf_bmi: formula_block("BMI", bmi, "BMI = Weight / (Height / 100)^2", f"{weight} / ({height}/100)^2")
-    if pdf_bsa: formula_block("BSA", bsa, "BSA = √(Height × Weight / 3600)", f"√({height} × {weight} / 3600)")
+if pdf_bmi:
+    story.append(Paragraph(f"BMI: <font color='red'><b>{bmi}</b></font>", styles["Normal"]))
+if pdf_bsa:
+    story.append(Paragraph(f"BSA: <font color='red'><b>{bsa} m²</b></font>", styles["Normal"]))
     if pdf_pre_hct: story.append(Paragraph(f"Pre-op Hct: {pre_hct}%", styles["Normal"]))
     if pdf_pre_hgb: story.append(Paragraph(f"Pre-op Hgb: {pre_hgb:.2f} g/dL", styles["Normal"]))
     if pdf_prime_vol:
