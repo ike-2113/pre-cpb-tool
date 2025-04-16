@@ -171,6 +171,61 @@ for ci in [1.8, 2.4, 3.0]:
 pdf_buffer = io.BytesIO()
 doc = SimpleDocTemplate(pdf_buffer, pagesize=letter)
 styles = getSampleStyleSheet()
+from reportlab.platypus import Table, TableStyle, Paragraph, Spacer
+
+def build_parameter_table(story, title, rows):
+    story.append(Spacer(1, 12))
+    story.append(Paragraph(f"<b>{title}</b>", styles["Heading2"]))
+    story.append(Spacer(1, 6))
+    table = Table(rows, colWidths=[170, 150, 230], hAlign="LEFT")
+    table.setStyle(TableStyle([
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("TEXTCOLOR", (1, 1), (1, -1), colors.red),
+        ("FONTSIZE", (0, 0), (-1, -1), 9),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 6),
+    ]))
+    story.append(table)
+
+def build_all_summary_tables(story):
+    # Patient Data
+    patient_rows = [["PARAMETER", "VALUE", "NOTES / FORMULA"]]
+    if pdf_height: patient_rows.append(["Height", f"{height} cm", "–"])
+    if pdf_weight: patient_rows.append(["Weight", f"{weight} kg", "–"])
+    if pdf_bmi: patient_rows.append(["BMI", f"{bmi}", "Weight / (Height/100)^2"])
+    if pdf_bsa: patient_rows.append(["BSA", f"{bsa} m²", "√(Height × Weight / 3600)"])
+    if pdf_pre_hct: patient_rows.append(["Pre-op Hct", f"{pre_hct}%", "Baseline"])
+    if pdf_pre_hgb: patient_rows.append(["Pre-op Hgb", f"{pre_hgb:.2f} g/dL", "–"])
+    if pdf_target_hct: patient_rows.append(["Target Hct", f"{target_hct}%", "Target during CPB"])
+    if pdf_ef: patient_rows.append(["Ejection Fraction", f"{ef}%", "LV function"])
+    if pdf_comorbid: patient_rows.append(["Comorbidities", ", ".join(comorbidities), "–"])
+    if valve_issues: patient_rows.append(["Valve Pathology", ", ".join(valve_issues), "–"])
+    build_parameter_table(story, "BODY METRICS & VOLUMES", patient_rows)
+
+    # Prime Data
+    if pdf_prime_vol:
+        prime_rows = [["PARAMETER", "VALUE", "NOTES / FORMULA"]]
+        prime_rows.append(["Prime Volume", f"{prime_vol} mL", "CPB circuit prime"])
+        prime_rows.append(["Prime Osmolality", f"{prime_osmo} mOsm/kg", "Normal estimate"])
+        if base_prime: prime_rows.append(["Base Prime", base_prime, "–"])
+        if pdf_prime_add and prime_additives:
+            prime_rows.append(["Additives", ", ".join(prime_additives), "–"])
+        build_parameter_table(story, "PRIME COMPOSITION", prime_rows)
+
+    # Cardioplegia Table
+    if pdf_cardio:
+        cardio_rows = [["ITEM", "DETAIL", ""]]
+        cardio_rows.append(["Cardioplegia", cardioplegia_type, ""])
+        cardio_rows.append(["Delivery Routes", ", ".join(delivery_routes), ""])
+        build_parameter_table(story, "CARDIOPLEGIA", cardio_rows)
+
+    # Arrest Plan Table
+    if pdf_arrest and arrest_temp:
+        arrest_rows = [["ITEM", "DETAIL", ""]]
+        arrest_rows.append(["Target Temperature", f"{arrest_temp}°C", ""])
+        arrest_rows.append(["Arrest Duration", f"{arrest_duration} min", ""])
+        arrest_rows.append(["Neuro Strategy", neuro_strategy, ""])
+        build_parameter_table(story, "CIRCULATORY ARREST PLAN", arrest_rows)
 formula_style = ParagraphStyle(name='Formula', fontSize=9)
 story = []
 
@@ -188,67 +243,10 @@ story.append(Spacer(1, 12))
 story.append(Paragraph(f"<b>Procedure:</b> {procedure}", styles["Heading2"]))
 story.append(Spacer(1, 8))  # consistent spacing
 
-# Always include patient section if any of its sub-fields are selected
-if any([pdf_height, pdf_weight, pdf_bmi, pdf_bsa, pdf_pre_hct, pdf_pre_hgb,
-        pdf_prime_vol, pdf_prime_add, pdf_target_hct, pdf_ef, pdf_comorbid]):
-    story.append(Paragraph("Patient Data", styles['Heading2']))
-    if pdf_height: story.append(Paragraph(f"Height: {height} cm", styles["Normal"]))
-    if pdf_weight: story.append(Paragraph(f"Weight: {weight} kg", styles["Normal"]))
-if pdf_bmi:
-    story.append(Paragraph(f"BMI: <font color='red'><b>{bmi}</b></font>", styles["Normal"]))
-if pdf_bsa:
-    story.append(Paragraph(f"BSA: <font color='red'><b>{bsa} m²</b></font>", styles["Normal"]))
-    if pdf_pre_hct: story.append(Paragraph(f"Pre-op Hct: {pre_hct}%", styles["Normal"]))
-    if pdf_pre_hgb: story.append(Paragraph(f"Pre-op Hgb: {pre_hgb:.2f} g/dL", styles["Normal"]))
-    if pdf_prime_vol:
-        story.append(Paragraph(f"Prime Volume: {prime_vol} mL", styles["Normal"]))
-        story.append(Paragraph(f"Prime Osmolality Estimate: {prime_osmo} mOsm/kg", styles["Normal"]))
-    if base_prime: story.append(Paragraph(f"Base Prime: {base_prime}", styles["Normal"]))
-    if pdf_prime_add and prime_additives:
-        story.append(Paragraph(f"Additives: {', '.join(prime_additives)}", styles["Normal"]))
-    if pdf_target_hct: story.append(Paragraph(f"Target Hct: {target_hct}%", styles["Normal"]))
-    if pdf_ef: story.append(Paragraph(f"Ejection Fraction: {ef}%", styles["Normal"]))
-    if pdf_comorbid: story.append(Paragraph(f"Comorbidities: {', '.join(comorbidities)}", styles["Normal"]))
-    if valve_issues: story.append(Paragraph(f"Valve Pathology: {', '.join(valve_issues)}", styles["Normal"]))
-
-if pdf_cardio:
-    story.append(Paragraph("Cardioplegia", styles["Heading2"]))
-    story.append(Paragraph(f"Type: {cardioplegia_type}", styles["Normal"]))
-    story.append(Paragraph(f"Routes: {', '.join(delivery_routes)}", styles["Normal"]))
-
-if pdf_arrest and arrest_temp:
-    story.append(Paragraph("Circulatory Arrest Plan", styles["Heading2"]))
-    story.append(Paragraph(f"Target Temp: {arrest_temp}°C", styles["Normal"]))
-    story.append(Paragraph(f"Duration: {arrest_duration} min", styles["Normal"]))
-    story.append(Paragraph(f"Neuro Strategy: {neuro_strategy}", styles["Normal"]))
-
-from reportlab.platypus import Table
-
-if pdf_cabg and selected_graft_images:
-    story.append(Paragraph("CABG Grafts", styles["Heading2"]))
-    image_cells = [RLImage(img, width=120, height=106) for img in selected_graft_images]
-    graft_table = Table([image_cells], hAlign='LEFT')  # 1 row, N columns
-    story.append(graft_table)
-    story.append(Spacer(1, 12))
-
+build_all_summary_tables(story)
 story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
 # -- Perfusion Summary Table Style Block --
 from reportlab.platypus import Table, TableStyle, Paragraph, Spacer
-
-def build_parameter_table(story, title, rows):
-    story.append(Spacer(1, 12))
-    story.append(Paragraph(f"<b>{title}</b>", styles["Heading2"]))
-    story.append(Spacer(1, 6))
-
-    table = Table(rows, colWidths=[170, 150, 230], hAlign="LEFT")
-    table.setStyle(TableStyle([
-        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-        ("TEXTCOLOR", (1, 1), (1, -1), colors.red),
-        ("FONTSIZE", (0, 0), (-1, -1), 9),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-        ("TOPPADDING", (0, 0), (-1, -1), 6),
-    ]))
-    story.append(table)
 
 # -- Define Your Table Rows --
 perfusion_table = [
