@@ -43,7 +43,7 @@ def calculate_prime_osmolality(additives):
         if "Heparin" in item: osmo += 1
     return osmo
 # ---- Streamlit UI ----
-st.title("Pre-CPB Planning Tool")
+st.title("Bypass Blueprint")
 with st.sidebar:
     with open(streamlit_logo_path, "rb") as img_file:
         st.image(img_file.read(), width=250)
@@ -172,8 +172,9 @@ def formula_block(label, value, formula, calc):
     story.append(Paragraph(f"<font size=9><i>{calc}</i></font>", formula_style))
     story.append(Spacer(1, 6))
 
-story.append(RLImage(pdf_logo_path, width=200, height=200))
-story.append(Paragraph("Perfusion Sentinel Report", styles['Title']))
+story.append(RLImage(pdf_logo_path, width=100, height=100, hAlign='LEFT'))
+story.append(Paragraph("<b>Perfusion Sentinel Report</b>", ParagraphStyle(
+    name="LeftTitle", fontSize=16, leftIndent=0, alignment=0)))  # alignment=0 is LEFT
 story.append(Spacer(1, 12))
 story.append(Paragraph(f"<b>Procedure:</b> {procedure}", styles["Heading2"]))
 
@@ -212,7 +213,7 @@ if pdf_arrest and arrest_temp:
 if pdf_cabg and selected_graft_images:
     story.append(Paragraph("CABG Grafts", styles["Heading2"]))
     for i, img in enumerate(selected_graft_images):
-        story.append(RLImage(img, width=200, height=150))
+        story.append(RLImage(img, width=200))  # no height
         story.append(Spacer(1, 10))
 
 story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
