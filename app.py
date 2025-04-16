@@ -210,11 +210,14 @@ if pdf_arrest and arrest_temp:
     story.append(Paragraph(f"Duration: {arrest_duration} min", styles["Normal"]))
     story.append(Paragraph(f"Neuro Strategy: {neuro_strategy}", styles["Normal"]))
 
+from reportlab.platypus import Table
+
 if pdf_cabg and selected_graft_images:
     story.append(Paragraph("CABG Grafts", styles["Heading2"]))
-    for i, img in enumerate(selected_graft_images):
-        story.append(RLImage(img, width=100, height=100))  # ✅ fixed
-        story.append(Spacer(1, 10))
+    image_cells = [RLImage(img, width=100, height=100) for img in selected_graft_images]
+    graft_table = Table([image_cells], hAlign='LEFT')  # 1 row, N columns
+    story.append(graft_table)
+    story.append(Spacer(1, 12))
 
 story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
 formula_block("Blood Volume", f"{blood_vol} mL", "BV = Weight × 70", f"{weight} × 70")
