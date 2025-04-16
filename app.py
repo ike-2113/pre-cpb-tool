@@ -214,7 +214,7 @@ from reportlab.platypus import Table
 
 if pdf_cabg and selected_graft_images:
     story.append(Paragraph("CABG Grafts", styles["Heading2"]))
-    image_cells = [RLImage(img, width=100, height=100) for img in selected_graft_images]
+    image_cells = [RLImage(img, width=120, height=90) for img in selected_graft_images]
     graft_table = Table([image_cells], hAlign='LEFT')  # 1 row, N columns
     story.append(graft_table)
     story.append(Spacer(1, 12))
