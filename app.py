@@ -43,14 +43,12 @@ def calculate_prime_osmolality(additives):
         if "Heparin" in item: osmo += 1
     return osmo
 # ---- Streamlit UI ----
-with open(streamlit_logo_path, "rb") as img_file:
-    st.image(img_file.read(), width=300)
-
-st.title("Pre-CPB Planning Tool")
-
 with st.sidebar:
+    with open(streamlit_logo_path, "rb") as img_file:
+        st.image(img_file.read(), width=250)
+
     st.markdown("## PDF Includes")
-    pdf_patient = st.checkbox("Patient Data", True)
+
     pdf_height = st.checkbox("Height", True)
     pdf_weight = st.checkbox("Weight", True)
     pdf_bmi = st.checkbox("BMI", True)
