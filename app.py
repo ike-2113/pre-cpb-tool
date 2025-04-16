@@ -64,6 +64,10 @@ with st.sidebar:
     pdf_cardio = st.checkbox("Cardioplegia", True)
     pdf_cabg = st.checkbox("CABG Grafts", True)
     pdf_arrest = st.checkbox("Arrest Plan", True)
+    
+    st.markdown("""<sub><i>
+    Medical Disclaimer: The information provided in this application is strictly for educational purposes only and is not intended or implied to be a substitute for medical advice or instruction by a health professional. Information in this application may differ from the opinions of your institution. Consult with a recognized medical professional before making decisions based on the information in this application. The authors are not responsible for the use or interpretation you make of any information provided.
+    </i></sub>""", unsafe_allow_html=True)
 
 unit_system = st.radio("Units", ["Metric (cm/kg)", "Imperial (in/lb)"])
 if unit_system == "Imperial (in/lb)":
@@ -269,6 +273,11 @@ from reportlab.platypus import Table, TableStyle, Paragraph, Spacer
 timestamp = datetime.now(pytz.timezone("US/Eastern")).strftime('%Y-%m-%d %I:%M %p')
 story.append(Spacer(1, 12))
 story.append(Paragraph(f"Generated {timestamp}", ParagraphStyle(name='Footer', fontSize=8, textColor=colors.grey, alignment=1)))
+story.append(Spacer(1, 20))
+story.append(Paragraph(
+    "Medical Disclaimer: The information provided in this application is strictly for educational purposes only and is not intended or implied to be a substitute for medical advice or instruction by a health professional. Information in this application may differ from the opinions of your institution. Consult with a recognized medical professional before making decisions based on the information in this application. The authors are not responsible for the use or interpretation you make of any information provided. Though we strive to make sure all of the information is current and reliable, we cannot guarantee accuracy, adequacy, completeness, legality, or usefulness of any information provided.",
+    ParagraphStyle(name='Disclaimer', fontSize=6, textColor=colors.grey, alignment=1)
+))
 doc.build(story)
 
 st.download_button("Download PDF", data=pdf_buffer.getvalue(), file_name="precpb_summary.pdf", mime="application/pdf")
