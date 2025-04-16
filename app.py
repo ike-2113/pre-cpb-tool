@@ -242,12 +242,6 @@ story.append(title_block)
 story.append(Spacer(1, 12))
 story.append(Paragraph(f"<b>Procedure:</b> {procedure}", styles["Heading2"]))
 story.append(Spacer(1, 8))  # consistent spacing
-build_parameter_table(story, "CRITICAL PERFUSION PARAMETERS – CASE SUMMARY", perfusion_table)
-
-build_all_summary_tables(story)
-story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
-# -- Perfusion Summary Table Style Block --
-from reportlab.platypus import Table, TableStyle, Paragraph, Spacer
 
 # -- Define Your Table Rows --
 perfusion_table = [
@@ -264,6 +258,13 @@ perfusion_table = [
     ["Post Dilutional Hct", f"{post_hct}%", "(Hct × BV) / (BV + PV)"],
     ["RBC Units", f"{rbc_units}", "(Target − Post) ÷ 3"],
 ]
+build_parameter_table(story, "CRITICAL PERFUSION PARAMETERS – CASE SUMMARY", perfusion_table)
+
+build_all_summary_tables(story)
+story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
+# -- Perfusion Summary Table Style Block --
+from reportlab.platypus import Table, TableStyle, Paragraph, Spacer
+
 
 timestamp = datetime.now(pytz.timezone("US/Eastern")).strftime('%Y-%m-%d %I:%M %p')
 story.append(Spacer(1, 12))
