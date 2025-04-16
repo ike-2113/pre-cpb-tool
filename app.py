@@ -214,12 +214,25 @@ from reportlab.platypus import Table
 
 if pdf_cabg and selected_graft_images:
     story.append(Paragraph("CABG Grafts", styles["Heading2"]))
-    image_cells = [RLImage(img, width=120, height=90) for img in selected_graft_images]
+    image_cells = [RLImage(img, width=110, height=69) for img in selected_graft_images]
     graft_table = Table([image_cells], hAlign='LEFT')  # 1 row, N columns
     story.append(graft_table)
     story.append(Spacer(1, 12))
 
 story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
+# Additional CI comparison block
+ci_list = [1.8, 2.4, 3.0]
+story.append(Spacer(1, 12))
+story.append(Paragraph("<b>Flow / DO2 / DO2i @ Multiple Cardiac Indexes</b>", styles["Normal"]))
+
+for ci in ci_list:
+    flow_ci = calculate_flow(ci, bsa)
+    do2_ci = calculate_do2(flow_ci, pre_hgb)
+    do2i_ci = round(do2_ci / bsa, 1)
+
+    story.append(Paragraph(f"Flow @ CI {ci}: {flow_ci} L/min", styles["Normal"]))
+    story.append(Paragraph(f"DO2: {do2_ci} | DO2i: {do2i_ci}", styles["Normal"]))
+    story.append(Spacer(1, 6))
 formula_block("Blood Volume", f"{blood_vol} mL", "BV = Weight × 70", f"{weight} × 70")
 formula_block("Post Hct", f"{post_hct}%", "[(Hct × BV) + (0 × PV)] / (BV + PV)", f"({pre_hct}% × {blood_vol}) / ({blood_vol} + {prime_vol})")
 formula_block("RBC Units", f"{rbc_units}", "(Target − Post) ÷ 3", f"({target_hct} − {post_hct}) ÷ 3")
