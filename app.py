@@ -213,7 +213,7 @@ if pdf_arrest and arrest_temp:
 if pdf_cabg and selected_graft_images:
     story.append(Paragraph("CABG Grafts", styles["Heading2"]))
     for i, img in enumerate(selected_graft_images):
-        story.append(RLImage(img, width=200, height=140))  # ✅ fixed
+        story.append(RLImage(img, width=200, height=100))  # ✅ fixed
         story.append(Spacer(1, 10))
 
 story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
