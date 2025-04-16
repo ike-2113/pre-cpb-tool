@@ -110,6 +110,8 @@ ef = st.number_input("Ejection Fraction (%)", value=55)
 procedure = st.selectbox("Procedure Type", ["CABG", "AVR", "MVR", "Transplant", "Hemiarch", "Bentall", "Full Arch", "Dissection Repair – Stanford Type A", "Dissection Repair – Stanford Type B", "LVAD", "Off-pump CABG", "ECMO Cannulation", "Standby", "Other"])
 comorbidities = st.multiselect("Comorbidities", ["CKD", "Hypertension", "Jehovah’s Witness", "Anemia", "Aortic Disease", "Diabetes", "Redo Sternotomy", "None"])
 valve_issues = st.multiselect("Valve Pathology", ["Aortic Stenosis", "Aortic Insufficiency", "Mitral Stenosis", "Mitral Regurgitation", "Tricuspid Regurgitation", "Valve Prolapse"])
+blood_type = st.selectbox("Patient Blood Type", ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"])
+blood_product_allergies = st.text_area("Blood Product Allergies (if any)", value="")
 # ---- Arrest Plan ----
 if procedure in ["Dissection Repair – Stanford Type A", "Full Arch"] and pdf_arrest:
     arrest_temp = st.number_input("Target Arrest Temperature (°C)", value=18)
@@ -156,6 +158,27 @@ do2i = round(do2 / bsa, 1)
 map_target = get_map_target(comorbidities)
 heparin_dose = calculate_heparin_dose(weight)
 
+def get_compatible_blood_products(blood_type):
+    compatibility = {
+        "A+": {"PRBC": ["A+", "A-", "O+", "O-"], "FFP": ["A+", "AB+", "A-", "AB-"]},
+        "A-": {"PRBC": ["A-", "O-"], "FFP": ["A-", "AB-"]},
+        "B+": {"PRBC": ["B+", "B-", "O+", "O-"], "FFP": ["B+", "AB+", "B-", "AB-"]},
+        "B-": {"PRBC": ["B-", "O-"], "FFP": ["B-", "AB-"]},
+        "AB+": {"PRBC": ["A+", "B+", "O+", "AB+", "A-", "B-", "O-", "AB-"], "FFP": ["AB+"]},
+        "AB-": {"PRBC": ["A-", "B-", "O-", "AB-"], "FFP": ["AB-"]},
+        "O+": {"PRBC": ["O+", "O-"], "FFP": ["O+", "A+", "B+", "AB+", "O-", "A-", "B-", "AB-"]},
+        "O-": {"PRBC": ["O-"], "FFP": ["O-", "A-", "B-", "AB-"]},
+    }
+    return {
+        "Blood Type": blood_type,
+        "PRBC": compatibility[blood_type]["PRBC"],
+        "FFP": compatibility[blood_type]["FFP"],
+        "Cryo": compatibility[blood_type]["FFP"],
+        "Whole Blood": compatibility[blood_type]["PRBC"]
+    }
+
+blood_compatibility = get_compatible_blood_products(blood_type)
+
 # ---- Outputs ----
 st.subheader("Outputs")
 st.write(f"BMI: {bmi} | BSA: {bsa} m²")
@@ -163,6 +186,13 @@ st.write(f"Flow @ CI {suggested_ci}: {flow} L/min")
 st.write(f"Post Dilutional Hct: {post_hct}% | RBC Units Needed: {rbc_units}")
 st.write(f"DO2: {do2} | DO2i: {do2i}")
 st.write(f"MAP Target: {map_target} | Heparin Dose: {heparin_dose} units")
+st.markdown("### Transfusion Compatibility")
+st.write(f"**Blood Type:** {blood_type}")
+for product, compatible in blood_compatibility.items():
+    if product != "Blood Type":
+        st.write(f"**{product} Compatible:** {', '.join(compatible)}")
+if blood_product_allergies:
+    st.warning(f"**Allergies:** {blood_product_allergies}")
 st.markdown("### CI Comparison")
 
 for ci in [1.8, 2.4, 3.0]:
@@ -274,10 +304,27 @@ timestamp = datetime.now(pytz.timezone("US/Eastern")).strftime('%Y-%m-%d %I:%M %
 story.append(Spacer(1, 12))
 story.append(Paragraph(f"Generated {timestamp}", ParagraphStyle(name='Footer', fontSize=8, textColor=colors.grey, alignment=1)))
 story.append(Spacer(1, 20))
-story.append(Paragraph(
-    "Medical Disclaimer: The information provided in this application is strictly for educational purposes only and is not intended or implied to be a substitute for medical advice or instruction by a health professional. Information in this application may differ from the opinions of your institution. Consult with a recognized medical professional before making decisions based on the information in this application. The authors are not responsible for the use or interpretation you make of any information provided. Though we strive to make sure all of the information is current and reliable, we cannot guarantee accuracy, adequacy, completeness, legality, or usefulness of any information provided.",
-    ParagraphStyle(name='Disclaimer', fontSize=6, textColor=colors.grey, alignment=1)
-))
+# Add transfusion compatibility section
+transfusion_rows = [["PRODUCT", "COMPATIBLE TYPES", ""]]
+for product in ["PRBC", "FFP", "Cryo", "Whole Blood"]:
+    transfusion_rows.append([product, ", ".join(blood_compatibility[product]), ""])
+if blood_product_allergies:
+    transfusion_rows.append(["Allergies", blood_product_allergies, ""])
+build_parameter_table(story, "TRANSFUSION COMPATIBILITY", transfusion_rows)
+
+# Add disclaimer
+story.append(Spacer(1, 12))
+disclaimer_text = (
+    "Medical Disclaimer: The information provided in this application is strictly for educational purposes only and "
+    "is not intended or implied to be a substitute for medical advice or instruction by a health professional. "
+    "Information in this application may differ from the opinions of your institution. Consult with a recognized medical professional "
+    "before making decisions based on the information in this application. The authors are not responsible for the use or interpretation "
+    "you make of any information provided. Though we strive to make sure all of the information is current and reliable, we cannot guarantee "
+    "accuracy, adequacy, completeness, legality, or usefulness of any information provided."
+)
+story.append(Paragraph(disclaimer_text, ParagraphStyle(name='Disclaimer', fontSize=6, textColor=colors.grey, alignment=1)))
+
+# Finalize PDF
 doc.build(story)
 
 st.download_button("Download PDF", data=pdf_buffer.getvalue(), file_name="precpb_summary.pdf", mime="application/pdf")
