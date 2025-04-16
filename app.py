@@ -43,6 +43,7 @@ def calculate_prime_osmolality(additives):
         if "Heparin" in item: osmo += 1
     return osmo
 # ---- Streamlit UI ----
+st.title("Pre-CPB Planning Tool")
 with st.sidebar:
     with open(streamlit_logo_path, "rb") as img_file:
         st.image(img_file.read(), width=250)
@@ -176,7 +177,9 @@ story.append(Paragraph("Perfusion Sentinel Report", styles['Title']))
 story.append(Spacer(1, 12))
 story.append(Paragraph(f"<b>Procedure:</b> {procedure}", styles["Heading2"]))
 
-if pdf_patient:
+# Always include patient section if any of its sub-fields are selected
+if any([pdf_height, pdf_weight, pdf_bmi, pdf_bsa, pdf_pre_hct, pdf_pre_hgb,
+        pdf_prime_vol, pdf_prime_add, pdf_target_hct, pdf_ef, pdf_comorbid]):
     story.append(Paragraph("Patient Data", styles['Heading2']))
     if pdf_height: story.append(Paragraph(f"Height: {height} cm", styles["Normal"]))
     if pdf_weight: story.append(Paragraph(f"Weight: {weight} kg", styles["Normal"]))
