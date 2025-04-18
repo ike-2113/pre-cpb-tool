@@ -2,8 +2,8 @@
 
 import streamlit as st
 st.set_page_config(
-    page_title="PerfusionSentinel",
-    page_icon="🫀",  # Optional emoji or icon
+    page_title="Perfusion Sentinel",
+    page_icon="pdf_logo.png",
     layout="centered"
 )
 
