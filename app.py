@@ -1,9 +1,11 @@
 # app.py — Complete Final Version with All Features
 
 import streamlit as st
+from PIL import Image
+
 st.set_page_config(
     page_title="Perfusion Sentinel",
-    page_icon="pdf_logo.png",
+    page_icon=Image.open("pdf_logo.png"),
     layout="centered"
 )
 
