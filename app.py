@@ -1,6 +1,12 @@
 # app.py — Complete Final Version with All Features
 
 import streamlit as st
+st.set_page_config(
+    page_title="PerfusionSentinel",
+    page_icon="🫀",  # Optional emoji or icon
+    layout="centered"
+)
+
 import os
 import io
 import pytz
