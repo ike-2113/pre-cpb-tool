@@ -52,6 +52,28 @@ def calculate_prime_osmolality(additives):
     return osmo
 # ---- Streamlit UI ----
 st.title("Bypass Blueprint")
+# ---- Hospital & Surgeon Select ----
+hospital = st.selectbox("Select Hospital", [
+    "Emory University Hospital",
+    "Emory Midtown Hospital",
+    "Emory St. Josephs Hospital",
+    "Piedmont Atlanta Hospital",
+    "Wellstar Kennestone Hospital"
+])
+
+hospital_surgeons = {
+    "Emory University Hospital": [
+        "Dr. Leshnower", "Dr. Vega", "Dr. Attia", "Dr. Daneshmand", "Dr. Chan",
+        "Dr. Bishawi", "Dr. Shashidharan", "Dr. Shaw", "Dr. Rosenblum",
+        "Dr. Zurcher", "Dr. Subi"
+    ],
+    "Emory Midtown Hospital": [],
+    "Emory St. Josephs Hospital": [],
+    "Piedmont Atlanta Hospital": [],
+    "Wellstar Kennestone Hospital": []
+}
+
+surgeon = st.selectbox("Select Surgeon", hospital_surgeons[hospital])
 with st.sidebar:
     with open(streamlit_logo_path, "rb") as img_file:
         st.image(img_file.read(), width=250)
@@ -152,7 +174,37 @@ if procedure == "CABG" and pdf_cabg:
         if image_path and os.path.exists(image_path):
             st.image(image_path, width=250)
             selected_graft_images.append(image_path)
-
+# ---- Surgeon Protocols ----
+surgeon_protocols = {
+    "Dr. Attia": (
+        "PUMP PRIME: 100mL 25% Albumin + 10,000 IU Heparin.\n"
+        "MAGNESIUM PROTOCOL: 5g Mg in 40mL P-Lyte.\n"
+        "INITIAL ADDITIVE SETTING: 8, CONTINUOUS SETTING: 3, INTERMITTENT SETTING: 6.\n"
+        "ON CPB DRUG PROTOCOL: 50mg Esmolol, 20g Mannitol.\n"
+        "POST CROSSCLAMP DRUG PROTOCOL: 200mg Lidocaine, 50mg Esmolol, 20g Mannitol, 2.5g Magnesium. 100mg Lidocaine for DCD Tx's.\n"
+        "CARDIOPLEGIA: Cold Microplegia: Hi K 1000 mL with 2/3 given antegrade and last 1/3 retrograde. Redose with 500ml retrograde and vein. Remind him at 15mins on retrograde. "
+        "Base redose K on patient needs and serum K. Warm shot: 250ml retrograde + 250ml antegrade. Uses DLP, burp vent before antegrade. Valve cases: remind at 30min antegrade + 15min retrograde. "
+        "MVRs: 8mm Jahele to coronary sinus. Flow: 250–300 cc/min. Heart Tx: 1L 4:1 before anastomoses, 500ml after each. Warm shot post-aortic with 500ml @ 100ml/min. Temp: 34°C for CABG/Single Valve. "
+        "Ask for complex cases. Stay warm for OHT. OPCAB: ACT > 350.\n"
+        "ADDITIONAL NOTES: 200mg Lidocaine post-XC. 50mg Esmolol pre/post-XC. Heart Tx per Dr. Vega. Use 50cc 25% Albumin (no Hespan). Cardioplegia leukocyte filter. "
+        "Two cell savers (except axillary IABP). Yellow sucker. Prefers 2-stage venous cannula. DCD Heart Tx’s."
+    ),
+    "Dr. Vega": (
+        "PUMP PRIME: 100mL 25% Albumin + 10,000 IU Heparin.\n"
+        "MAGNESIUM PROTOCOL: 5g Mg in 40mL P-Lyte.\n"
+        "INITIAL ADDITIVE SETTING: 8, CONTINUOUS SETTING: 3, INTERMITTENT SETTING: 6.\n"
+        "ON CPB DRUG PROTOCOL: 50mg Esmolol, 20g Mannitol.\n"
+        "POST CROSSCLAMP DRUG PROTOCOL: 200mg Lidocaine, 50mg Esmolol, 20g Mannitol, 2.5g Magnesium. 100mg Esmolol for AI/LVH.\n"
+        "CARDIOPLEGIA: 4:1 Cold Solution High K+ (add 20 mEq Bicarb to Plegia Bag). Heart Tx: 4:1 High K+ (add 20 mEq Bicarb + 3cc Dextrose). "
+        "1000mL Antegrade, 500mL Retrograde. Remind q20min on valves. CABGs: SVG @ 100 mmHg. No retrograde for CABG (only valves/aneurysms/dissections).\n"
+        "TEMP: 32–34°C. Lower for high-risk cases.\n"
+        "OPCAB: ½ Heparin dose.\n"
+        "POST XC DRUGS – ALL CASES: 200mg Lidocaine, 50mg Esmolol, 2.5g Magnesium, 20g Mannitol. 100mg Esmolol for AI/LVH. Heart Tx: 50cc 25% Albumin (no Hespan). "
+        "Cardioplegia leukocyte filter for all transplants.\n"
+        "DCD HEART TX: Only give 100mg Lidocaine when Xclamp comes off."
+    )
+}
+protocol_note = surgeon_protocols.get(surgeon, "No specific protocol provided.")
 # ---- Calculations ----
 bsa = calculate_bsa(height, weight)
 bmi = calculate_bmi(height, weight)
@@ -319,6 +371,12 @@ for product in ["PRBC", "FFP", "Cryo", "Whole Blood"]:
 if blood_product_allergies:
     transfusion_rows.append(["Allergies", blood_product_allergies, ""])
 build_parameter_table(story, "TRANSFUSION COMPATIBILITY", transfusion_rows)
+# ---- Surgeon Protocol PDF Section ----
+surgeon_block = [["ITEM", "DETAIL", ""]]
+surgeon_block.append(["Hospital", hospital, ""])
+surgeon_block.append(["Surgeon", surgeon, ""])
+surgeon_block.append(["Protocol", protocol_note, ""])
+build_parameter_table(story, "HOSPITAL & SURGEON PROTOCOL", surgeon_block)
 
 # Add disclaimer
 story.append(Spacer(1, 12))
