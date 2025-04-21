@@ -305,7 +305,7 @@ def build_parameter_table(story, title, rows):
     story.append(Spacer(1, 12))
     story.append(Paragraph(f"<b>{title}</b>", styles["Heading2"]))
     story.append(Spacer(1, 6))
-    table = Table(rows, colWidths=[170, 150, 230], hAlign="LEFT")
+    table = Table(rows, colWidths=[160, 200, 190], hAlign="LEFT")
     table.setStyle(TableStyle([
         ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
         ("TEXTCOLOR", (1, 1), (1, -1), colors.red),
@@ -419,18 +419,22 @@ build_parameter_table(story, "HOSPITAL & SURGEON PROTOCOL", surgeon_rows)
 
 # ---- STS Report PDF Section ----
 sts_rows = [["ITEM", "DETAIL", ""]]
-sts_rows.append(["STS Procedure", sts_procedure, ""])
-sts_rows.append(["Cross Clamp Time", f"{cross_clamp_time} min", ""])
-sts_rows.append(["Bypass Time", f"{bypass_time} min", ""])
-sts_rows.append(["Plegia Type", plegia_type, ""])
-sts_rows.append(["Crystalloid Plegia Volume", f"{plegia_volume} mL", ""])
-sts_rows.append(["Transfusion Given", transfusion_given, ""])
+from reportlab.lib.utils import simpleSplit
+def wrap(text):
+    return Paragraph(text, styles["Normal"])
+
+sts_rows.append(["STS Procedure", wrap(sts_procedure), ""])
+sts_rows.append(["Cross Clamp Time", wrap(f"{cross_clamp_time} min"), ""])
+sts_rows.append(["Bypass Time", wrap(f"{bypass_time} min"), ""])
+sts_rows.append(["Plegia Type", wrap(plegia_type), ""])
+sts_rows.append(["Crystalloid Plegia Volume", wrap(f"{plegia_volume} mL"), ""])
+sts_rows.append(["Transfusion Given", wrap(transfusion_given), ""])
 if transfusion_given == "Yes":
-    sts_rows.append(["Transfusion Volume", f"{transfusion_volume} mL", ""])
-sts_rows.append(["Hemoconcentrator Used", hemo_used, ""])
+    sts_rows.append(["Transfusion Volume", wrap(f"{transfusion_volume} mL"), ""])
+sts_rows.append(["Hemoconcentrator Used", wrap(hemo_used), ""])
 if hemo_used == "Yes":
-    sts_rows.append(["Hemoconcentrator Volume", f"{hemo_volume} mL", ""])
-sts_rows.append(["IMA Used", ima_used, ""])
+    sts_rows.append(["Hemoconcentrator Volume", wrap(f"{hemo_volume} mL"), ""])
+sts_rows.append(["IMA Used", wrap(ima_used), ""])
 
 build_parameter_table(story, "STS REPORT – PERFUSION SUMMARY", sts_rows)
 from reportlab.lib.enums import TA_RIGHT
