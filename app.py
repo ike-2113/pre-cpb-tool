@@ -74,6 +74,30 @@ hospital_surgeons = {
 }
 
 surgeon = st.selectbox("Select Surgeon", hospital_surgeons[hospital])
+# ---- STS Report Section ----
+st.markdown("### STS Report")
+
+sts_procedure = st.selectbox("Procedure Type (STS)", [
+    "CABG", "Mitral", "Aortic", "Mitral + CABG",
+    "Aortic + CABG", "Mitral Repair vs Replace + CABG"
+])
+
+cross_clamp_time = st.number_input("Cross Clamp Time (min)", min_value=0, value=0)
+bypass_time = st.number_input("Bypass Time (min)", min_value=0, value=0)
+
+plegia_type = st.selectbox("Cardioplegia Type", ["4:1", "Del Nido", "Microplegia"])
+plegia_volume = st.number_input("Crystalloid Plegia Volume (mL)", min_value=0, value=0)
+
+st.markdown("### Transfusion")
+transfusion_given = st.radio("Was transfusion given?", ["No", "Yes"])
+transfusion_volume = st.text_input("Transfusion Volume (mL)", value="") if transfusion_given == "Yes" else ""
+
+st.markdown("### Hemoconcentrator")
+hemo_used = st.radio("Used Hemoconcentrator?", ["No", "Yes"])
+hemo_volume = st.text_input("Volume Removed (mL)", value="") if hemo_used == "Yes" else ""
+
+st.markdown("### Use of IMA")
+ima_used = st.radio("IMA Used?", ["No", "Yes"])
 with st.sidebar:
     with open(streamlit_logo_path, "rb") as img_file:
         st.image(img_file.read(), width=250)
@@ -372,11 +396,33 @@ if blood_product_allergies:
     transfusion_rows.append(["Allergies", blood_product_allergies, ""])
 build_parameter_table(story, "TRANSFUSION COMPATIBILITY", transfusion_rows)
 # ---- Surgeon Protocol PDF Section ----
-surgeon_block = [["ITEM", "DETAIL", ""]]
-surgeon_block.append(["Hospital", hospital, ""])
-surgeon_block.append(["Surgeon", surgeon, ""])
-surgeon_block.append(["Protocol", protocol_note, ""])
-build_parameter_table(story, "HOSPITAL & SURGEON PROTOCOL", surgeon_block)
+surgeon_section = [["ITEM", "DETAIL", ""]]
+surgeon_section.append(["Hospital", hospital, ""])
+surgeon_section.append(["Surgeon", surgeon, ""])
+
+# Format protocol for paragraph-style readability
+formatted_protocol = Paragraph(
+    protocol_note.replace("\n", "<br/>").replace("  ", "&nbsp;&nbsp;"),
+    ParagraphStyle(name="ProtocolBlock", fontSize=8, leading=11)
+)
+surgeon_section.append(["Protocol", formatted_protocol, ""])
+build_parameter_table(story, "HOSPITAL & SURGEON PROTOCOL", surgeon_section)
+# ---- STS Report PDF Section ----
+sts_rows = [["ITEM", "DETAIL", ""]]
+sts_rows.append(["STS Procedure", sts_procedure, ""])
+sts_rows.append(["Cross Clamp Time", f"{cross_clamp_time} min", ""])
+sts_rows.append(["Bypass Time", f"{bypass_time} min", ""])
+sts_rows.append(["Plegia Type", plegia_type, ""])
+sts_rows.append(["Crystalloid Plegia Volume", f"{plegia_volume} mL", ""])
+sts_rows.append(["Transfusion Given", transfusion_given, ""])
+if transfusion_given == "Yes":
+    sts_rows.append(["Transfusion Volume", f"{transfusion_volume} mL", ""])
+sts_rows.append(["Hemoconcentrator Used", hemo_used, ""])
+if hemo_used == "Yes":
+    sts_rows.append(["Hemoconcentrator Volume", f"{hemo_volume} mL", ""])
+sts_rows.append(["IMA Used", ima_used, ""])
+
+build_parameter_table(story, "STS REPORT – PERFUSION SUMMARY", sts_rows)
 
 # Add disclaimer
 story.append(Spacer(1, 12))
