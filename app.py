@@ -20,6 +20,16 @@ from reportlab.lib import colors
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
+# ---- Password Gate ----
+st.title("🔐 Secure Access")
+
+PASSWORD = "Emory2025"
+user_input = st.text_input("Enter password to access Perfusion Sentinel:", type="password")
+
+if user_input != PASSWORD:
+    st.warning("Incorrect password. Please try again.")
+    st.stop()
+
 pdfmetrics.registerFont(TTFont("DejaVuSans", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"))
 
 streamlit_logo_path = "streamlit_logo.png"
@@ -165,7 +175,7 @@ procedure = st.selectbox("Procedure Type", ["CABG", "AVR", "MVR", "Transplant", 
 comorbidities = st.multiselect("Comorbidities", ["CKD", "Hypertension", "Jehovah’s Witness", "Anemia", "Aortic Disease", "Diabetes", "Redo Sternotomy", "None"])
 valve_issues = st.multiselect("Valve Pathology", ["Aortic Stenosis", "Aortic Insufficiency", "Mitral Stenosis", "Mitral Regurgitation", "Tricuspid Regurgitation", "Valve Prolapse"])
 blood_type = st.selectbox("Patient Blood Type", ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"])
-blood_product_allergies = st.text_area("Blood Product Allergies (if any)", value="")
+allergies = st.text_area("Allergies (if any)", value="")
 # ---- Arrest Plan ----
 if procedure in ["Dissection Repair – Stanford Type A", "Full Arch"] and pdf_arrest:
     arrest_temp = st.number_input("Target Arrest Temperature (°C)", value=18)
@@ -275,8 +285,8 @@ st.write(f"**Blood Type:** {blood_type}")
 for product, compatible in blood_compatibility.items():
     if product != "Blood Type":
         st.write(f"**{product} Compatible:** {', '.join(compatible)}")
-if blood_product_allergies:
-    st.warning(f"**Allergies:** {blood_product_allergies}")
+if allergies:
+    st.warning(f"**Allergies:** {allergies}")
 st.markdown("### CI Comparison")
 
 for ci in [1.8, 2.4, 3.0]:
@@ -384,8 +394,8 @@ build_all_summary_tables(story)
 transfusion_rows = [["PRODUCT", "COMPATIBLE TYPES", ""]]
 for product in ["PRBC", "FFP", "Cryo", "Whole Blood"]:
     transfusion_rows.append([product, ", ".join(blood_compatibility[product]), ""])
-if blood_product_allergies:
-    transfusion_rows.append(["Allergies", blood_product_allergies, ""])
+if allergies:
+    transfusion_rows.append(["Allergies", allergies, ""])
 build_parameter_table(story, "TRANSFUSION COMPATIBILITY", transfusion_rows)
 # ---- Surgeon Protocol PDF Section ----
 surgeon_rows = [["ITEM", "DETAIL", ""]]
