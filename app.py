@@ -402,12 +402,16 @@ surgeon_rows = [["ITEM", "DETAIL", ""]]
 surgeon_rows.append(["Hospital", hospital, ""])
 surgeon_rows.append(["Surgeon", surgeon, ""])
 
-# Add each protocol line as its own row if exists
 if protocol_note != "No specific protocol provided.":
     for line in protocol_note.strip().split("\n"):
-        line_clean = line.strip()
-        if line_clean:
-            surgeon_rows.append(["Protocol", line_clean, ""])
+        if ":" in line:
+            # Split into title and content
+            title, content = line.split(":", 1)
+            title = title.strip().capitalize()
+            content = content.strip()
+            surgeon_rows.append([title, content, ""])
+        else:
+            surgeon_rows.append(["", line.strip(), ""])
 else:
     surgeon_rows.append(["Protocol", protocol_note, ""])
 
