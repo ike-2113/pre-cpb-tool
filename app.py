@@ -379,15 +379,7 @@ perfusion_table = [
 build_parameter_table(story, "CRITICAL PERFUSION PARAMETERS – CASE SUMMARY", perfusion_table)
 
 build_all_summary_tables(story)
-story.append(Paragraph("Perfusion Summary", styles["Heading2"]))
-# -- Perfusion Summary Table Style Block --
-from reportlab.platypus import Table, TableStyle, Paragraph, Spacer
 
-
-timestamp = datetime.now(pytz.timezone("US/Eastern")).strftime('%Y-%m-%d %I:%M %p')
-story.append(Spacer(1, 12))
-story.append(Paragraph(f"Generated {timestamp}", ParagraphStyle(name='Footer', fontSize=8, textColor=colors.grey, alignment=1)))
-story.append(Spacer(1, 20))
 # Add transfusion compatibility section
 transfusion_rows = [["PRODUCT", "COMPATIBLE TYPES", ""]]
 for product in ["PRBC", "FFP", "Cryo", "Whole Blood"]:
@@ -396,17 +388,21 @@ if blood_product_allergies:
     transfusion_rows.append(["Allergies", blood_product_allergies, ""])
 build_parameter_table(story, "TRANSFUSION COMPATIBILITY", transfusion_rows)
 # ---- Surgeon Protocol PDF Section ----
-surgeon_section = [["ITEM", "DETAIL", ""]]
-surgeon_section.append(["Hospital", hospital, ""])
-surgeon_section.append(["Surgeon", surgeon, ""])
+surgeon_rows = [["ITEM", "DETAIL", ""]]
+surgeon_rows.append(["Hospital", hospital, ""])
+surgeon_rows.append(["Surgeon", surgeon, ""])
 
-# Format protocol for paragraph-style readability
-formatted_protocol = Paragraph(
-    protocol_note.replace("\n", "<br/>").replace("  ", "&nbsp;&nbsp;"),
-    ParagraphStyle(name="ProtocolBlock", fontSize=8, leading=11)
-)
-surgeon_section.append(["Protocol", formatted_protocol, ""])
-build_parameter_table(story, "HOSPITAL & SURGEON PROTOCOL", surgeon_section)
+# Add each protocol line as its own row if exists
+if protocol_note != "No specific protocol provided.":
+    for line in protocol_note.strip().split("\n"):
+        line_clean = line.strip()
+        if line_clean:
+            surgeon_rows.append(["Protocol", line_clean, ""])
+else:
+    surgeon_rows.append(["Protocol", protocol_note, ""])
+
+build_parameter_table(story, "HOSPITAL & SURGEON PROTOCOL", surgeon_rows)
+
 # ---- STS Report PDF Section ----
 sts_rows = [["ITEM", "DETAIL", ""]]
 sts_rows.append(["STS Procedure", sts_procedure, ""])
@@ -423,6 +419,19 @@ if hemo_used == "Yes":
 sts_rows.append(["IMA Used", ima_used, ""])
 
 build_parameter_table(story, "STS REPORT – PERFUSION SUMMARY", sts_rows)
+from reportlab.lib.enums import TA_RIGHT
+
+footer_style = ParagraphStyle(
+    name='FooterRight',
+    fontSize=8,
+    textColor=colors.grey,
+    alignment=TA_RIGHT,
+    rightIndent=12
+)
+
+timestamp = datetime.now(pytz.timezone("US/Eastern")).strftime('%Y-%m-%d %I:%M %p')
+story.append(Spacer(1, 12))
+story.append(Paragraph(f"Generated {timestamp}", footer_style))
 
 # Add disclaimer
 story.append(Spacer(1, 12))
