@@ -339,6 +339,15 @@ def build_all_summary_tables(story):
         if pdf_prime_add and prime_additives:
             prime_rows.append(["Additives", ", ".join(prime_additives), "–"])
         build_parameter_table(story, "PRIME COMPOSITION", prime_rows)
+def add_graft_images_to_pdf(story, selected_graft_images):
+    story.append(Spacer(1, 12))
+    story.append(Paragraph("<b>CABG GRAFT IMAGES</b>", styles["Heading2"]))
+    story.append(Spacer(1, 6))
+    for img_path in selected_graft_images:
+        if os.path.exists(img_path):
+            graft_img = RLImage(img_path, width=250)
+            story.append(graft_img)
+            story.append(Spacer(1, 6))
 
     # Cardioplegia Table
     if pdf_cardio:
@@ -389,16 +398,9 @@ perfusion_table = [
 build_parameter_table(story, "CRITICAL PERFUSION PARAMETERS – CASE SUMMARY", perfusion_table)
 
 build_all_summary_tables(story)
-# ---- Graft Images Section ----
+
 if selected_graft_images:
-    story.append(Spacer(1, 12))
-    story.append(Paragraph("CABG Graft Images", styles["Heading2"]))
-    story.append(Spacer(1, 6))
-    for img_path in selected_graft_images:
-        if os.path.exists(img_path):
-           graft_img = RLImage(img_path, width=250)
-            story.append(graft_img)
-            story.append(Spacer(1, 6))
+    add_graft_images_to_pdf(story, selected_graft_images)
 
 # Add transfusion compatibility section
 transfusion_rows = [["PRODUCT", "COMPATIBLE TYPES", ""]]
