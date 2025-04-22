@@ -305,7 +305,7 @@ def build_parameter_table(story, title, rows):
     story.append(Spacer(1, 12))
     story.append(Paragraph(f"<b>{title}</b>", styles["Heading2"]))
     story.append(Spacer(1, 6))
-    table = Table(rows, colWidths=[160, 200, 190], hAlign="LEFT")
+    table = Table(rows, colWidths=[120, 250, 130], hAlign="LEFT")
     table.setStyle(TableStyle([
         ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
         ("TEXTCOLOR", (1, 1), (1, -1), colors.red),
@@ -409,9 +409,13 @@ if protocol_note != "No specific protocol provided.":
             title, content = line.split(":", 1)
             title = title.strip().capitalize()
             content = content.strip()
-            surgeon_rows.append([title, content, ""])
+            surgeon_rows.append([
+                Paragraph(title, styles["Normal"]),
+                Paragraph(content, styles["Normal"]),
+                ""
+            ])
         else:
-            surgeon_rows.append(["", line.strip(), ""])
+            surgeon_rows.append(["", Paragraph(line.strip(), styles["Normal"]), ""])
 else:
     surgeon_rows.append(["Protocol", protocol_note, ""])
 
