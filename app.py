@@ -396,7 +396,7 @@ if selected_graft_images:
     story.append(Spacer(1, 6))
     for img_path in selected_graft_images:
         if os.path.exists(img_path):
-            graft_img = RLImage(img_path, width=250, height=150)  # adjust size as needed
+           graft_img = RLImage(img_path, width=250)
             story.append(graft_img)
             story.append(Spacer(1, 6))
 
