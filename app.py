@@ -389,6 +389,16 @@ perfusion_table = [
 build_parameter_table(story, "CRITICAL PERFUSION PARAMETERS – CASE SUMMARY", perfusion_table)
 
 build_all_summary_tables(story)
+# ---- Graft Images Section ----
+if selected_graft_images:
+    story.append(Spacer(1, 12))
+    story.append(Paragraph("CABG Graft Images", styles["Heading2"]))
+    story.append(Spacer(1, 6))
+    for img_path in selected_graft_images:
+        if os.path.exists(img_path):
+            graft_img = RLImage(img_path, width=250, height=150)  # adjust size as needed
+            story.append(graft_img)
+            story.append(Spacer(1, 6))
 
 # Add transfusion compatibility section
 transfusion_rows = [["PRODUCT", "COMPATIBLE TYPES", ""]]
