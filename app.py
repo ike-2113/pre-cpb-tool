@@ -85,29 +85,29 @@ hospital_surgeons = {
 
 surgeon = st.selectbox("Select Surgeon", hospital_surgeons[hospital])
 # ---- STS Report Section ----
-st.markdown("### STS Report")
+with st.expander("STS Report", expanded=True):
+    sts_procedure = st.selectbox("Procedure Type (STS)", [
+        "CABG", "Mitral", "Aortic", "Mitral + CABG",
+        "Aortic + CABG", "Mitral Repair vs Replace + CABG"
+    ])
 
-sts_procedure = st.selectbox("Procedure Type (STS)", [
-    "CABG", "Mitral", "Aortic", "Mitral + CABG",
-    "Aortic + CABG", "Mitral Repair vs Replace + CABG"
-])
+    cross_clamp_time = st.number_input("Cross Clamp Time (min)", min_value=0, value=0)
+    bypass_time = st.number_input("Bypass Time (min)", min_value=0, value=0)
 
-cross_clamp_time = st.number_input("Cross Clamp Time (min)", min_value=0, value=0)
-bypass_time = st.number_input("Bypass Time (min)", min_value=0, value=0)
+    plegia_type = st.selectbox("Cardioplegia Type", ["4:1", "Del Nido", "Microplegia"])
+    plegia_volume = st.number_input("Crystalloid Plegia Volume (mL)", min_value=0, value=0)
 
-plegia_type = st.selectbox("Cardioplegia Type", ["4:1", "Del Nido", "Microplegia"])
-plegia_volume = st.number_input("Crystalloid Plegia Volume (mL)", min_value=0, value=0)
+    st.markdown("### Transfusion")
+    transfusion_given = st.radio("Was transfusion given?", ["No", "Yes"])
+    transfusion_volume = st.text_input("Transfusion Volume (mL)", value="") if transfusion_given == "Yes" else ""
 
-st.markdown("### Transfusion")
-transfusion_given = st.radio("Was transfusion given?", ["No", "Yes"])
-transfusion_volume = st.text_input("Transfusion Volume (mL)", value="") if transfusion_given == "Yes" else ""
+    st.markdown("### Hemoconcentrator")
+    hemo_used = st.radio("Used Hemoconcentrator?", ["No", "Yes"])
+    hemo_volume = st.text_input("Volume Removed (mL)", value="") if hemo_used == "Yes" else ""
 
-st.markdown("### Hemoconcentrator")
-hemo_used = st.radio("Used Hemoconcentrator?", ["No", "Yes"])
-hemo_volume = st.text_input("Volume Removed (mL)", value="") if hemo_used == "Yes" else ""
+    st.markdown("### Use of IMA")
+    ima_used = st.radio("IMA Used?", ["No", "Yes"])
 
-st.markdown("### Use of IMA")
-ima_used = st.radio("IMA Used?", ["No", "Yes"])
 with st.sidebar:
     with open(streamlit_logo_path, "rb") as img_file:
         st.image(img_file.read(), width=250)
