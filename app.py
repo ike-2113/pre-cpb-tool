@@ -66,6 +66,7 @@ st.title("Bypass Blueprint")
 ## Removed hospital and surgeon selection
 # ---- STS Report Section ----
 with st.expander("STS Report", expanded=True):
+    sts_date = st.date_input("Date of Procedure")
     sts_procedure = st.selectbox("Procedure Type (STS)", [
         "CABG", "Mitral", "Aortic", "Mitral + CABG",
         "Aortic + CABG", "Mitral Repair vs Replace + CABG"
@@ -154,8 +155,8 @@ ef = st.number_input("Ejection Fraction (%)", value=55)
 procedure = st.selectbox("Procedure Type", ["CABG", "AVR", "MVR", "Transplant", "Hemiarch", "Bentall", "Full Arch", "Dissection Repair – Stanford Type A", "Dissection Repair – Stanford Type B", "LVAD", "Off-pump CABG", "ECMO Cannulation", "Standby", "Other"])
 comorbidities = st.multiselect("Comorbidities", ["CKD", "Hypertension", "Jehovah’s Witness", "Anemia", "Aortic Disease", "Diabetes", "Redo Sternotomy", "None"])
 valve_issues = st.multiselect("Valve Pathology", ["Aortic Stenosis", "Aortic Insufficiency", "Mitral Stenosis", "Mitral Regurgitation", "Tricuspid Regurgitation", "Valve Prolapse"])
+# ---- Allergies removed ----
 blood_type = st.selectbox("Patient Blood Type", ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"])
-allergies = st.text_area("Allergies (if any)", value="")
 # ---- Arrest Plan ----
 if procedure in ["Dissection Repair – Stanford Type A", "Full Arch"] and pdf_arrest:
     arrest_temp = st.number_input("Target Arrest Temperature (°C)", value=18)
@@ -237,8 +238,6 @@ st.write(f"**Blood Type:** {blood_type}")
 for product, compatible in blood_compatibility.items():
     if product != "Blood Type":
         st.write(f"**{product} Compatible:** {', '.join(compatible)}")
-if allergies:
-    st.warning(f"**Allergies:** {allergies}")
 st.markdown("### CI Comparison")
 
 for ci in [1.8, 2.4, 3.0]:
@@ -356,8 +355,6 @@ if selected_graft_images:
 transfusion_rows = [["PRODUCT", "COMPATIBLE TYPES", ""]]
 for product in ["PRBC", "FFP", "Cryo", "Whole Blood"]:
     transfusion_rows.append([product, ", ".join(blood_compatibility[product]), ""])
-if allergies:
-    transfusion_rows.append(["Allergies", allergies, ""])
 build_parameter_table(story, "TRANSFUSION COMPATIBILITY", transfusion_rows)
 # ---- Surgeon Protocol PDF Section ----
 # Removed hospital & surgeon protocol section from PDF
@@ -368,6 +365,7 @@ from reportlab.lib.utils import simpleSplit
 def wrap(text):
     return Paragraph(text, styles["Normal"])
 
+sts_rows.append(["Date of Procedure", wrap(str(sts_date)), ""])
 sts_rows.append(["STS Procedure", wrap(sts_procedure), ""])
 sts_rows.append(["Cross Clamp Time", wrap(f"{cross_clamp_time} min"), ""])
 sts_rows.append(["Bypass Time", wrap(f"{bypass_time} min"), ""])
