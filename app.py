@@ -423,6 +423,7 @@ if tool == "Drug Library":
             "Use": "Intra- or post-op.",
             "Potency": "High.",
             "CPB/CNS Considerations": "Hemodilution may ↓ concentration."
+            ,"Dosing": "1–2 mg/kg IV over 20–30 minutes (max ~7 mg/kg/day)"
         },
         "Statins": {
             "Mechanism of Action": "HMG-CoA reductase inhibitor → ↓ cholesterol synthesis.",
@@ -434,6 +435,7 @@ if tool == "Drug Library":
             "Use": "Pre-op.",
             "Potency": "Moderate–high.",
             "CPB/CNS Considerations": "None."
+            ,"Dosing": "10–80 mg orally daily"
         },
         "Fibrates": {
             "Mechanism of Action": "Upregulates lipoprotein lipase → ↓ TGs, ↑ HDL.",
@@ -445,6 +447,7 @@ if tool == "Drug Library":
             "Use": "Pre-op.",
             "Potency": "Moderate.",
             "CPB/CNS Considerations": "None."
+            ,"Dosing": "48–145 mg orally daily"
         },
         "Bile Acid Sequestrants": {
             "Mechanism of Action": "Binds bile acids → ↑ excretion → ↑ LDL receptor.",
@@ -456,6 +459,7 @@ if tool == "Drug Library":
             "Use": "Pre-op.",
             "Potency": "Low–moderate.",
             "CPB/CNS Considerations": "None."
+            ,"Dosing": "4–16 g orally/day in divided doses"
         },
         "Niacin": {
             "Mechanism of Action": "↓ TG synthesis, ↑ HDL via lipoprotein lipase.",
@@ -467,6 +471,7 @@ if tool == "Drug Library":
             "Use": "Pre-op.",
             "Potency": "Moderate.",
             "CPB/CNS Considerations": "None."
+            ,"Dosing": "500–2,000 mg orally daily (start low to minimize flushing)"
         },
         "Diazepam": {
             "Mechanism of Action": "GABA-A agonist → CNS depression.",
@@ -478,6 +483,7 @@ if tool == "Drug Library":
             "Use": "Pre-op.",
             "Potency": "Moderate.",
             "CPB/CNS Considerations": "Hemodilution ↑ free drug."
+            ,"Dosing": "2–10 mg IV every 3–4 hours PRN; max ~30 mg/8 hours"
         },
         "Lorazepam": {
             "Mechanism of Action": "GABA-A agonist.",
@@ -489,6 +495,7 @@ if tool == "Drug Library":
             "Use": "Pre-op.",
             "Potency": "Moderate.",
             "CPB/CNS Considerations": "Hemodilution ↑ free drug."
+            ,"Dosing": "1–4 mg IV every 2–6 hours PRN"
         },
         "Midazolam": {
             "Mechanism of Action": "GABA-A agonist.",
@@ -500,6 +507,7 @@ if tool == "Drug Library":
             "Use": "Pre-op.",
             "Potency": "Moderate.",
             "CPB/CNS Considerations": "Hemodilution ↑ free drug."
+            ,"Dosing": "0.02–0.1 mg/kg IV (typically 1–2 mg increments)"
         },
         "Atropine": {
             "Mechanism of Action": "Muscarinic antagonist → ↓ parasympathetic tone.",
@@ -511,6 +519,7 @@ if tool == "Drug Library":
             "Use": "Pre-op.",
             "Potency": "Moderate.",
             "CPB/CNS Considerations": "None."
+            ,"Dosing": "0.5–1 mg IV every 3–5 minutes as needed; max ~3 mg"
         },
         "Glycopyrrolate": {
             "Mechanism of Action": "Muscarinic antagonist.",
@@ -522,6 +531,7 @@ if tool == "Drug Library":
             "Use": "Pre-op.",
             "Potency": "Moderate.",
             "CPB/CNS Considerations": "None."
+            ,"Dosing": "0.1–0.2 mg IV every 2–4 hours PRN"
         },
         "Adenosine": {
             "Mechanism of Action": "A1 receptor agonist → AV block.",
@@ -533,6 +543,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "High.",
             "CPB/CNS Considerations": "↓ plasma concentration."
+            ,"Dosing": "6 mg rapid IV push; if ineffective, 12 mg in 1–2 minutes, may repeat once"
         },
         "Magnesium": {
             "Mechanism of Action": "Stabilizes myocardium, ↓ Ca²⁺ influx.",
@@ -544,6 +555,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "High.",
             "CPB/CNS Considerations": "↓ plasma concentration."
+            ,"Dosing": "1–2 g IV over 15–30 minutes (for torsades)"
         },
         "Propofol": {
             "Mechanism of Action": "GABA-A agonist → CNS depression.",
@@ -555,6 +567,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "High.",
             "CPB/CNS Considerations": "↑ free drug."
+            ,"Dosing": "Induction: 1.5–2.5 mg/kg IV; maintenance: 50–200 mcg/kg/min"
         },
         "Dexmedetomidine": {
             "Mechanism of Action": "α2 agonist → ↓ NE release.",
@@ -566,6 +579,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "High.",
             "CPB/CNS Considerations": "↑ free drug."
+            ,"Dosing": "Load: 1 mcg/kg over 10 minutes; maintenance: 0.2–0.7 mcg/kg/hr"
         },
         "Etomidate": {
             "Mechanism of Action": "GABAergic CNS depression.",
@@ -577,6 +591,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "High.",
             "CPB/CNS Considerations": "↑ free drug."
+            ,"Dosing": "0.2–0.3 mg/kg IV (single dose for induction)"
         },
         "Ketamine": {
             "Mechanism of Action": "NMDA antagonist.",
@@ -588,6 +603,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "High.",
             "CPB/CNS Considerations": "↑ free drug."
+            ,"Dosing": "Induction: 1–2 mg/kg IV; maintenance: 0.5–1 mg/min or 0.5–1 mg/kg/hr"
         },
         "Alfentanil": {
             "Mechanism of Action": "μ-opioid agonist.",
@@ -599,6 +615,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "Moderate.",
             "CPB/CNS Considerations": "↓ concentration."
+            ,"Dosing": "8–20 mcg/kg IV bolus, or infusion 0.5–1 mcg/kg/min"
         },
         "Fentanyl": {
             "Mechanism of Action": "μ-opioid agonist.",
@@ -610,6 +627,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "High.",
             "CPB/CNS Considerations": "↓ concentration."
+            ,"Dosing": "Induction: 1–5 mcg/kg IV; maintenance: 1–3 mcg/kg/hr"
         },
         "Remifentanil": {
             "Mechanism of Action": "μ-opioid agonist.",
@@ -621,6 +639,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "High.",
             "CPB/CNS Considerations": "Not sequestered."
+            ,"Dosing": "0.5–1 mcg/kg over 60–90 seconds, then 0.05–2 mcg/kg/min infusion"
         },
         "Sufentanil": {
             "Mechanism of Action": "μ-opioid agonist.",
@@ -632,6 +651,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "Very high.",
             "CPB/CNS Considerations": "↓ concentration."
+            ,"Dosing": "Induction: 0.3–1 mcg/kg IV; maintenance: 0.3–0.5 mcg/kg/hr"
         },
         "Benzocaine": {
             "Mechanism of Action": "Na⁺ channel blocker (ester).",
@@ -641,6 +661,7 @@ if tool == "Drug Library":
             "Use": "Topical.",
             "Potency": "Low.",
             "CPB/CNS Considerations": "None."
+            ,"Dosing": "Apply thin layer or spray; max ~200 mg total"
         },
         "Bupivacaine": {
             "Mechanism of Action": "Na⁺ channel blocker (amide).",
@@ -651,6 +672,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "Moderate.",
             "CPB/CNS Considerations": "None."
+            ,"Dosing": "Infiltration: 1.25–2.5 mg/kg (max ~175 mg single dose)"
         },
         "Ropivacaine": {
             "Mechanism of Action": "Na⁺ channel blocker (amide).",
@@ -660,6 +682,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "Moderate.",
             "CPB/CNS Considerations": "None."
+            ,"Dosing": "Infiltration: 2–3 mg/kg (max ~200 mg)"
         },
         "Lidocaine": {
             "Mechanism of Action": "Na⁺ channel blocker (amide).",
@@ -670,6 +693,7 @@ if tool == "Drug Library":
             "Use": "Intra-op.",
             "Potency": "Moderate.",
             "CPB/CNS Considerations": "Antiarrhythmic effect preserved."
+            ,"Dosing": "Max: 4.5 mg/kg plain (up to ~300 mg); with epi: ~500 mg"
         },
         "Acetaminophen": {
             "Mechanism of Action": "Weak COX inhibitor, centrally acting.",
@@ -681,6 +705,7 @@ if tool == "Drug Library":
             "Use": "Post-op.",
             "Potency": "Moderate.",
             "CPB/CNS Considerations": "None."
+            ,"Dosing": "650–1,000 mg every 4–6 hours; max ~4 g/day"
         },
         # ...existing and additional drugs remain below...
         "Ketorolac": {
@@ -692,7 +717,8 @@ if tool == "Drug Library":
             "Adjuvants": "None.",
             "Use": "Post-op.",
             "Potency": "Moderate.",
-            "CPB/CNS Considerations": "None."
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "15–30 mg IV every 6 hours; max ~120 mg/day"
         },
         "Ibuprofen": {
             "Mechanism of Action": "COX inhibitor.",
@@ -703,7 +729,8 @@ if tool == "Drug Library":
             "Adjuvants": "None.",
             "Use": "Post-op.",
             "Potency": "Moderate.",
-            "CPB/CNS Considerations": "None."
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "400–800 mg orally every 6–8 hours; max ~3.2 g/day"
         },
         "Ketamine (sub-anesthetic)": {
             "Mechanism of Action": "NMDA antagonist.",
@@ -714,7 +741,8 @@ if tool == "Drug Library":
             "Adjuvants": "Benzodiazepines.",
             "Use": "Post-op.",
             "Potency": "Moderate.",
-            "CPB/CNS Considerations": "None."
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "0.25–0.5 mg/kg IV bolus or 0.1–0.3 mg/kg/hr"
         },
         "Pregabalin": {
             "Mechanism of Action": "Binds α2δ calcium channel → ↓ neurotransmitter release.",
@@ -724,7 +752,8 @@ if tool == "Drug Library":
             "Situations to Avoid": "None specified.",
             "Use": "Post-op.",
             "Potency": "Moderate.",
-            "CPB/CNS Considerations": "None."
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "75–150 mg orally twice daily"
         },
         "Gabapentin": {
             "Mechanism of Action": "Same as pregabalin.",
@@ -735,7 +764,8 @@ if tool == "Drug Library":
             "Adjuvants": "None.",
             "Use": "Post-op.",
             "Potency": "Moderate.",
-            "CPB/CNS Considerations": "None."
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "300–600 mg orally three times daily"
         },
         "Dexamethasone (anti-inflammatory)": {
             "Mechanism of Action": "Glucocorticoid.",
@@ -746,7 +776,8 @@ if tool == "Drug Library":
             "Adjuvants": "5-HT₃ antagonists.",
             "Use": "Post-op.",
             "Potency": "High.",
-            "CPB/CNS Considerations": "Helpful during CPB."
+            "CPB/CNS Considerations": "Helpful during CPB.",
+            "Dosing": "PONV: 4–8 mg IV; anti-inflammatory: 10–20 mg IV"
         },
         "Magnesium (analgesic adjunct)": {
             "Mechanism of Action": "Calcium antagonist, NMDA antagonist.",
@@ -757,7 +788,8 @@ if tool == "Drug Library":
             "Adjuvants": "Electrolyte therapy.",
             "Use": "Intra-op.",
             "Potency": "Moderate.",
-            "CPB/CNS Considerations": "None."
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "1–2 g IV over 30–60 minutes"
         },
         "Mitomycin C": {
             "Mechanism of Action": "Alkylating agent → DNA crosslinks.",
@@ -768,7 +800,8 @@ if tool == "Drug Library":
             "Adjuvants": "None.",
             "Use": "Intra-op.",
             "Potency": "High.",
-            "CPB/CNS Considerations": "None."
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "~20–40 mg total intra-peritoneally (HIPEC)"
         },
         "Cisplatin": {
             "Mechanism of Action": "Platinum alkylator → DNA crosslinks.",
@@ -779,7 +812,8 @@ if tool == "Drug Library":
             "Adjuvants": "None.",
             "Use": "Intra-op.",
             "Potency": "High.",
-            "CPB/CNS Considerations": "None."
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "~50–100 mg/m² intra-peritoneally (HIPEC)"
         },
         "Oxaliplatin": {
             "Mechanism of Action": "Platinum alkylator → DNA crosslinks.",
@@ -790,7 +824,8 @@ if tool == "Drug Library":
             "Adjuvants": "None.",
             "Use": "Intra-op.",
             "Potency": "High.",
-            "CPB/CNS Considerations": "None."
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "~200–300 mg/m² intra-peritoneally (HIPEC)"
         },
         "General Antiemetic": {
             "Mechanism of Action": "Broad anti-nausea pathways.",
@@ -801,7 +836,8 @@ if tool == "Drug Library":
             "Adjuvants": "None.",
             "Use": "Pre-/post-op.",
             "Potency": "Moderate.",
-            "CPB/CNS Considerations": "Hemodilution may reduce effect."
+            "CPB/CNS Considerations": "Hemodilution may reduce effect.",
+            "Dosing": "See specific agents"
         },
         "Granisetron": {
             "Mechanism of Action": "5-HT₃ antagonist.",
@@ -812,7 +848,8 @@ if tool == "Drug Library":
             "Adjuvants": "Dexamethasone.",
             "Use": "Pre-op.",
             "Potency": "Moderate.",
-            "CPB/CNS Considerations": "May require redosing."
+            "CPB/CNS Considerations": "May require redosing.",
+            "Dosing": "1 mg IV or 0.01 mg/kg once"
         },
         "Palonosetron": {
             "Mechanism of Action": "Long-acting 5-HT₃ antagonist.",
@@ -823,7 +860,8 @@ if tool == "Drug Library":
             "Adjuvants": "Dexamethasone.",
             "Use": "Pre-op.",
             "Potency": "High.",
-            "CPB/CNS Considerations": "Less redosing needed."
+            "CPB/CNS Considerations": "Less redosing needed.",
+            "Dosing": "0.075 mg IV once"
         },
         "Aprepitant": {
             "Mechanism of Action": "NK-1 antagonist.",
@@ -834,7 +872,440 @@ if tool == "Drug Library":
             "Adjuvants": "5-HT₃ + dexamethasone.",
             "Use": "Pre-op.",
             "Potency": "High.",
-            "CPB/CNS Considerations": "None."
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "40–125 mg orally pre-op"
+        },
+        "Dexamethasone (antiemetic)": {
+            "Mechanism of Action": "Glucocorticoid.",
+            "Indications for Use": "Antiemetic (PONV).",
+            "Effect on Patient": "↓ nausea.",
+            "Adverse Reactions": "Hyperglycemia, insomnia.",
+            "Situations to Avoid": "Uncontrolled diabetes.",
+            "Adjuvants": "5-HT₃ antagonists.",
+            "Use": "Pre-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Helpful during CPB.",
+            "Dosing": "See above"
+        },
+        "Amisulpride": {
+            "Mechanism of Action": "D₂ antagonist.",
+            "Indications for Use": "PONV.",
+            "Effect on Patient": "↓ nausea.",
+            "Adverse Reactions": "QT prolongation.",
+            "Situations to Avoid": "QT risk.",
+            "Adjuvants": "None.",
+            "Use": "Pre-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "5–10 mg IV once"
+        },
+        "Droperidol": {
+            "Mechanism of Action": "D₂ antagonist.",
+            "Indications for Use": "PONV.",
+            "Effect on Patient": "↓ nausea, sedation.",
+            "Adverse Reactions": "QT prolongation, sedation.",
+            "Situations to Avoid": "QT risk.",
+            "Adjuvants": "None.",
+            "Use": "Pre-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "0.625–1.25 mg IV once"
+        },
+        "Haloperidol": {
+            "Mechanism of Action": "D₂ antagonist.",
+            "Indications for Use": "PONV, delirium.",
+            "Effect on Patient": "↓ nausea, sedation.",
+            "Adverse Reactions": "QT prolongation, sedation.",
+            "Situations to Avoid": "QT risk.",
+            "Adjuvants": "None.",
+            "Use": "Pre-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "0.5–2 mg IV or IM"
+        },
+        "Dimenhydrinate": {
+            "Mechanism of Action": "H₁ antagonist.",
+            "Indications for Use": "PONV, motion sickness.",
+            "Effect on Patient": "↓ nausea, sedation.",
+            "Adverse Reactions": "Sedation, anticholinergic.",
+            "Situations to Avoid": "Glaucoma, BPH.",
+            "Adjuvants": "None.",
+            "Use": "Pre-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "50 mg IV or IM every 4–6 hours"
+        },
+        "Promethazine": {
+            "Mechanism of Action": "H₁ & weak D₂ antagonist.",
+            "Indications for Use": "PONV, motion sickness.",
+            "Effect on Patient": "↓ nausea, sedation.",
+            "Adverse Reactions": "Sedation, hypotension.",
+            "Situations to Avoid": "Children <2, elderly.",
+            "Adjuvants": "Potentiates opioids.",
+            "Use": "Pre-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "12.5–25 mg IV or IM every 4–6 hours"
+        },
+        "Succinylcholine": {
+            "Mechanism of Action": "Depolarizing neuromuscular blocker.",
+            "Indications for Use": "Rapid sequence intubation.",
+            "Effect on Patient": "Paralysis.",
+            "Adverse Reactions": "Hyperkalemia, malignant hyperthermia.",
+            "Situations to Avoid": "Hyperkalemia, neuromuscular disease.",
+            "Adjuvants": "None.",
+            "Use": "Induction.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "1–1.5 mg/kg IV (max ~150 mg/dose)"
+        },
+        "Pancuronium": {
+            "Mechanism of Action": "Non-depolarizing neuromuscular blocker.",
+            "Indications for Use": "Muscle relaxation for surgery.",
+            "Effect on Patient": "Paralysis.",
+            "Adverse Reactions": "Tachycardia.",
+            "Situations to Avoid": "Tachyarrhythmias.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "0.06–0.1 mg/kg IV"
+        },
+        "Vecuronium": {
+            "Mechanism of Action": "Non-depolarizing neuromuscular blocker.",
+            "Indications for Use": "Muscle relaxation for surgery.",
+            "Effect on Patient": "Paralysis.",
+            "Adverse Reactions": "Prolonged paralysis.",
+            "Situations to Avoid": "Liver/renal dysfunction.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "0.08–0.1 mg/kg IV"
+        },
+        "Rocuronium": {
+            "Mechanism of Action": "Non-depolarizing neuromuscular blocker.",
+            "Indications for Use": "Muscle relaxation for surgery, rapid sequence intubation.",
+            "Effect on Patient": "Paralysis.",
+            "Adverse Reactions": "Prolonged paralysis.",
+            "Situations to Avoid": "Liver disease.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "0.6–1.2 mg/kg IV"
+        },
+        "Atracurium": {
+            "Mechanism of Action": "Non-depolarizing neuromuscular blocker.",
+            "Indications for Use": "Muscle relaxation for surgery.",
+            "Effect on Patient": "Paralysis.",
+            "Adverse Reactions": "Histamine release, hypotension.",
+            "Situations to Avoid": "Asthma.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "0.4–0.5 mg/kg IV"
+        },
+        "Cisatracurium": {
+            "Mechanism of Action": "Non-depolarizing neuromuscular blocker.",
+            "Indications for Use": "Muscle relaxation for surgery.",
+            "Effect on Patient": "Paralysis.",
+            "Adverse Reactions": "Bradycardia, hypotension.",
+            "Situations to Avoid": "Hypersensitivity.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "0.1–0.2 mg/kg IV"
+        },
+        "Mivacurium": {
+            "Mechanism of Action": "Short-acting non-depolarizing neuromuscular blocker.",
+            "Indications for Use": "Short procedures requiring muscle relaxation.",
+            "Effect on Patient": "Paralysis.",
+            "Adverse Reactions": "Histamine release, hypotension.",
+            "Situations to Avoid": "Pseudocholinesterase deficiency.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "0.15–0.25 mg/kg IV"
+        },
+        "Neostigmine": {
+            "Mechanism of Action": "Acetylcholinesterase inhibitor.",
+            "Indications for Use": "Reversal of neuromuscular blockade.",
+            "Effect on Patient": "Restores muscle function.",
+            "Adverse Reactions": "Bradycardia, increased secretions.",
+            "Situations to Avoid": "GI/urinary obstruction.",
+            "Adjuvants": "Anticholinergic (glycopyrrolate or atropine).",
+            "Use": "Post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "25–50 mcg/kg IV with anticholinergic"
+        },
+        "Edrophonium": {
+            "Mechanism of Action": "Short-acting acetylcholinesterase inhibitor.",
+            "Indications for Use": "Reversal of neuromuscular blockade, diagnosis of myasthenia gravis.",
+            "Effect on Patient": "Restores muscle function.",
+            "Adverse Reactions": "Bradycardia, increased secretions.",
+            "Situations to Avoid": "GI/urinary obstruction.",
+            "Adjuvants": "Atropine.",
+            "Use": "Post-op, diagnostic.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "0.5–1 mg/kg IV with atropine"
+        },
+        "Sugammadex": {
+            "Mechanism of Action": "Encapsulates and inactivates rocuronium/vecuronium.",
+            "Indications for Use": "Reversal of neuromuscular blockade.",
+            "Effect on Patient": "Restores muscle function.",
+            "Adverse Reactions": "Bradycardia, hypersensitivity.",
+            "Situations to Avoid": "Severe renal impairment.",
+            "Adjuvants": "None.",
+            "Use": "Post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "2–4 mg/kg IV (up to 16 mg/kg for high-dose reversal)"
+        },
+        "Hydrocortisone": {
+            "Mechanism of Action": "Glucocorticoid.",
+            "Indications for Use": "Adrenal insufficiency, inflammation.",
+            "Effect on Patient": "↓ inflammation, replaces cortisol.",
+            "Adverse Reactions": "Hyperglycemia, fluid retention.",
+            "Situations to Avoid": "Systemic fungal infection.",
+            "Adjuvants": "None.",
+            "Use": "All phases.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "100–200 mg IV every 8 hours"
+        },
+        "Methylprednisolone": {
+            "Mechanism of Action": "Glucocorticoid.",
+            "Indications for Use": "Inflammation, CPB prophylaxis.",
+            "Effect on Patient": "↓ inflammation.",
+            "Adverse Reactions": "Hyperglycemia, infection.",
+            "Situations to Avoid": "Systemic fungal infection.",
+            "Adjuvants": "None.",
+            "Use": "All phases.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Used for CPB prophylaxis.",
+            "Dosing": "1–2 mg/kg IV; for CPB: 30 mg/kg IV once"
+        },
+        "Fludrocortisone": {
+            "Mechanism of Action": "Mineralocorticoid.",
+            "Indications for Use": "Adrenal insufficiency, salt wasting.",
+            "Effect on Patient": "↑ sodium retention.",
+            "Adverse Reactions": "Hypertension, edema.",
+            "Situations to Avoid": "Heart failure.",
+            "Adjuvants": "None.",
+            "Use": "All phases.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "0.05–0.2 mg orally daily"
+        },
+        "Quinidine": {
+            "Mechanism of Action": "Class Ia antiarrhythmic (Na⁺/K⁺ blocker).",
+            "Indications for Use": "Atrial/ventricular arrhythmias.",
+            "Effect on Patient": "Slows conduction, prolongs QT.",
+            "Adverse Reactions": "Cinchonism, hypotension.",
+            "Situations to Avoid": "QT prolongation, G6PD deficiency.",
+            "Adjuvants": "None.",
+            "Use": "Outpatient.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Not used intra-op.",
+            "Dosing": "200–400 mg orally every 6–8 hours"
+        },
+        "Procainamide": {
+            "Mechanism of Action": "Class Ia antiarrhythmic (Na⁺ blocker).",
+            "Indications for Use": "Atrial/ventricular arrhythmias.",
+            "Effect on Patient": "Slows conduction, prolongs QT.",
+            "Adverse Reactions": "Lupus-like syndrome, hypotension.",
+            "Situations to Avoid": "QT prolongation, SLE.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op, emergency.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Not used intra-op.",
+            "Dosing": "15–17 mg/kg IV over 30–60 min, then 1–4 mg/min infusion"
+        },
+        "Disopyramide": {
+            "Mechanism of Action": "Class Ia antiarrhythmic (Na⁺ blocker).",
+            "Indications for Use": "Atrial/ventricular arrhythmias.",
+            "Effect on Patient": "Slows conduction, anticholinergic.",
+            "Adverse Reactions": "Anticholinergic, hypotension.",
+            "Situations to Avoid": "Glaucoma, urinary retention.",
+            "Adjuvants": "None.",
+            "Use": "Outpatient.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Not used intra-op.",
+            "Dosing": "100–150 mg orally every 6 hours"
+        },
+        "Lidocaine (antiarrhythmic)": {
+            "Mechanism of Action": "Class Ib antiarrhythmic (Na⁺ blocker).",
+            "Indications for Use": "Ventricular arrhythmias.",
+            "Effect on Patient": "Suppresses ventricular ectopy.",
+            "Adverse Reactions": "CNS toxicity.",
+            "Situations to Avoid": "Severe heart block.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op, emergency.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Antiarrhythmic effect preserved.",
+            "Dosing": "Bolus: 1–1.5 mg/kg IV; infusion: 1–4 mg/min"
+        },
+        "Mexiletine": {
+            "Mechanism of Action": "Class Ib antiarrhythmic (Na⁺ blocker).",
+            "Indications for Use": "Ventricular arrhythmias.",
+            "Effect on Patient": "Suppresses ventricular ectopy.",
+            "Adverse Reactions": "CNS toxicity, GI upset.",
+            "Situations to Avoid": "Severe heart block.",
+            "Adjuvants": "None.",
+            "Use": "Outpatient.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Not used intra-op.",
+            "Dosing": "200–300 mg orally every 8 hours"
+        },
+        "Flecainide": {
+            "Mechanism of Action": "Strong Na⁺ blocker.",
+            "Indications for Use": "Afib, SVT.",
+            "Effect on Patient": "Slows atrial arrhythmias.",
+            "Adverse Reactions": "Blurred vision, pro-arrhythmia.",
+            "Situations to Avoid": "Structural heart disease, MI.",
+            "Adjuvants": "Beta blockers.",
+            "Use": "Outpatient.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Not used intra-op.",
+            "Dosing": "50–100 mg orally every 12 hours"
+        },
+        "Propafenone": {
+            "Mechanism of Action": "Na⁺ blocker + mild beta blockade.",
+            "Indications for Use": "Atrial arrhythmias.",
+            "Effect on Patient": "Rhythm control.",
+            "Adverse Reactions": "Metallic taste, bronchospasm.",
+            "Situations to Avoid": "Asthma, HF.",
+            "Adjuvants": "AV nodal blockers.",
+            "Use": "Outpatient.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Not used intra-op.",
+            "Dosing": "150–300 mg orally every 8 hours"
+        },
+        "Metoprolol": {
+            "Mechanism of Action": "Beta-1 blocker.",
+            "Indications for Use": "Afib, HTN, post-MI.",
+            "Effect on Patient": "↓ HR, ↓ O₂ demand.",
+            "Adverse Reactions": "Bradycardia, fatigue.",
+            "Situations to Avoid": "Heart block, decompensated HF.",
+            "Adjuvants": "Amiodarone, digoxin.",
+            "Use": "All phases.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "May be held.",
+            "Dosing": "2.5–5 mg IV every 2–5 minutes up to 15 mg; orally 25–100 mg BID"
+        },
+        "Esmolol": {
+            "Mechanism of Action": "Short-acting beta-1 blocker.",
+            "Indications for Use": "Acute rate control.",
+            "Effect on Patient": "↓ HR.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "Heart block, asthma.",
+            "Adjuvants": "Anesthetics.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Requires redosing.",
+            "Dosing": "Bolus: 500 mcg/kg over 1 min; infusion: 50–200 mcg/kg/min"
+        },
+        "Amiodarone": {
+            "Mechanism of Action": "K⁺, Na⁺, Ca²⁺ blocker + beta blockade.",
+            "Indications for Use": "VT, VF, Afib.",
+            "Effect on Patient": "Stabilizes rhythm.",
+            "Adverse Reactions": "Pulmonary fibrosis, thyroid dysfunction.",
+            "Situations to Avoid": "Bradycardia, iodine allergy.",
+            "Adjuvants": "Beta blockers.",
+            "Use": "All phases.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "May need dose adjustment.",
+            "Dosing": "150 mg IV over 10 min, then 1 mg/min"
+        },
+        "Sotalol": {
+            "Mechanism of Action": "K⁺ blocker + beta blockade.",
+            "Indications for Use": "Afib, VT.",
+            "Effect on Patient": "Slows rate, prolongs QT.",
+            "Adverse Reactions": "Torsades, bradycardia.",
+            "Situations to Avoid": "QT prolongation.",
+            "Adjuvants": "Monitor QT & renal.",
+            "Use": "Outpatient.",
+            "Potency": "Moderate-high.",
+            "CPB/CNS Considerations": "QT risk post-CPB.",
+            "Dosing": "80–160 mg orally twice daily"
+        },
+        "Dronedarone": {
+            "Mechanism of Action": "K⁺, Na⁺, Ca²⁺ blocker + mild anti-adrenergic.",
+            "Indications for Use": "Non-permanent Afib.",
+            "Effect on Patient": "Maintains NSR.",
+            "Adverse Reactions": "Liver toxicity, HF.",
+            "Situations to Avoid": "HF, permanent AF.",
+            "Adjuvants": "Avoid CYP3A4 inhibitors.",
+            "Use": "Outpatient.",
+            "Potency": "Lower than amiodarone.",
+            "CPB/CNS Considerations": "Not used intra-op.",
+            "Dosing": "400 mg orally twice daily"
+        },
+        "Verapamil": {
+            "Mechanism of Action": "L-type Ca²⁺ blocker.",
+            "Indications for Use": "SVT, Afib, angina.",
+            "Effect on Patient": "↓ HR, vasodilation.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "HF, AV block.",
+            "Adjuvants": "None.",
+            "Use": "Rarely intra-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Hypotension risk.",
+            "Dosing": "2.5–10 mg IV over 2 minutes"
+        },
+        "Diltiazem": {
+            "Mechanism of Action": "Ca²⁺ blocker.",
+            "Indications for Use": "Rate control, angina, HTN.",
+            "Effect on Patient": "↓ HR & SVR.",
+            "Adverse Reactions": "Bradycardia, edema.",
+            "Situations to Avoid": "CHF, hypotension.",
+            "Adjuvants": "Anticoagulation.",
+            "Use": "Pre-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Additive hypotension.",
+            "Dosing": "0.25 mg/kg IV bolus, then infusion 5–15 mg/hr"
+        },
+        "Adenosine": {
+            "Mechanism of Action": "A1 receptor agonist.",
+            "Indications for Use": "SVT.",
+            "Effect on Patient": "Transient AV block.",
+            "Adverse Reactions": "Flushing, chest pain.",
+            "Situations to Avoid": "Asthma.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "See above"
+        },
+        "Digoxin": {
+            "Mechanism of Action": "Inhibits Na⁺/K⁺ ATPase → ↑ Ca²⁺.",
+            "Indications for Use": "Rate control, HF.",
+            "Effect on Patient": "↓ HR, ↑ contractility.",
+            "Adverse Reactions": "Toxicity.",
+            "Situations to Avoid": "Renal failure, hypokalemia.",
+            "Adjuvants": "Monitor electrolytes.",
+            "Use": "Post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "↓ clearance.",
+            "Dosing": "0.25–0.5 mg IV loading; maintenance ~0.125–0.25 mg daily"
+        },
+        "Magnesium Sulfate": {
+            "Mechanism of Action": "Stabilizes myocardium.",
+            "Indications for Use": "Torsades, hypomagnesemia.",
+            "Effect on Patient": "↓ ventricular irritability.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "Hypermagnesemia.",
+            "Adjuvants": "Electrolytes.",
+            "Use": "All phases.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "In prime or intra-op.",
+            "Dosing": "See above"
         },
         # --- Drugs 64–81 ---
         "Flecainide": {
@@ -1436,6 +1907,281 @@ if tool == "Drug Library":
             "Use": "Post-CPB.",
             "Potency": "High.",
             "CPB/CNS Considerations": "Essential."
+            ,"Dosing": "1 mg per ~100 units heparin"
+        },
+        "Insulin (Regular)": {
+            "Mechanism of Action": "Facilitates glucose & K⁺ uptake.",
+            "Indications for Use": "Hyperglycemia, hyperkalemia.",
+            "Effect on Patient": "↓ glucose & K⁺.",
+            "Adverse Reactions": "Hypoglycemia.",
+            "Situations to Avoid": "Hypoglycemia.",
+            "Adjuvants": "Dextrose.",
+            "Use": "All phases.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "↑ sensitivity post-CPB.",
+            "Dosing": "Variable; infusion starts ~0.1 units/kg/hr for hyperglycemia"
+        },
+        "Dextrose 50% (D50)": {
+            "Mechanism of Action": "Provides glucose.",
+            "Indications for Use": "Hypoglycemia.",
+            "Effect on Patient": "↑ glucose.",
+            "Adverse Reactions": "Phlebitis.",
+            "Situations to Avoid": "Hyperglycemia.",
+            "Adjuvants": "Insulin, glucagon.",
+            "Use": "All phases.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Useful post-CPB.",
+            "Dosing": "25–50 mL IV bolus"
+        },
+        "Glucagon": {
+            "Mechanism of Action": "Glycogenolysis & gluconeogenesis.",
+            "Indications for Use": "Hypoglycemia, β-blocker overdose.",
+            "Effect on Patient": "↑ glucose & HR.",
+            "Adverse Reactions": "Nausea, hyperglycemia.",
+            "Situations to Avoid": "Pheochromocytoma.",
+            "Adjuvants": "Calcium, glucose.",
+            "Use": "Emergency.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Useful post-CPB.",
+            "Dosing": "1–5 mg IV or IM"
+        },
+        "Vitamin K (Phytonadione)": {
+            "Mechanism of Action": "Restores clotting factor activation.",
+            "Indications for Use": "Warfarin reversal.",
+            "Effect on Patient": "Corrects INR.",
+            "Adverse Reactions": "Rare anaphylaxis.",
+            "Situations to Avoid": "None.",
+            "Use": "Post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "2.5–10 mg IV or orally"
+        },
+        "4-Factor PCC (Kcentra)": {
+            "Mechanism of Action": "Replaces clotting factors II, VII, IX, X.",
+            "Indications for Use": "Rapid INR reversal.",
+            "Effect on Patient": "Restores coagulation.",
+            "Adverse Reactions": "Thrombosis.",
+            "Situations to Avoid": "Active thrombosis.",
+            "Use": "Emergency.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "~25–50 IU/kg IV"
+        },
+        "FFP (Fresh Frozen Plasma)": {
+            "Mechanism of Action": "Replaces clotting factors.",
+            "Indications for Use": "Coagulopathy.",
+            "Effect on Patient": "Replaces clotting.",
+            "Adverse Reactions": "TRALI, TACO.",
+            "Situations to Avoid": "Volume overload.",
+            "Adjuvants": "None.",
+            "Use": "Post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "~10–15 mL/kg"
+        },
+        "Edoxaban": {
+            "Mechanism of Action": "Factor Xa inhibitor.",
+            "Indications for Use": "VTE, AF.",
+            "Effect on Patient": "Anticoagulation.",
+            "Adverse Reactions": "Bleeding.",
+            "Situations to Avoid": "Active bleeding, renal failure.",
+            "Adjuvants": "None.",
+            "Use": "Outpatient.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Typically withheld perioperatively.",
+            "Dosing": "30–60 mg orally daily"
+        },
+        "Betrixaban": {
+            "Mechanism of Action": "Factor Xa inhibitor.",
+            "Indications for Use": "VTE prophylaxis.",
+            "Effect on Patient": "Anticoagulation.",
+            "Adverse Reactions": "Bleeding.",
+            "Situations to Avoid": "Active bleeding.",
+            "Adjuvants": "None.",
+            "Use": "Outpatient.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Typically withheld perioperatively.",
+            "Dosing": "80 mg orally once daily"
+        },
+        "Tranexamic Acid (TXA)": {
+            "Mechanism of Action": "Inhibits fibrinolysis by blocking plasminogen.",
+            "Indications for Use": "Reduce bleeding.",
+            "Effect on Patient": "↓ bleeding, ↓ transfusion.",
+            "Adverse Reactions": "Seizures, thrombosis.",
+            "Situations to Avoid": "Active thrombosis.",
+            "Adjuvants": "Standard coagulation.",
+            "Use": "Pre-, intra-, post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Often added to prime.",
+            "Dosing": "10–15 mg/kg IV pre-op or infusion ~1 mg/kg/hr"
+        },
+        "Epsilon-Aminocaproic Acid (EACA)": {
+            "Mechanism of Action": "Inhibits fibrinolysis.",
+            "Indications for Use": "Reduce bleeding.",
+            "Effect on Patient": "↓ bleeding.",
+            "Adverse Reactions": "Hypotension, thrombosis.",
+            "Situations to Avoid": "Active thrombosis.",
+            "Adjuvants": "None.",
+            "Use": "Pre-, intra-, post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Often added to prime.",
+            "Dosing": "5 g IV load, then 1 g/hr"
+        },
+        "Prostacyclin (Epoprostenol)": {
+            "Mechanism of Action": "PGI₂ analogue → vasodilation, platelet inhibition.",
+            "Indications for Use": "Circuit thrombosis prevention.",
+            "Effect on Patient": "↓ platelet aggregation, vasodilation.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "Hypotension.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op (ECMO/CPB).",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Administered in circuit.",
+            "Dosing": "2–10 ng/kg/min IV or intra-circuit"
+        },
+        "Nitroglycerin": {
+            "Mechanism of Action": "NO donor → venodilation.",
+            "Indications for Use": "Myocardial ischemia, hypertension.",
+            "Effect on Patient": "↓ preload & mild afterload.",
+            "Adverse Reactions": "Hypotension, headache.",
+            "Situations to Avoid": "Severe hypotension.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "Infusion: 5–200 mcg/min"
+        },
+        "Nitroprusside": {
+            "Mechanism of Action": "NO donor → potent vasodilation.",
+            "Indications for Use": "Hypertensive crisis.",
+            "Effect on Patient": "↓ afterload.",
+            "Adverse Reactions": "Cyanide toxicity.",
+            "Situations to Avoid": "Prolonged use, renal failure.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None.",
+            "Dosing": "Infusion: 0.3–10 mcg/kg/min"
+        },
+        "Vasopressin": {
+            "Mechanism of Action": "V1 receptor agonist.",
+            "Indications for Use": "Vasoplegia.",
+            "Effect on Patient": "↑ SVR, ↑ MAP.",
+            "Adverse Reactions": "Ischemia.",
+            "Situations to Avoid": "None specific.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Effective post-CPB.",
+            "Dosing": "Infusion: 0.01–0.04 units/min"
+        },
+        "Phenylephrine": {
+            "Mechanism of Action": "Alpha agonist → vasoconstriction.",
+            "Indications for Use": "Hypotension.",
+            "Effect on Patient": "↑ SVR, ↑ MAP.",
+            "Adverse Reactions": "Reflex bradycardia.",
+            "Situations to Avoid": "Severe vasoconstriction.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Common intra-op.",
+            "Dosing": "Bolus: 50–200 mcg; infusion: 0.25–1 mcg/kg/min"
+        },
+        "Norepinephrine": {
+            "Mechanism of Action": "Alpha > beta agonist.",
+            "Indications for Use": "Shock, low SVR.",
+            "Effect on Patient": "↑ MAP, mild ↑ CO.",
+            "Adverse Reactions": "Arrhythmias.",
+            "Situations to Avoid": "None specific.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Common post-CPB.",
+            "Dosing": "Infusion: 2–30 mcg/min"
+        },
+        "Epinephrine": {
+            "Mechanism of Action": "Beta > alpha agonist.",
+            "Indications for Use": "Cardiac arrest, shock.",
+            "Effect on Patient": "↑ HR, ↑ CO.",
+            "Adverse Reactions": "Arrhythmias, hyperglycemia.",
+            "Situations to Avoid": "None specific.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Common post-CPB.",
+            "Dosing": "Infusion: 1–10 mcg/min"
+        },
+        "Milrinone": {
+            "Mechanism of Action": "PDE-3 inhibitor → ↑ cAMP.",
+            "Indications for Use": "Low CO, RV failure.",
+            "Effect on Patient": "↑ CO, ↓ PVR.",
+            "Adverse Reactions": "Hypotension, arrhythmias.",
+            "Situations to Avoid": "Hypotension.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Common post-CPB.",
+            "Dosing": "Load: 50 mcg/kg over 10 min; then 0.25–0.75 mcg/kg/min"
+        },
+        "Levosimendan": {
+            "Mechanism of Action": "Calcium sensitizer + PDE inhibition.",
+            "Indications for Use": "Low output states.",
+            "Effect on Patient": "↑ contractility.",
+            "Adverse Reactions": "Hypotension, arrhythmias.",
+            "Situations to Avoid": "Hypotension.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "Moderate-high.",
+            "CPB/CNS Considerations": "Not widely available in US.",
+            "Dosing": "12 mcg/kg over 10 min, then 0.1 mcg/kg/min"
+        },
+        "Calcium Chloride": {
+            "Mechanism of Action": "Replenishes ionized calcium.",
+            "Indications for Use": "Hypocalcemia, myocardial depression.",
+            "Effect on Patient": "↑ contractility.",
+            "Adverse Reactions": "Arrhythmias if rapid.",
+            "Situations to Avoid": "Hypercalcemia.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Essential post-CPB.",
+            "Dosing": "500–1,000 mg IV"
+        },
+        "Calcium Gluconate": {
+            "Mechanism of Action": "Same as above.",
+            "Indications for Use": "Hypocalcemia.",
+            "Effect on Patient": "↑ contractility.",
+            "Adverse Reactions": "Less irritating than chloride.",
+            "Situations to Avoid": "Hypercalcemia.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Same as chloride.",
+            "Dosing": "1–3 g IV"
+        },
+        "Mannitol": {
+            "Mechanism of Action": "Osmotic diuretic.",
+            "Indications for Use": "Renal protection, cerebral edema.",
+            "Effect on Patient": "↑ urine output.",
+            "Adverse Reactions": "Fluid shifts.",
+            "Situations to Avoid": "Anuria.",
+            "Adjuvants": "None.",
+            "Use": "In prime/intra-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Often added to prime.",
+            "Dosing": "0.25–1 g/kg IV"
+        },
+        "Heparin": {
+            "Mechanism of Action": "Potentiates antithrombin.",
+            "Indications for Use": "Anticoagulation on CPB.",
+            "Effect on Patient": "Prevents clotting.",
+            "Adverse Reactions": "HIT, bleeding.",
+            "Situations to Avoid": "HIT.",
+            "Adjuvants": "None.",
+            "Use": "Pre-/intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Essential.",
+            "Dosing": "300–400 units/kg IV for CPB"
         },
         "Methylene Blue": {
             "Mechanism of Action": "Inhibits NO-cGMP pathway.",
@@ -1454,11 +2200,8 @@ if tool == "Drug Library":
 
 
     # --- Drug Library UI ---
-    # Search bar and dropdown for drug selection
-    search = st.text_input("Search for a drug:")
-    filtered = [d for d in drug_names if search.lower() in d.lower()] if search else drug_names
-
-    selected_drug = st.selectbox("Select a drug to view details:", filtered, key="drug_select")
+    # Only show selectbox for drug selection, no search bar
+    selected_drug = st.selectbox("Select a drug to view details:", drug_names, key="drug_select")
     if selected_drug:
         st.subheader(selected_drug)
         for k, v in drug_data[selected_drug].items():
@@ -1466,7 +2209,7 @@ if tool == "Drug Library":
 
     st.markdown("---")
     st.markdown("### Compare Drugs")
-    compare = st.multiselect("Select up to 2 drugs to compare:", filtered, max_selections=2, key="compare_select")
+    compare = st.multiselect("Select up to 2 drugs to compare:", drug_names, max_selections=2, key="compare_select")
     if len(compare) == 2:
         st.write(f"#### {compare[0]} vs {compare[1]}")
         col1, col2 = st.columns(2)
