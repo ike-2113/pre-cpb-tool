@@ -104,7 +104,7 @@ with st.sidebar:
     pdf_prime_vol = st.checkbox("Prime Vol", True)
     pdf_prime_add = st.checkbox("Prime Additives", True)
     pdf_target_hct = st.checkbox("Target Hct", True)
-    pdf_ef = st.checkbox("Ejection Fraction", True)
+    # Removed Ejection Fraction checkbox
     pdf_comorbid = st.checkbox("Comorbidities / Pathology", True)
     pdf_cardio = st.checkbox("Cardioplegia", True)
     pdf_cabg = st.checkbox("CABG Grafts", True)
@@ -150,8 +150,8 @@ if pdf_prime_vol:
         else:
             st.success(f"Osmolality normal: {prime_osmo} mOsm/kg")
 
-target_hct = st.number_input("Target Hematocrit (%)", value=25.0)
-ef = st.number_input("Ejection Fraction (%)", value=55)
+target_hct = st.number_input("Hematocrit Transfusion Threshold (%)", value=25.0)
+## Removed Ejection Fraction
 procedure = st.selectbox("Procedure Type", ["CABG", "AVR", "MVR", "Transplant", "Hemiarch", "Bentall", "Full Arch", "Dissection Repair – Stanford Type A", "Dissection Repair – Stanford Type B", "LVAD", "Off-pump CABG", "ECMO Cannulation", "Standby", "Other"])
 comorbidities = st.multiselect("Comorbidities", ["CKD", "Hypertension", "Jehovah’s Witness", "Anemia", "Aortic Disease", "Diabetes", "Redo Sternotomy", "None"])
 valve_issues = st.multiselect("Valve Pathology", ["Aortic Stenosis", "Aortic Insufficiency", "Mitral Stenosis", "Mitral Regurgitation", "Tricuspid Regurgitation", "Valve Prolapse"])
@@ -198,7 +198,7 @@ bmi = calculate_bmi(height, weight)
 blood_vol = calculate_blood_volume(weight)
 post_hct = calculate_post_dilution_hct(pre_hct, blood_vol, prime_vol)
 rbc_units = calculate_rbc_units_needed(post_hct, target_hct)
-suggested_ci = 2.4 if ef >= 40 else 2.6 if ef >= 30 else 2.8
+suggested_ci = 2.4  # Default value, since EF is removed
 flow = calculate_flow(suggested_ci, bsa)
 do2 = calculate_do2(flow, pre_hgb)
 do2i = round(do2 / bsa, 1)
@@ -275,8 +275,8 @@ def build_all_summary_tables(story):
     if pdf_bsa: patient_rows.append(["BSA", f"{bsa} m²", "√(Height × Weight / 3600)"])
     if pdf_pre_hct: patient_rows.append(["Pre-op Hct", f"{pre_hct}%", "Baseline"])
     if pdf_pre_hgb: patient_rows.append(["Pre-op Hgb", f"{pre_hgb:.2f} g/dL", "–"])
-    if pdf_target_hct: patient_rows.append(["Target Hct", f"{target_hct}%", "Target during CPB"])
-    if pdf_ef: patient_rows.append(["Ejection Fraction", f"{ef}%", "LV function"])
+    if pdf_target_hct: patient_rows.append(["Hematocrit Transfusion Threshold", f"{target_hct}%", "Transfusion threshold during CPB"])
+    # Removed Ejection Fraction from patient_rows
     if pdf_comorbid: patient_rows.append(["Comorbidities", ", ".join(comorbidities), "–"])
     if valve_issues: patient_rows.append(["Valve Pathology", ", ".join(valve_issues), "–"])
     build_parameter_table(story, "BODY METRICS & VOLUMES", patient_rows)
@@ -378,6 +378,34 @@ sts_rows.append(["Hemoconcentrator Used", wrap(hemo_used), ""])
 if hemo_used == "Yes":
     sts_rows.append(["Hemoconcentrator Volume", wrap(f"{hemo_volume} mL"), ""])
 sts_rows.append(["IMA Used", wrap(ima_used), ""])
+
+# ---- Email STS Report ----
+st.markdown("---")
+st.markdown("### Email STS Report")
+sts_email = st.text_input("Enter email to send STS report to:")
+if sts_email:
+    import smtplib
+    from email.message import EmailMessage
+    st.info(f"Sending STS report to {sts_email} using perfusionsentinel@gmail.com")
+    try:
+        msg = EmailMessage()
+        msg['Subject'] = 'Perfusion Sentinel STS Report'
+        msg['From'] = 'perfusionsentinel@gmail.com'
+        msg['To'] = sts_email
+        msg.set_content('Attached is your STS report PDF.')
+        msg.add_attachment(pdf_buffer.getvalue(), maintype='application', subtype='pdf', filename='precpb_summary.pdf')
+
+        # --- IMPORTANT: Replace this with your actual Gmail App Password ---
+        gmail_user = 'perfusionsentinel@gmail.com'
+        gmail_app_password = st.secrets["gmail_app_password"] if "gmail_app_password" in st.secrets else "YOUR_APP_PASSWORD"
+
+        with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+            smtp.starttls()
+            smtp.login(gmail_user, gmail_app_password)
+            smtp.send_message(msg)
+        st.success('Email sent successfully!')
+    except Exception as e:
+        st.error(f'Error sending email: {e}')
 
 build_parameter_table(story, "STS REPORT – PERFUSION SUMMARY", sts_rows)
 from reportlab.lib.enums import TA_RIGHT
