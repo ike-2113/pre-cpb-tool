@@ -407,385 +407,1303 @@ if tool == "Pre-CPB Tool":
 
 # ---- Drug Library Section ----
 if tool == "Drug Library":
+        "Succinylcholine": {
+            "Mechanism of Action": "Depolarizing NMBA — mimics acetylcholine.",
+            "Indications for Use": "Rapid intubation.",
+            "Effect on Patient": "Paralysis.",
+            "Adverse Reactions": "Hyperkalemia, malignant hyperthermia.",
+            "Situations to Avoid": "Burns, trauma, renal failure.",
+            "Adjuvants": "Sedation & analgesia.",
+            "Use": "Induction.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Used pre-CPB."
+        },
+        "Pancuronium": {
+            "Mechanism of Action": "Non-depolarizing NMBA — competitive ACh antagonist.",
+            "Indications for Use": "Maintenance paralysis.",
+            "Effect on Patient": "Long-lasting paralysis.",
+            "Adverse Reactions": "Tachycardia.",
+            "Situations to Avoid": "Tachycardia, hypertension.",
+            "Adjuvants": "Sedation & analgesia.",
+            "Use": "Induction.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Prolonged pre-bypass."
+        },
+        "Vecuronium": {
+            "Mechanism of Action": "Non-depolarizing NMBA.",
+            "Indications for Use": "Paralysis during anesthesia.",
+            "Effect on Patient": "Smooth paralysis.",
+            "Adverse Reactions": "Bradycardia.",
+            "Situations to Avoid": "Liver/renal dysfunction.",
+            "Adjuvants": "Sedation & analgesia.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Prolonged due to ↓ clearance."
+        },
+        "Rocuronium": {
+            "Mechanism of Action": "Non-depolarizing NMBA.",
+            "Indications for Use": "Rapid intubation.",
+            "Effect on Patient": "Fast paralysis.",
+            "Adverse Reactions": "Hypersensitivity.",
+            "Situations to Avoid": "Known allergy.",
+            "Adjuvants": "Sedation & analgesia.",
+            "Use": "Pre-/intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Possible prolongation."
+        },
+        "Atracurium": {
+            "Mechanism of Action": "Non-depolarizing NMBA.",
+            "Indications for Use": "Paralysis — hepatic/renal safe.",
+            "Effect on Patient": "Smooth paralysis.",
+            "Adverse Reactions": "Histamine release.",
+            "Situations to Avoid": "Asthma.",
+            "Adjuvants": "Sedation & analgesia.",
+            "Use": "Intra-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Predictable via Hofmann elimination."
+        },
+        "Cisatracurium": {
+            "Mechanism of Action": "Non-depolarizing NMBA.",
+            "Indications for Use": "Paralysis in hepatic/renal failure.",
+            "Effect on Patient": "Predictable paralysis.",
+            "Adverse Reactions": "Minimal.",
+            "Situations to Avoid": "None specific.",
+            "Adjuvants": "Sedation & analgesia.",
+            "Use": "Intra-op.",
+            "Potency": "Moderate-high.",
+            "CPB/CNS Considerations": "Unaffected."
+        },
+        "Mivacurium": {
+            "Mechanism of Action": "Non-depolarizing NMBA.",
+            "Indications for Use": "Short procedures.",
+            "Effect on Patient": "Short paralysis.",
+            "Adverse Reactions": "Histamine release.",
+            "Situations to Avoid": "Pseudocholinesterase deficiency.",
+            "Adjuvants": "Sedation & analgesia.",
+            "Use": "Intra-op.",
+            "Potency": "Low.",
+            "CPB/CNS Considerations": "Prolonged effect."
+        },
+        "Neostigmine": {
+            "Mechanism of Action": "Acetylcholinesterase inhibitor.",
+            "Indications for Use": "NMBA reversal.",
+            "Effect on Patient": "Restores NMJ function.",
+            "Adverse Reactions": "Bradycardia, ↑ secretions.",
+            "Situations to Avoid": "Bradycardia, obstruction.",
+            "Adjuvants": "Atropine/glycopyrrolate.",
+            "Use": "Post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Delayed by hypothermia."
+        },
+        "Edrophonium": {
+            "Mechanism of Action": "Acetylcholinesterase inhibitor.",
+            "Indications for Use": "NMBA reversal, myasthenia gravis diagnosis.",
+            "Effect on Patient": "Transient strength return.",
+            "Adverse Reactions": "Bradycardia.",
+            "Situations to Avoid": "Asthma.",
+            "Adjuvants": "Atropine.",
+            "Use": "Rarely post-op.",
+            "Potency": "Short-acting.",
+            "CPB/CNS Considerations": "Rapid metabolism."
+        },
+        "Sugammadex": {
+            "Mechanism of Action": "Encapsulates rocuronium/vecuronium.",
+            "Indications for Use": "Rapid NMBA reversal.",
+            "Effect on Patient": "Fast reversal.",
+            "Adverse Reactions": "Bradycardia, anaphylaxis.",
+            "Situations to Avoid": "Non-steroidal NMBAs.",
+            "Use": "Post-op.",
+            "Potency": "Very high.",
+            "CPB/CNS Considerations": "Effective post-CPB."
+        },
+        "Cortisol (Hydrocortisone)": {
+            "Mechanism of Action": "Glucocorticoid receptor agonist.",
+            "Indications for Use": "Stress response, sepsis.",
+            "Effect on Patient": "Supports BP, glucose.",
+            "Adverse Reactions": "Hyperglycemia.",
+            "Situations to Avoid": "Diabetes.",
+            "Adjuvants": "Vasopressors.",
+            "Use": "All phases.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Supports hemodynamics."
+        },
+        "Methylprednisolone": {
+            "Mechanism of Action": "Glucocorticoid.",
+            "Indications for Use": "Neuroprotection, inflammation.",
+            "Effect on Patient": "↓ inflammation.",
+            "Adverse Reactions": "Hyperglycemia, infection.",
+            "Situations to Avoid": "Diabetes.",
+            "Adjuvants": "Mannitol.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Blunts inflammation."
+        },
+        "Fludrocortisone": {
+            "Mechanism of Action": "Mineralocorticoid.",
+            "Indications for Use": "Adrenal insufficiency.",
+            "Effect on Patient": "↑ BP via sodium & water.",
+            "Adverse Reactions": "HTN, edema.",
+            "Situations to Avoid": "CHF.",
+            "Adjuvants": "Hydrocortisone.",
+            "Use": "Pre-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Minimal effect."
+        },
+        "Quinidine": {
+            "Mechanism of Action": "Na⁺ & K⁺ blocker.",
+            "Indications for Use": "Atrial & ventricular arrhythmias.",
+            "Effect on Patient": "Slows rhythm, ↑ AP duration.",
+            "Adverse Reactions": "QT prolongation.",
+            "Situations to Avoid": "QT prolongation, CHF.",
+            "Adjuvants": "AV blockers.",
+            "Use": "Post-op (rare).",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "May need redosing."
+        },
+        "Procainamide": {
+            "Mechanism of Action": "Na⁺ blocker.",
+            "Indications for Use": "VT, SVT.",
+            "Effect on Patient": "Slows conduction.",
+            "Adverse Reactions": "Hypotension, lupus.",
+            "Situations to Avoid": "CHF, QT prolongation.",
+            "Adjuvants": "ECG monitoring.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Prolonged clearance."
+        },
+        "Disopyramide": {
+            "Mechanism of Action": "Na⁺ & K⁺ blocker + anticholinergic.",
+            "Indications for Use": "Ventricular arrhythmias, HCM.",
+            "Effect on Patient": "Slows conduction.",
+            "Adverse Reactions": "Anticholinergic effects.",
+            "Situations to Avoid": "HF, glaucoma.",
+            "Adjuvants": "None.",
+            "Use": "Outpatient.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Not used intra-op."
+        },
+        "Lidocaine (antiarrhythmic)": {
+            "Mechanism of Action": "Na⁺ blocker.",
+            "Indications for Use": "VT, VF.",
+            "Effect on Patient": "Stabilizes myocardium.",
+            "Adverse Reactions": "CNS toxicity.",
+            "Situations to Avoid": "Liver failure.",
+            "Adjuvants": "IV push + drip.",
+            "Use": "Intra-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "May need bolus."
+        },
+        "Mexiletine": {
+            "Mechanism of Action": "Na⁺ blocker.",
+            "Indications for Use": "Chronic VT.",
+            "Effect on Patient": "Prevents VT.",
+            "Adverse Reactions": "Tremor, nausea.",
+            "Situations to Avoid": "Liver dysfunction.",
+            "Adjuvants": "With other antiarrhythmics.",
+            "Use": "Outpatient.",
+            "Potency": "Mild-moderate.",
+            "CPB/CNS Considerations": "None."
+        },
     st.title("Drug Library")
     st.markdown("Search for a drug or select two to compare.")
 
     # Drug Library is a completely separate entity. No Bypass Blueprint or Pre-CPB Tool code or UI here.
     # Example drug data structure (replace/add with your real data)
     drug_data = {
-        "Heparin": {
-            "Class": "Anticoagulant",
-            "Indication": "Prevention and treatment of thrombosis",
-            "Dose": "300-400 units/kg IV",
-            "Onset": "Immediate",
-            "Half-life": "1-2 hours",
-            "Notes": "Monitor ACT. Reversed with protamine."
-        },
-        "Protamine": {
-            "Class": "Antidote (Heparin reversal)",
-            "Indication": "Reversal of heparin anticoagulation",
-            "Dose": "1 mg per 100 units heparin remaining",
-            "Onset": "5 minutes",
-            "Half-life": "7 minutes",
-            "Notes": "Give slowly to avoid hypotension/anaphylaxis."
-        },
+        # --- Updated and new drugs from user list ---
         "Methylene Blue": {
-            "Mechanism": "Inhibits nitric oxide (NO) and cyclic GMP activation; promotes methoglobin formation at higher doses.",
-            "Indications": "Vasoplegic syndrome (post-CPB), methemoglobinemia.",
-            "Effect": "Restores vascular tone (vasoconstriction); improves oxygen delivery by treating methemoglobinemia.",
-            "Adverse": "Serotonin syndrome (if on SSRIs), blue urine, reflex hypertension.",
-            "Avoid": "Patients on SSRIs (risk of serotonin syndrome).",
-            "Adjuvants": "Vasopressors/fluids, supplemental oxygen.",
-            "Use": "Intra- or Post-op.",
-            "CPB/CNS": "Hemodilution and increased volume can reduce plasma concentration and potency."
+            "Mechanism of Action": "Inhibits nitric oxide & cGMP pathway, forms methemoglobin at higher doses.",
+            "Indications for Use": "Vasoplegic syndrome, methemoglobinemia.",
+            "Effect on Patient": "Restores vascular tone, treats methemoglobinemia.",
+            "Adverse Reactions": "Serotonin syndrome, blue urine, hypertension.",
+            "Situations to Avoid": "SSRIs.",
+            "Adjuvants": "Vasopressors, oxygen.",
+            "Use": "Intra- or post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Hemodilution may ↓ concentration."
         },
         "Statins": {
-            "Mechanism": "Inhibit HMG-CoA reductase → reduced cholesterol synthesis.",
-            "Indications": "Hyperlipidemia, cardiovascular risk reduction.",
-            "Effect": "↓ LDL (30–60%), ↓ triglycerides (30–50%), ↑ HDL (5–15%).",
-            "Adverse": "Myopathy, hepatic dysfunction.",
-            "Avoid": "Liver dysfunction.",
-            "Adjuvants": "Omega-3 (↓ triglycerides), Niacin (↑ HDL).",
+            "Mechanism of Action": "HMG-CoA reductase inhibitor → ↓ cholesterol synthesis.",
+            "Indications for Use": "Hyperlipidemia, CV risk reduction.",
+            "Effect on Patient": "↓ LDL, ↓ triglycerides, ↑ HDL.",
+            "Adverse Reactions": "Myopathy, liver dysfunction.",
+            "Situations to Avoid": "Liver disease.",
+            "Adjuvants": "Omega-3, niacin.",
             "Use": "Pre-op.",
-            "Potency": "High intensity (↓ LDL >50%) vs moderate intensity (↓ LDL 30–49%)."
+            "Potency": "Moderate–high.",
+            "CPB/CNS Considerations": "None."
         },
         "Fibrates": {
-            "Mechanism": "Upregulate apolipoprotein activity → ↓ triglyceride production, ↑ HDL.",
-            "Indications": "Hypertriglyceridemia.",
-            "Effect": "↓ triglycerides, ↑ HDL.",
-            "Adverse": "Hepatic dysfunction.",
-            "Avoid": "Liver dysfunction, severe renal impairment.",
-            "Adjuvants": "Caution when combined with statins or bile acid sequestrants.",
-            "Use": "Pre-op."
+            "Mechanism of Action": "Upregulates lipoprotein lipase → ↓ TGs, ↑ HDL.",
+            "Indications for Use": "Hypertriglyceridemia.",
+            "Effect on Patient": "↓ TGs, ↑ HDL.",
+            "Adverse Reactions": "Hepatic dysfunction.",
+            "Situations to Avoid": "Liver & renal dysfunction.",
+            "Adjuvants": "Caution with statins.",
+            "Use": "Pre-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
         },
         "Bile Acid Sequestrants": {
-            "Mechanism": "Bind bile acids in gut → increased excretion → ↑ LDL receptor activity.",
-            "Indications": "Hypercholesterolemia.",
-            "Effect": "↓ LDL.",
-            "Adverse": "Constipation, bloating, GI discomfort.",
-            "Avoid": "GI disorders.",
-            "Adjuvants": "Complementary with statins (↓ LDL synthesis).",
+            "Mechanism of Action": "Binds bile acids → ↑ excretion → ↑ LDL receptor.",
+            "Indications for Use": "Hypercholesterolemia.",
+            "Effect on Patient": "↓ LDL.",
+            "Adverse Reactions": "Constipation, bloating.",
+            "Situations to Avoid": "GI disorders.",
+            "Adjuvants": "Statins.",
             "Use": "Pre-op.",
-            "Potency": "↓ LDL by 15–30%."
+            "Potency": "Low–moderate.",
+            "CPB/CNS Considerations": "None."
         },
         "Niacin": {
-            "Mechanism of Action": "Inhibits triglyceride production, enhances lipoprotein lipase activity → ↑ HDL, ↓ triglycerides.",
-            "Indications for Use": "Hyperlipidemia, low HDL.",
-            "Effect on Patient": "↓ triglycerides, ↑↑↑ HDL.",
-            "Adverse Reactions": "Flushing (can be reduced with aspirin pre-treatment), hyperglycemia.",
-            "Situations to Avoid": "Liver dysfunction, caution with diabetes.",
-            "Adjuvants": "Often combined with statins for broader lipid control.",
-            "Use": "Pre-op."
-        },
-        "Diazepam (Valium)": {
-            "Mechanism of Action": "Enhances GABA-A receptor activity → ↑ CNS inhibition.",
-            "Indications for Use": "Preoperative sedation, anxiety, seizures.",
-            "Effect on Patient": "Sedation, anxiolysis, amnesia.",
-            "Adverse Reactions": "Respiratory depression, propylene glycol toxicity.",
-            "Situations to Avoid": "Respiratory insufficiency, liver dysfunction, elderly.",
+            "Mechanism of Action": "↓ TG synthesis, ↑ HDL via lipoprotein lipase.",
+            "Indications for Use": "Hyperlipidemia.",
+            "Effect on Patient": "↑ HDL, ↓ TG.",
+            "Adverse Reactions": "Flushing, hyperglycemia.",
+            "Situations to Avoid": "Liver disease, diabetes.",
+            "Adjuvants": "Statins.",
             "Use": "Pre-op.",
-            "CPB/CNS Considerations": "Hemodilution may ↓ total plasma concentration but ↑ free drug levels."
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
         },
-        "Lorazepam (Ativan)": {
-            "Mechanism of Action": "Same as Diazepam (GABA-A agonist).",
+        "Diazepam": {
+            "Mechanism of Action": "GABA-A agonist → CNS depression.",
+            "Indications for Use": "Sedation, anxiety.",
+            "Effect on Patient": "Sedation, amnesia.",
+            "Adverse Reactions": "Respiratory depression.",
+            "Situations to Avoid": "Elderly, respiratory compromise.",
+            "Adjuvants": "Opioids.",
+            "Use": "Pre-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Hemodilution ↑ free drug."
+        },
+        "Lorazepam": {
+            "Mechanism of Action": "GABA-A agonist.",
             "Indications for Use": "Anxiety, seizures.",
-            "Effect on Patient": "Sedation, anxiolysis, amnesia.",
-            "Adverse Reactions": "Respiratory depression, propylene glycol toxicity.",
-            "Situations to Avoid": "Respiratory insufficiency, pregnancy, hypotension, elderly.",
+            "Effect on Patient": "Sedation, amnesia.",
+            "Adverse Reactions": "Respiratory depression.",
+            "Situations to Avoid": "Pregnancy, elderly.",
+            "Adjuvants": "Opioids.",
             "Use": "Pre-op.",
-            "CPB/CNS Considerations": "Same as Diazepam."
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Hemodilution ↑ free drug."
         },
-        "Midazolam (Versed)": {
-            "Mechanism of Action": "Same as Diazepam (GABA-A agonist).",
-            "Indications for Use": "Preoperative sedation.",
-            "Effect on Patient": "Sedation, anxiolysis, amnesia.",
-            "Adverse Reactions": "Respiratory depression, delirium.",
-            "Situations to Avoid": "Respiratory insufficiency, liver dysfunction, elderly.",
+        "Midazolam": {
+            "Mechanism of Action": "GABA-A agonist.",
+            "Indications for Use": "Sedation.",
+            "Effect on Patient": "Sedation, amnesia.",
+            "Adverse Reactions": "Respiratory depression.",
+            "Situations to Avoid": "Elderly, respiratory compromise.",
+            "Adjuvants": "Opioids.",
             "Use": "Pre-op.",
-            "CPB/CNS Considerations": "Same as Diazepam."
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Hemodilution ↑ free drug."
         },
         "Atropine": {
-            "Mechanism of Action": "Muscarinic receptor antagonist → inhibits parasympathetic activity.",
-            "Indications for Use": "Bradycardia, AV-node block (prevents reflex bradycardia).",
-            "Effect on Patient": "↑ heart rate (chronotropy), ↑ conduction (dromotropy), reduced secretions.",
-            "Adverse Reactions": "Tachycardia, delirium, flushing.",
-            "Situations to Avoid": "Tachycardia, arrhythmias, heart failure, elderly (delirium risk).",
-            "Adjuvants": "Often paired with opioids as premedication.",
-            "Use": "Pre-op."
+            "Mechanism of Action": "Muscarinic antagonist → ↓ parasympathetic tone.",
+            "Indications for Use": "Bradycardia.",
+            "Effect on Patient": "↑ HR, ↓ secretions.",
+            "Adverse Reactions": "Tachycardia, delirium.",
+            "Situations to Avoid": "Tachyarrhythmias, elderly.",
+            "Adjuvants": "Opioids.",
+            "Use": "Pre-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
         },
-        "Glycopyrrolate (Robinul)": {
-            "Mechanism of Action": "Muscarinic receptor antagonist → inhibits acetylcholine at parasympathetic sites.",
-            "Indications for Use": "Reduce secretions, treat bradycardia (slower onset than atropine).",
-            "Effect on Patient": "↓ secretions, ↑ heart rate.",
-            "Adverse Reactions": "Mild tachycardia, constipation.",
-            "Situations to Avoid": "Tachycardia, arrhythmias, heart failure.",
-            "Adjuvants": "Often paired with opioids as premedication.",
-            "Use": "Pre-op."
+        "Glycopyrrolate": {
+            "Mechanism of Action": "Muscarinic antagonist.",
+            "Indications for Use": "Reduce secretions, mild bradycardia.",
+            "Effect on Patient": "↑ HR, ↓ secretions.",
+            "Adverse Reactions": "Mild tachycardia.",
+            "Situations to Avoid": "Arrhythmias.",
+            "Adjuvants": "Opioids.",
+            "Use": "Pre-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
         },
         "Adenosine": {
-            "Mechanism of Action": "A1 receptor → ↓ chronotropy & dromotropy; A2a → vasodilation.",
-            "Indications for Use": "Paroxysmal supraventricular tachycardia (PSVT).",
-            "Effect on Patient": "Restores normal rhythm.",
-            "Adverse Reactions": "Flushing, dyspnea, chest pain, bradycardia, transient AV block.",
-            "Situations to Avoid": "Bradycardia, hypotension, shock.",
+            "Mechanism of Action": "A1 receptor agonist → AV block.",
+            "Indications for Use": "SVT.",
+            "Effect on Patient": "Restores sinus rhythm.",
+            "Adverse Reactions": "Flushing, chest pain.",
+            "Situations to Avoid": "Asthma, AV block.",
+            "Adjuvants": "None.",
             "Use": "Intra-op.",
+            "Potency": "High.",
             "CPB/CNS Considerations": "↓ plasma concentration."
         },
         "Magnesium": {
-            "Mechanism of Action": "Stabilizes cell membranes, essential cofactor for Na⁺/K⁺ ATPase, calcium antagonist.",
-            "Indications for Use": "Torsades de Pointes, ventricular tachycardia.",
+            "Mechanism of Action": "Stabilizes myocardium, ↓ Ca²⁺ influx.",
+            "Indications for Use": "Torsades, VT.",
             "Effect on Patient": "Corrects arrhythmias.",
-            "Adverse Reactions": "Hypotension, flushing, asystole.",
-            "Situations to Avoid": "Renal dysfunction, hypotension.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "Renal failure.",
+            "Adjuvants": "Electrolyte repletion.",
             "Use": "Intra-op.",
+            "Potency": "High.",
             "CPB/CNS Considerations": "↓ plasma concentration."
         },
         "Propofol": {
-            "Mechanism of Action": "GABA receptor agonist → ↑ Cl⁻ influx → hyperpolarization of neurons.",
-            "Indications for Use": "Induction & maintenance of anesthesia.",
-            "Effect on Patient": "Sedation/hypnosis, anxiolysis, amnesia, hypotension, respiratory depression.",
-            "Adverse Reactions": "Hypoventilation/apnea, hypotension, hypertriglyceridemia.",
-            "Situations to Avoid": "Hypertriglyceridemia, hemodynamic instability, egg/soy allergy.",
-            "Adjuvants": "Opioids (analgesia), ketamine (analgesic adjunct).",
+            "Mechanism of Action": "GABA-A agonist → CNS depression.",
+            "Indications for Use": "Induction/maintenance of anesthesia.",
+            "Effect on Patient": "Sedation, ↓ BP.",
+            "Adverse Reactions": "Hypotension, apnea.",
+            "Situations to Avoid": "Egg/soy allergy, instability.",
+            "Adjuvants": "Opioids.",
             "Use": "Intra-op.",
-            "CPB/CNS Considerations": "↑ unbound drug due to hemodilution → ↑ effect."
+            "Potency": "High.",
+            "CPB/CNS Considerations": "↑ free drug."
         },
-        "Dexmedetomidine (Precedex)": {
-            "Mechanism of Action": "Selective alpha-2 adrenergic agonist → ↓ norepinephrine release.",
+        "Dexmedetomidine": {
+            "Mechanism of Action": "α2 agonist → ↓ NE release.",
             "Indications for Use": "Sedation of intubated patients.",
-            "Effect on Patient": "Sedation, mild analgesia, anxiolysis, hypotension, reflex bradycardia.",
-            "Adverse Reactions": "Hypotension, transient hypertension, reflex bradycardia.",
-            "Situations to Avoid": "Diabetes, bradycardia, hypotension, shock.",
-            "Adjuvants": "Opioids (added analgesia), ketamine (counteract hypotension).",
+            "Effect on Patient": "Sedation, mild analgesia.",
+            "Adverse Reactions": "Hypotension, bradycardia.",
+            "Situations to Avoid": "Shock, diabetes.",
+            "Adjuvants": "Opioids.",
             "Use": "Intra-op.",
-            "CPB/CNS Considerations": "↑ free drug levels (highly protein-bound) → ↑ anesthetic effect."
+            "Potency": "High.",
+            "CPB/CNS Considerations": "↑ free drug."
         },
         "Etomidate": {
-            "Mechanism of Action": "Enhances GABAergic activity → CNS depression.",
-            "Indications for Use": "Induction of anesthesia (potent hypnotic, minimal CV effects).",
-            "Effect on Patient": "Sedation, hypnosis, amnesia.",
-            "Adverse Reactions": "Post-op nausea/vomiting, myoclonus, pain at injection site, adrenal suppression.",
-            "Situations to Avoid": "Adrenal dysfunction — consider ketamine or propofol instead.",
-            "Adjuvants": "Opioids (analgesia), benzodiazepines (anxiolysis).",
+            "Mechanism of Action": "GABAergic CNS depression.",
+            "Indications for Use": "Induction with minimal CV depression.",
+            "Effect on Patient": "Sedation.",
+            "Adverse Reactions": "Adrenal suppression.",
+            "Situations to Avoid": "Adrenal insufficiency.",
+            "Adjuvants": "Opioids.",
             "Use": "Intra-op.",
-            "CPB/CNS Considerations": "↑ free drug (moderately protein-bound) → ↑ anesthetic effect."
+            "Potency": "High.",
+            "CPB/CNS Considerations": "↑ free drug."
         },
         "Ketamine": {
-            "Mechanism of Action": "NMDA receptor antagonist → dissociation, ↑ sympathetic activity.",
-            "Indications for Use": "Induction & maintenance of anesthesia, reactive airway disease.",
-            "Effect on Patient": "Dissociation, ↑ HR, ↑ BP, ↑ CO, analgesia, psychotomimetic effects.",
-            "Adverse Reactions": "Hypertension, hallucinations, emergence delirium.",
-            "Situations to Avoid": "Ischemic heart disease — consider etomidate or propofol instead.",
-            "Adjuvants": "Opioids (synergistic effect), benzodiazepines (reduce hallucinations).",
+            "Mechanism of Action": "NMDA antagonist.",
+            "Indications for Use": "Induction, reactive airway disease.",
+            "Effect on Patient": "Dissociation, ↑ HR, ↑ BP.",
+            "Adverse Reactions": "Hallucinations, hypertension.",
+            "Situations to Avoid": "Ischemic heart disease.",
+            "Adjuvants": "Benzodiazepines.",
             "Use": "Intra-op.",
-            "CPB/CNS Considerations": "↑ free drug → ↑ effect."
+            "Potency": "High.",
+            "CPB/CNS Considerations": "↑ free drug."
         },
         "Alfentanil": {
-            "Mechanism of Action": "μ-opioid receptor agonist → inhibits pain pathways.",
-            "Indications for Use": "Short, intense surgical procedures.",
-            "Effect on Patient": "Rapid-onset analgesia, sedation.",
-            "Adverse Reactions": "Respiratory depression, sedation, hypotension, bradycardia.",
-            "Situations to Avoid": "Respiratory insufficiency, hemodynamic instability, hypotension.",
-            "Adjuvants": "Benzodiazepines, induction agents, anticholinergics.",
+            "Mechanism of Action": "μ-opioid agonist.",
+            "Indications for Use": "Short intense procedures.",
+            "Effect on Patient": "Rapid analgesia.",
+            "Adverse Reactions": "Respiratory depression.",
+            "Situations to Avoid": "Respiratory failure.",
+            "Adjuvants": "Benzos.",
             "Use": "Intra-op.",
-            "Potency": "~0.1–0.5 (relative scale).",
-            "CPB/CNS Considerations": "↓ plasma concentration, lipophilic → sequestration."
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "↓ concentration."
         },
         "Fentanyl": {
-            "Mechanism of Action": "μ-opioid receptor agonist → potent analgesia.",
-            "Indications for Use": "Severe pain, anesthesia adjunct.",
-            "Effect on Patient": "Analgesia, sedation.",
-            "Adverse Reactions": "Respiratory depression, sedation, hypotension, bradycardia.",
+            "Mechanism of Action": "μ-opioid agonist.",
+            "Indications for Use": "Severe pain, adjunct.",
+            "Effect on Patient": "Analgesia.",
+            "Adverse Reactions": "Respiratory depression.",
             "Situations to Avoid": "Same as above.",
-            "Adjuvants": "Same as above.",
+            "Adjuvants": "Benzos.",
             "Use": "Intra-op.",
             "Potency": "High.",
-            "CPB/CNS Considerations": "↓ plasma concentration, highly lipophilic → sequestration."
+            "CPB/CNS Considerations": "↓ concentration."
         },
         "Remifentanil": {
-            "Mechanism of Action": "μ-opioid receptor agonist → ultra-short-acting analgesia.",
-            "Indications for Use": "Precisely controlled surgical pain relief.",
-            "Effect on Patient": "Precise, short-acting analgesia.",
-            "Adverse Reactions": "Respiratory depression, sedation, hypotension, bradycardia.",
-            "Situations to Avoid": "Non-functional blood/tissue esterases (metabolism is extrahepatic).",
-            "Adjuvants": "Same as above.",
+            "Mechanism of Action": "μ-opioid agonist.",
+            "Indications for Use": "Precisely controlled analgesia.",
+            "Effect on Patient": "Rapid-onset, short-acting.",
+            "Adverse Reactions": "Respiratory depression.",
+            "Situations to Avoid": "Esterase deficiency.",
+            "Adjuvants": "Benzos.",
             "Use": "Intra-op.",
-            "Potency": "Very high.",
-            "CPB/CNS Considerations": "No sequestration (rapid metabolism)."
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Not sequestered."
         },
         "Sufentanil": {
-            "Mechanism of Action": "μ-opioid receptor agonist → inhibits pain pathways.",
-            "Indications for Use": "Surgical pain management.",
-            "Effect on Patient": "Profound analgesia, sedation.",
-            "Adverse Reactions": "Respiratory depression, sedation, hypotension, bradycardia.",
-            "Situations to Avoid": "Respiratory insufficiency, hemodynamic instability, hypotension.",
-            "Adjuvants": "Benzodiazepines, induction agents, anticholinergics.",
+            "Mechanism of Action": "μ-opioid agonist.",
+            "Indications for Use": "Surgical analgesia.",
+            "Effect on Patient": "Profound analgesia.",
+            "Adverse Reactions": "Respiratory depression.",
+            "Situations to Avoid": "Same as above.",
+            "Adjuvants": "Benzos.",
             "Use": "Intra-op.",
-            "Potency": "Very high (~10× fentanyl).",
-            "CPB/CNS Considerations": "↓ plasma concentration, highly lipophilic → sequestration."
+            "Potency": "Very high.",
+            "CPB/CNS Considerations": "↓ concentration."
         },
-        "Benzocaine (Ester)": {
-            "Mechanism of Action": "Blocks sodium channels (inactive/open state).",
-            "Indications for Use": "Temporary pain relief, mucosal numbing.",
-            "Effect on Patient": "Localized numbness.",
+        "Benzocaine": {
+            "Mechanism of Action": "Na⁺ channel blocker (ester).",
+            "Indications for Use": "Topical mucosal anesthesia.",
+            "Effect on Patient": "Local numbness.",
             "Adverse Reactions": "Methemoglobinemia.",
-            "Use": "Topical."
+            "Use": "Topical.",
+            "Potency": "Low.",
+            "CPB/CNS Considerations": "None."
         },
-        "Bupivacaine (Amide)": {
-            "Mechanism of Action": "Blocks sodium channels (inactive/open state).",
-            "Indications for Use": "Regional anesthesia, epidurals, peripheral nerve blocks.",
-            "Effect on Patient": "Long-lasting numbness, pain relief.",
-            "Adverse Reactions": "Cardiotoxicity (especially if injected intravascularly).",
+        "Bupivacaine": {
+            "Mechanism of Action": "Na⁺ channel blocker (amide).",
+            "Indications for Use": "Regional/epidural anesthesia.",
+            "Effect on Patient": "Long-lasting numbness.",
+            "Adverse Reactions": "Cardiotoxicity.",
+            "Situations to Avoid": "Intravascular injection.",
             "Use": "Intra-op.",
             "Potency": "Moderate.",
-            "CPB/CNS Considerations": "None specific."
+            "CPB/CNS Considerations": "None."
         },
-        "Ropivacaine (Amide, S-isomer of Bupivacaine)": {
-            "Mechanism of Action": "Blocks sodium channels (inactive/open state).",
-            "Indications for Use": "Nerve blocks, regional anesthesia.",
-            "Effect on Patient": "Numbness, pain relief.",
-            "Adverse Reactions": "Less cardiotoxic than bupivacaine.",
-            "Use": "Intra-op.",
-            "Potency": "Moderate."
-        },
-        "Lidocaine (Amide)": {
-            "Mechanism of Action": "Blocks sodium channels (inactive/open state).",
-            "Indications for Use": "Local or regional anesthesia, also class 1b antiarrhythmic.",
-            "Effect on Patient": "Numbness, pain relief, arrhythmia suppression.",
-            "Adverse Reactions": "Systemic toxicity (if overdosed).",
+        "Ropivacaine": {
+            "Mechanism of Action": "Na⁺ channel blocker (amide).",
+            "Indications for Use": "Nerve blocks.",
+            "Effect on Patient": "Numbness.",
+            "Adverse Reactions": "Less cardiotoxic.",
             "Use": "Intra-op.",
             "Potency": "Moderate.",
-            "CPB/CNS Considerations": "Antiarrhythmic effect."
+            "CPB/CNS Considerations": "None."
         },
-        "Acetaminophen (paracetamol)": {
-            "Mechanism of Action": "Weak COX inhibitor, may activate serotonergic pathways.",
+        "Lidocaine": {
+            "Mechanism of Action": "Na⁺ channel blocker (amide).",
+            "Indications for Use": "Local/regional anesthesia, antiarrhythmic.",
+            "Effect on Patient": "Numbness, arrhythmia suppression.",
+            "Adverse Reactions": "Systemic toxicity.",
+            "Situations to Avoid": "Overdose.",
+            "Use": "Intra-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Antiarrhythmic effect preserved."
+        },
+        "Acetaminophen": {
+            "Mechanism of Action": "Weak COX inhibitor, centrally acting.",
             "Indications for Use": "Fever, mild pain.",
-            "Effect on Patient": "Reduced pain, mild antipyretic, minimal GI impact.",
-            "Adverse Reactions": "Hepatotoxicity (especially >4g/day or with liver disease).",
-            "Situations to Avoid": "Hepatic dysfunction.",
+            "Effect on Patient": "Pain relief, antipyretic.",
+            "Adverse Reactions": "Hepatotoxicity.",
+            "Situations to Avoid": "Liver disease.",
+            "Adjuvants": "None.",
             "Use": "Post-op.",
-            "Potency": "Moderate."
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
         },
-        "Ketorolac (NSAID)": {
-            "Mechanism of Action": "COX-1 & COX-2 inhibition → ↓ prostaglandin synthesis.",
-            "Indications for Use": "Moderate-to-severe pain, anti-inflammatory.",
-            "Effect on Patient": "Pain relief, reduced inflammation.",
-            "Adverse Reactions": "GI bleeding, renal injury, increased CV risk.",
+        # ...existing and additional drugs remain below...
+        "Ketorolac": {
+            "Mechanism of Action": "COX inhibitor → ↓ prostaglandins.",
+            "Indications for Use": "Moderate-to-severe pain.",
+            "Effect on Patient": "Analgesia, anti-inflammatory.",
+            "Adverse Reactions": "GI bleeding, renal injury.",
+            "Situations to Avoid": "Renal dysfunction.",
+            "Adjuvants": "None.",
             "Use": "Post-op.",
-            "Potency": "Moderate."
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
         },
-        "Ibuprofen (NSAID)": {
-            "Mechanism of Action": "Same as Ketorolac — COX inhibition.",
+        "Ibuprofen": {
+            "Mechanism of Action": "COX inhibitor.",
             "Indications for Use": "Mild-to-moderate pain, inflammation.",
-            "Effect on Patient": "Pain relief, reduced inflammation.",
-            "Adverse Reactions": "GI bleeding, renal injury, increased CV risk.",
+            "Effect on Patient": "Analgesia, anti-inflammatory.",
+            "Adverse Reactions": "GI bleeding, renal injury.",
+            "Situations to Avoid": "Renal failure.",
+            "Adjuvants": "None.",
             "Use": "Post-op.",
-            "Potency": "Moderate."
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
         },
-        "Ketamine (at sub-anesthetic doses)": {
-            "Mechanism of Action": "NMDA receptor antagonist.",
-            "Indications for Use": "Adjunct pain management.",
-            "Effect on Patient": "Analgesia, sedation, dissociation.",
-            "Adverse Reactions": "Hallucinations, hypertension, emergence delirium.",
+        "Ketamine (sub-anesthetic)": {
+            "Mechanism of Action": "NMDA antagonist.",
+            "Indications for Use": "Adjunct analgesia.",
+            "Effect on Patient": "Analgesia, sedation.",
+            "Adverse Reactions": "Hallucinations.",
+            "Situations to Avoid": "Psychiatric disorders.",
+            "Adjuvants": "Benzodiazepines.",
             "Use": "Post-op.",
-            "Potency": "Moderate."
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
         },
-        "Pregabalin (Gabapentinoid)": {
-            "Mechanism of Action": "Binds to α2δ subunit of voltage-gated calcium channels → ↓ neurotransmitter release.",
+        "Pregabalin": {
+            "Mechanism of Action": "Binds α2δ calcium channel → ↓ neurotransmitter release.",
             "Indications for Use": "Neuropathic pain.",
-            "Effect on Patient": "Pain relief, anxiolysis (mild).",
+            "Effect on Patient": "Analgesia, anxiolysis.",
             "Adverse Reactions": "Dizziness, sedation.",
+            "Situations to Avoid": "None specified.",
             "Use": "Post-op.",
-            "Potency": "Moderate."
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
         },
-        "Gabapentin (Gabapentinoid)": {
-            "Mechanism of Action": "Binds α2δ subunit of voltage-gated calcium channels → ↓ neurotransmitter release.",
+        "Gabapentin": {
+            "Mechanism of Action": "Same as pregabalin.",
             "Indications for Use": "Neuropathic pain.",
-            "Effect on Patient": "Pain relief.",
+            "Effect on Patient": "Analgesia.",
             "Adverse Reactions": "Dizziness, sedation.",
+            "Situations to Avoid": "None specified.",
+            "Adjuvants": "None.",
             "Use": "Post-op.",
-            "Potency": "Moderate."
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
         },
-        "Dexamethasone (Decadron)": {
-            "Mechanism of Action": "Glucocorticoid — anti-inflammatory, immunosuppressive.",
-            "Indications for Use": "Anti-inflammatory, reduces opioid use, antiemetic.",
-            "Effect on Patient": "↓ pain, ↓ inflammation, ↓ nausea.",
-            "Adverse Reactions": "Hyperglycemia, insomnia, anxiety, psychosis, impaired wound healing.",
+        "Dexamethasone (anti-inflammatory)": {
+            "Mechanism of Action": "Glucocorticoid.",
+            "Indications for Use": "Anti-inflammatory, antiemetic.",
+            "Effect on Patient": "↓ inflammation & nausea.",
+            "Adverse Reactions": "Hyperglycemia, insomnia.",
+            "Situations to Avoid": "Uncontrolled diabetes.",
+            "Adjuvants": "5-HT₃ antagonists.",
             "Use": "Post-op.",
-            "Potency": "Moderate."
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Helpful during CPB."
         },
-        "Magnesium (as an adjunct)": {
-            "Mechanism of Action": "Calcium channel blocker, NMDA antagonist.",
-            "Indications for Use": "Torsades de Pointes, ventricular tachycardia, adjunct for analgesia.",
-            "Effect on Patient": "Corrects arrhythmias, ↓ pain, ↓ anesthetic requirement.",
-            "Adverse Reactions": "Hypotension, bradycardia.",
+        "Magnesium (analgesic adjunct)": {
+            "Mechanism of Action": "Calcium antagonist, NMDA antagonist.",
+            "Indications for Use": "Analgesic adjunct, arrhythmias.",
+            "Effect on Patient": "↓ pain, arrhythmia control.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "Renal failure.",
+            "Adjuvants": "Electrolyte therapy.",
             "Use": "Intra-op.",
-            "Potency": "Moderate."
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
         },
-        "Mitomycin C (MMC)": {
-            "Mechanism of Action": "Alkylating antitumor antibiotic → inhibits DNA synthesis.",
-            "Indications for Use": "Peritoneal carcinomatosis, cancer.",
-            "Effect on Patient": "Cytotoxic — kills tumor cells, slows progression.",
-            "Adverse Reactions": "Bone marrow suppression, mucositis, pulmonary fibrosis.",
-            "Use": "Intra-op."
+        "Mitomycin C": {
+            "Mechanism of Action": "Alkylating agent → DNA crosslinks.",
+            "Indications for Use": "HIPEC.",
+            "Effect on Patient": "Tumor cell death.",
+            "Adverse Reactions": "Marrow suppression.",
+            "Situations to Avoid": "Severe marrow suppression.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
         },
         "Cisplatin": {
-            "Mechanism of Action": "Platinum alkylating agent → DNA crosslinking → cell death.",
-            "Indications for Use": "Peritoneal carcinomatosis, cancer.",
-            "Effect on Patient": "Cytotoxic — kills tumor cells, slows progression.",
-            "Adverse Reactions": "Nephrotoxicity, peripheral neuropathy, nausea, vomiting.",
-            "Use": "Intra-op."
+            "Mechanism of Action": "Platinum alkylator → DNA crosslinks.",
+            "Indications for Use": "HIPEC.",
+            "Effect on Patient": "Tumor cell death.",
+            "Adverse Reactions": "Nephrotoxicity, neurotoxicity.",
+            "Situations to Avoid": "Renal dysfunction.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
         },
         "Oxaliplatin": {
-            "Mechanism of Action": "Platinum alkylating agent → DNA crosslinking → cell death.",
-            "Indications for Use": "Cancer (peritoneal carcinomatosis).",
-            "Effect on Patient": "Cytotoxic — kills tumor cells, slows progression.",
-            "Adverse Reactions": "Peripheral neuropathy, bone marrow suppression, cold sensitivity.",
-            "Use": "Intra-op."
+            "Mechanism of Action": "Platinum alkylator → DNA crosslinks.",
+            "Indications for Use": "HIPEC.",
+            "Effect on Patient": "Tumor cell death.",
+            "Adverse Reactions": "Neuropathy, marrow suppression.",
+            "Situations to Avoid": "Neuropathy.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
         },
         "General Antiemetic": {
-            "Mechanism of Action": "Broad — various anti-nausea pathways.",
-            "Indications for Use": "Prevent or treat nausea/vomiting.",
-            "Effect on Patient": "Antiemetic effect.",
-            "Adverse Reactions": "Minimal (depends on drug).",
-            "Use": "Pre-op, intra-op, or post-op.",
-            "CPB/CNS Considerations": "Hemodilution on CPB may require redosing."
+            "Mechanism of Action": "Broad anti-nausea pathways.",
+            "Indications for Use": "PONV.",
+            "Effect on Patient": "↓ nausea.",
+            "Adverse Reactions": "Minimal.",
+            "Situations to Avoid": "None specified.",
+            "Adjuvants": "None.",
+            "Use": "Pre-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Hemodilution may reduce effect."
         },
-        "Granisetron (Sustol)": {
-            "Mechanism of Action": "5-HT₃ receptor antagonist (central & peripheral).",
-            "Indications for Use": "Postoperative nausea and vomiting (PONV).",
-            "Effect on Patient": "Reduces nausea and vomiting.",
-            "Adverse Reactions": "Headache, constipation, QT prolongation.",
-            "Situations to Avoid": "Patients at risk of QT prolongation.",
-            "Adjuvants": "Often combined with dexamethasone or NK-1 antagonists.",
+        "Granisetron": {
+            "Mechanism of Action": "5-HT₃ antagonist.",
+            "Indications for Use": "PONV.",
+            "Effect on Patient": "↓ nausea.",
+            "Adverse Reactions": "Headache, QT prolongation.",
+            "Situations to Avoid": "QT risk.",
+            "Adjuvants": "Dexamethasone.",
             "Use": "Pre-op.",
             "Potency": "Moderate.",
-            "CPB/CNS Considerations": "Minimal, may need redosing."
+            "CPB/CNS Considerations": "May require redosing."
         },
-        "Palonosetron (Aloxi)": {
-            "Mechanism of Action": "Long-acting 5-HT₃ receptor antagonist.",
+        "Palonosetron": {
+            "Mechanism of Action": "Long-acting 5-HT₃ antagonist.",
             "Indications for Use": "PONV.",
-            "Effect on Patient": "Long-lasting antiemetic effect.",
-            "Adverse Reactions": "Headache, constipation, QT prolongation.",
-            "Situations to Avoid": "Patients at risk of QT prolongation.",
-            "Adjuvants": "Often combined with dexamethasone or NK-1 antagonists.",
-            "Use": "Pre-op.",
-            "Potency": "High, longer half-life.",
-            "CPB/CNS Considerations": "Minimal, less redosing required."
-        },
-        "Aprepitant": {
-            "Mechanism of Action": "NK-1 receptor antagonist → blocks substance P.",
-            "Indications for Use": "PONV.",
-            "Effect on Patient": "Reduces nausea and vomiting.",
-            "Adverse Reactions": "Fatigue, hiccups, constipation.",
-            "Situations to Avoid": "Patients on CYP3A4 substrates or inducers, pregnancy.",
-            "Adjuvants": "Often combined with 5-HT₃ antagonists + dexamethasone.",
+            "Effect on Patient": "Long-acting antiemetic.",
+            "Adverse Reactions": "Headache, QT prolongation.",
+            "Situations to Avoid": "QT risk.",
+            "Adjuvants": "Dexamethasone.",
             "Use": "Pre-op.",
             "Potency": "High.",
-            "CPB/CNS Considerations": "Minimal effect."
+            "CPB/CNS Considerations": "Less redosing needed."
         },
+        "Aprepitant": {
+            "Mechanism of Action": "NK-1 antagonist.",
+            "Indications for Use": "PONV.",
+            "Effect on Patient": "↓ nausea.",
+            "Adverse Reactions": "Fatigue, hiccups.",
+            "Situations to Avoid": "Pregnancy.",
+            "Adjuvants": "5-HT₃ + dexamethasone.",
+            "Use": "Pre-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
+        },
+        "Dexamethasone (antiemetic)": {
+            "Mechanism of Action": "Glucocorticoid.",
+            "Indications for Use": "PONV.",
+            "Effect on Patient": "↓ nausea & inflammation.",
+            "Adverse Reactions": "Hyperglycemia.",
+            "Situations to Avoid": "Diabetes.",
+            "Adjuvants": "5-HT₃.",
+            "Use": "Pre-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Helpful on CPB."
+        },
+        "Amisulpride": {
+            "Mechanism of Action": "D₂/D₃ antagonist.",
+            "Indications for Use": "PONV.",
+            "Effect on Patient": "↓ nausea.",
+            "Adverse Reactions": "QT prolongation.",
+            "Situations to Avoid": "Parkinson’s, QT risk.",
+            "Adjuvants": "5-HT₃ + dexamethasone.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
+        },
+        "Droperidol": {
+            "Mechanism of Action": "D₂ antagonist.",
+            "Indications for Use": "PONV.",
+            "Effect on Patient": "↓ nausea.",
+            "Adverse Reactions": "QT prolongation.",
+            "Situations to Avoid": "Parkinson’s, QT risk.",
+            "Adjuvants": "5-HT₃ + dexamethasone.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
+        },
+        "Haloperidol": {
+            "Mechanism of Action": "D₂ antagonist.",
+            "Indications for Use": "PONV, sedation.",
+            "Effect on Patient": "↓ nausea, sedation.",
+            "Adverse Reactions": "QT prolongation, delirium.",
+            "Situations to Avoid": "Dementia, Parkinson’s.",
+            "Adjuvants": "Benzodiazepines.",
+            "Use": "Post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
+        },
+        "Dimenhydrinate": {
+            "Mechanism of Action": "H₁ antagonist + anticholinergic.",
+            "Indications for Use": "Motion sickness, PONV.",
+            "Effect on Patient": "↓ nausea, sedation.",
+            "Adverse Reactions": "Sedation, dry mouth.",
+            "Situations to Avoid": "Elderly, glaucoma.",
+            "Adjuvants": "None.",
+            "Use": "Pre-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
+        },
+        "Promethazine": {
+        },
+        # --- Drugs 64–81 ---
+        "Flecainide": {
+            "Mechanism of Action": "Strong Na⁺ blocker.",
+            "Indications for Use": "Afib, SVT.",
+            "Effect on Patient": "Slows atrial arrhythmias.",
+            "Adverse Reactions": "Blurred vision, pro-arrhythmia.",
+            "Situations to Avoid": "Structural heart disease, MI.",
+            "Adjuvants": "Beta blockers.",
+            "Use": "Outpatient.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Not used intra-op."
+        },
+        "Propafenone": {
+            "Mechanism of Action": "Na⁺ blocker + mild beta blockade.",
+            "Indications for Use": "Atrial arrhythmias.",
+            "Effect on Patient": "Rhythm control.",
+            "Adverse Reactions": "Metallic taste, bronchospasm.",
+            "Situations to Avoid": "Asthma, HF.",
+            "Adjuvants": "AV nodal blockers.",
+            "Use": "Outpatient.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Not used intra-op."
+        },
+        "Metoprolol": {
+            "Mechanism of Action": "Beta-1 blocker.",
+            "Indications for Use": "Afib, HTN, post-MI.",
+            "Effect on Patient": "↓ HR, ↓ O₂ demand.",
+            "Adverse Reactions": "Bradycardia, fatigue.",
+            "Situations to Avoid": "Heart block, decompensated HF.",
+            "Adjuvants": "Amiodarone, digoxin.",
+            "Use": "All phases.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "May be held."
+        },
+        "Esmolol": {
+            "Mechanism of Action": "Short-acting beta-1 blocker.",
+            "Indications for Use": "Acute rate control.",
+            "Effect on Patient": "↓ HR.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "Heart block, asthma.",
+            "Adjuvants": "Anesthetics.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Requires redosing."
+        },
+        "Amiodarone": {
+            "Mechanism of Action": "K⁺, Na⁺, Ca²⁺ blocker + beta blockade.",
+            "Indications for Use": "VT, VF, Afib.",
+            "Effect on Patient": "Stabilizes rhythm.",
+            "Adverse Reactions": "Pulmonary fibrosis, thyroid dysfunction.",
+            "Situations to Avoid": "Bradycardia, iodine allergy.",
+            "Adjuvants": "Beta blockers.",
+            "Use": "All phases.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "May need dose adjustment."
+        },
+        "Sotalol": {
+            "Mechanism of Action": "K⁺ blocker + beta blockade.",
+            "Indications for Use": "Afib, VT.",
+            "Effect on Patient": "Slows rate, prolongs QT.",
+            "Adverse Reactions": "Torsades, bradycardia.",
+            "Situations to Avoid": "QT prolongation.",
+            "Adjuvants": "Monitor QT & renal.",
+            "Use": "Outpatient.",
+            "Potency": "Moderate-high.",
+            "CPB/CNS Considerations": "QT risk post-CPB."
+        },
+        "Dronedarone": {
+            "Mechanism of Action": "K⁺, Na⁺, Ca²⁺ blocker + mild anti-adrenergic.",
+            "Indications for Use": "Non-permanent Afib.",
+            "Effect on Patient": "Maintains NSR.",
+            "Adverse Reactions": "Liver toxicity, HF.",
+            "Situations to Avoid": "HF, permanent AF.",
+            "Adjuvants": "Avoid CYP3A4 inhibitors.",
+            "Use": "Outpatient.",
+            "Potency": "Lower than amiodarone.",
+            "CPB/CNS Considerations": "Not used intra-op."
+        },
+        "Promethazine": {
+            "Mechanism of Action": "H₁ & weak D₂ antagonist.",
+            "Indications for Use": "PONV, motion sickness.",
+            "Effect on Patient": "↓ nausea, sedation.",
+            "Adverse Reactions": "Sedation, hypotension.",
+            "Situations to Avoid": "Children <2, elderly.",
+            "Adjuvants": "Potentiates opioids.",
+            "Use": "Pre-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
+        },
+        "Verapamil": {
+            "Mechanism of Action": "L-type Ca²⁺ blocker.",
+            "Indications for Use": "SVT, Afib, angina.",
+            "Effect on Patient": "↓ HR, vasodilation.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "HF, AV block.",
+            "Adjuvants": "None.",
+            "Use": "Rarely intra-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Hypotension risk."
+        },
+        "Diltiazem": {
+            "Mechanism of Action": "Ca²⁺ blocker.",
+            "Indications for Use": "Rate control, angina, HTN.",
+            "Effect on Patient": "↓ HR & SVR.",
+            "Adverse Reactions": "Bradycardia, edema.",
+            "Situations to Avoid": "CHF, hypotension.",
+            "Adjuvants": "Anticoagulation.",
+            "Use": "Pre-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Additive hypotension."
+        },
+        "Adenosine": {
+            "Mechanism of Action": "A1 receptor agonist.",
+            "Indications for Use": "SVT.",
+            "Effect on Patient": "Transient AV block.",
+            "Adverse Reactions": "Flushing, chest pain.",
+            "Situations to Avoid": "Asthma.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
+        },
+        "Digoxin": {
+            "Mechanism of Action": "Inhibits Na⁺/K⁺ ATPase → ↑ Ca²⁺.",
+            "Indications for Use": "Rate control, HF.",
+            "Effect on Patient": "↓ HR, ↑ contractility.",
+            "Adverse Reactions": "Toxicity.",
+            "Situations to Avoid": "Renal failure, hypokalemia.",
+            "Adjuvants": "Monitor electrolytes.",
+            "Use": "Post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "↓ clearance."
+        },
+        "Magnesium Sulfate": {
+            "Mechanism of Action": "Stabilizes myocardium.",
+            "Indications for Use": "Torsades, hypomagnesemia.",
+            "Effect on Patient": "↓ ventricular irritability.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "Hypermagnesemia.",
+            "Adjuvants": "Electrolytes.",
+            "Use": "All phases.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "In prime or intra-op."
+        },
+        "Insulin (Regular)": {
+            "Mechanism of Action": "Facilitates glucose & K⁺ uptake.",
+            "Indications for Use": "Hyperglycemia, hyperkalemia.",
+            "Effect on Patient": "↓ glucose & K⁺.",
+            "Adverse Reactions": "Hypoglycemia.",
+            "Situations to Avoid": "Hypoglycemia.",
+            "Adjuvants": "Dextrose.",
+            "Use": "All phases.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "↑ sensitivity post-CPB."
+        },
+        "Dextrose 50% (D50)": {
+            "Mechanism of Action": "Provides glucose.",
+            "Indications for Use": "Hypoglycemia.",
+            "Effect on Patient": "↑ glucose.",
+            "Adverse Reactions": "Phlebitis.",
+            "Situations to Avoid": "Hyperglycemia.",
+            "Adjuvants": "Insulin, glucagon.",
+            "Use": "All phases.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Useful post-CPB."
+        },
+        "Glucagon": {
+            "Mechanism of Action": "Glycogenolysis & gluconeogenesis.",
+            "Indications for Use": "Hypoglycemia, β-blocker overdose.",
+            "Effect on Patient": "↑ glucose & HR.",
+            "Adverse Reactions": "Nausea, hyperglycemia.",
+            "Situations to Avoid": "Pheochromocytoma.",
+            "Adjuvants": "Calcium, glucose.",
+            "Use": "Emergency.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Useful post-CPB."
+        },
+        "Vitamin K (Phytonadione)": {
+            "Mechanism of Action": "Restores clotting factor activation.",
+            "Indications for Use": "Warfarin reversal.",
+            "Effect on Patient": "Corrects INR.",
+            "Adverse Reactions": "Rare anaphylaxis.",
+            "Situations to Avoid": "None.",
+            "Use": "Post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
+        },
+        "4-Factor PCC (Kcentra)": {
+            "Mechanism of Action": "Replaces clotting factors II, VII, IX, X.",
+            "Indications for Use": "Rapid INR reversal.",
+            "Effect on Patient": "Restores coagulation.",
+            "Adverse Reactions": "Thrombosis.",
+            "Situations to Avoid": "Active thrombosis.",
+            "Use": "Emergency.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
+        },
+        "FFP (Fresh Frozen Plasma)": {
+            "Mechanism of Action": "Replaces clotting factors.",
+            "Indications for Use": "Coagulopathy.",
+            "Effect on Patient": "Replaces clotting.",
+            "Adverse Reactions": "TRALI, TACO.",
+            "Situations to Avoid": "Volume overload.",
+            "Use": "Post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
+        },
+        "Flecainide": {
+            "Mechanism of Action": "Strong Na⁺ blocker.",
+            "Indications for Use": "Afib, SVT.",
+            "Effect on Patient": "Slows atrial arrhythmias.",
+            "Adverse Reactions": "Blurred vision, pro-arrhythmia.",
+            "Situations to Avoid": "Structural heart disease, MI.",
+            "Adjuvants": "Beta blockers.",
+            "Use": "Outpatient.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Not used intra-op."
+        },
+        "Propafenone": {
+            "Mechanism of Action": "Na⁺ blocker + mild beta blockade.",
+            "Indications for Use": "Atrial arrhythmias.",
+            "Effect on Patient": "Rhythm control.",
+            "Adverse Reactions": "Metallic taste, bronchospasm.",
+            "Situations to Avoid": "Asthma, HF.",
+            "Adjuvants": "AV nodal blockers.",
+            "Use": "Outpatient.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Not used intra-op."
+        },
+        "Metoprolol": {
+            "Mechanism of Action": "Beta-1 blocker.",
+            "Indications for Use": "Afib, HTN, post-MI.",
+            "Effect on Patient": "↓ HR, ↓ O₂ demand.",
+            "Adverse Reactions": "Bradycardia, fatigue.",
+            "Situations to Avoid": "Heart block, decompensated HF.",
+            "Adjuvants": "Amiodarone, digoxin.",
+            "Use": "All phases.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "May be held."
+        },
+        "Esmolol": {
+            "Mechanism of Action": "Short-acting beta-1 blocker.",
+            "Indications for Use": "Acute rate control.",
+            "Effect on Patient": "↓ HR.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "Heart block, asthma.",
+            "Adjuvants": "Anesthetics.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Requires redosing."
+        },
+        "Amiodarone": {
+            "Mechanism of Action": "K⁺, Na⁺, Ca²⁺ blocker + beta blockade.",
+            "Indications for Use": "VT, VF, Afib.",
+            "Effect on Patient": "Stabilizes rhythm.",
+            "Adverse Reactions": "Pulmonary fibrosis, thyroid dysfunction.",
+            "Situations to Avoid": "Bradycardia, iodine allergy.",
+            "Adjuvants": "Beta blockers.",
+            "Use": "All phases.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "May need dose adjustment."
+        },
+        "Sotalol": {
+            "Mechanism of Action": "K⁺ blocker + beta blockade.",
+            "Indications for Use": "Afib, VT.",
+            "Effect on Patient": "Slows rate, prolongs QT.",
+            "Adverse Reactions": "Torsades, bradycardia.",
+            "Situations to Avoid": "QT prolongation.",
+            "Adjuvants": "Monitor QT & renal.",
+            "Use": "Outpatient.",
+            "Potency": "Moderate-high.",
+            "CPB/CNS Considerations": "QT risk post-CPB."
+        },
+        "Dronedarone": {
+            "Mechanism of Action": "K⁺, Na⁺, Ca²⁺ blocker + mild anti-adrenergic.",
+            "Indications for Use": "Non-permanent Afib.",
+            "Effect on Patient": "Maintains NSR.",
+            "Adverse Reactions": "Liver toxicity, HF.",
+            "Situations to Avoid": "HF, permanent AF.",
+            "Adjuvants": "Avoid CYP3A4 inhibitors.",
+            "Use": "Outpatient.",
+            "Potency": "Lower than amiodarone.",
+            "CPB/CNS Considerations": "Not used intra-op."
+        },
+        "Verapamil": {
+            "Mechanism of Action": "L-type Ca²⁺ blocker.",
+            "Indications for Use": "SVT, Afib, angina.",
+            "Effect on Patient": "↓ HR, vasodilation.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "HF, AV block.",
+            "Adjuvants": "None.",
+            "Use": "Rarely intra-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Hypotension risk."
+        },
+        "Diltiazem": {
+            "Mechanism of Action": "Ca²⁺ blocker.",
+            "Indications for Use": "Rate control, angina, HTN.",
+            "Effect on Patient": "↓ HR & SVR.",
+            "Adverse Reactions": "Bradycardia, edema.",
+            "Situations to Avoid": "CHF, hypotension.",
+            "Adjuvants": "Anticoagulation.",
+            "Use": "Pre-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Additive hypotension."
+        },
+        "Adenosine": {
+            "Mechanism of Action": "A1 receptor agonist.",
+            "Indications for Use": "SVT.",
+            "Effect on Patient": "Transient AV block.",
+            "Adverse Reactions": "Flushing, chest pain.",
+            "Situations to Avoid": "Asthma.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
+        },
+        "Digoxin": {
+            "Mechanism of Action": "Inhibits Na⁺/K⁺ ATPase → ↑ Ca²⁺.",
+            "Indications for Use": "Rate control, HF.",
+            "Effect on Patient": "↓ HR, ↑ contractility.",
+            "Adverse Reactions": "Toxicity.",
+            "Situations to Avoid": "Renal failure, hypokalemia.",
+            "Adjuvants": "Monitor electrolytes.",
+            "Use": "Post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "↓ clearance."
+        },
+        "Magnesium Sulfate": {
+            "Mechanism of Action": "Stabilizes myocardium.",
+            "Indications for Use": "Torsades, hypomagnesemia.",
+            "Effect on Patient": "↓ ventricular irritability.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "Hypermagnesemia.",
+            "Adjuvants": "Electrolytes.",
+            "Use": "All phases.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "In prime or intra-op."
+        },
+        "Insulin (Regular)": {
+            "Mechanism of Action": "Facilitates glucose & K⁺ uptake.",
+            "Indications for Use": "Hyperglycemia, hyperkalemia.",
+            "Effect on Patient": "↓ glucose & K⁺.",
+            "Adverse Reactions": "Hypoglycemia.",
+            "Situations to Avoid": "Hypoglycemia.",
+            "Adjuvants": "Dextrose.",
+            "Use": "All phases.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "↑ sensitivity post-CPB."
+        },
+        "Dextrose 50% (D50)": {
+            "Mechanism of Action": "Provides glucose.",
+            "Indications for Use": "Hypoglycemia.",
+            "Effect on Patient": "↑ glucose.",
+            "Adverse Reactions": "Phlebitis.",
+            "Situations to Avoid": "Hyperglycemia.",
+            "Adjuvants": "Insulin, glucagon.",
+            "Use": "All phases.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Useful post-CPB."
+        },
+        "Glucagon": {
+            "Mechanism of Action": "Glycogenolysis & gluconeogenesis.",
+            "Indications for Use": "Hypoglycemia, β-blocker overdose.",
+            "Effect on Patient": "↑ glucose & HR.",
+            "Adverse Reactions": "Nausea, hyperglycemia.",
+            "Situations to Avoid": "Pheochromocytoma.",
+            "Adjuvants": "Calcium, glucose.",
+            "Use": "Emergency.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Useful post-CPB."
+        },
+        "Vitamin K (Phytonadione)": {
+            "Mechanism of Action": "Restores clotting factor activation.",
+            "Indications for Use": "Warfarin reversal.",
+            "Effect on Patient": "Corrects INR.",
+            "Adverse Reactions": "Rare anaphylaxis.",
+            "Situations to Avoid": "None.",
+            "Use": "Post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
+        },
+        "4-Factor PCC (Kcentra)": {
+            "Mechanism of Action": "Replaces clotting factors II, VII, IX, X.",
+            "Indications for Use": "Rapid INR reversal.",
+            "Effect on Patient": "Restores coagulation.",
+            "Adverse Reactions": "Thrombosis.",
+            "Situations to Avoid": "Active thrombosis.",
+            "Use": "Emergency.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
+        },
+        "FFP (Fresh Frozen Plasma)": {
+            "Mechanism of Action": "Replaces clotting factors.",
+            "Indications for Use": "Coagulopathy.",
+            "Effect on Patient": "Replaces clotting.",
+            "Adverse Reactions": "TRALI, TACO.",
+            "Situations to Avoid": "Volume overload.",
+            "Adjuvants": "None.",
+            "Use": "Post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
+        },
+        "Edoxaban": {
+            "Mechanism of Action": "Factor Xa inhibitor.",
+            "Indications for Use": "VTE, AF.",
+            "Effect on Patient": "Anticoagulation.",
+            "Adverse Reactions": "Bleeding.",
+            "Situations to Avoid": "Active bleeding, renal failure.",
+            "Adjuvants": "None.",
+            "Use": "Outpatient.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Typically withheld perioperatively."
+        },
+        "Betrixaban": {
+            "Mechanism of Action": "Factor Xa inhibitor.",
+            "Indications for Use": "VTE prophylaxis.",
+            "Effect on Patient": "Anticoagulation.",
+            "Adverse Reactions": "Bleeding.",
+            "Situations to Avoid": "Active bleeding.",
+            "Adjuvants": "None.",
+            "Use": "Outpatient.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Typically withheld perioperatively."
+        },
+        "Tranexamic Acid (TXA)": {
+            "Mechanism of Action": "Inhibits fibrinolysis by blocking plasminogen.",
+            "Indications for Use": "Reduce bleeding.",
+            "Effect on Patient": "↓ bleeding, ↓ transfusion.",
+            "Adverse Reactions": "Seizures, thrombosis.",
+            "Situations to Avoid": "Active thrombosis.",
+            "Adjuvants": "Standard coagulation.",
+            "Use": "Pre-, intra-, post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Often added to prime."
+        },
+        "Epsilon-Aminocaproic Acid (EACA)": {
+            "Mechanism of Action": "Inhibits fibrinolysis.",
+            "Indications for Use": "Reduce bleeding.",
+            "Effect on Patient": "↓ bleeding.",
+            "Adverse Reactions": "Hypotension, thrombosis.",
+            "Situations to Avoid": "Active thrombosis.",
+            "Adjuvants": "None.",
+            "Use": "Pre-, intra-, post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Often added to prime."
+        },
+        "Prostacyclin (Epoprostenol)": {
+            "Mechanism of Action": "PGI₂ analogue → vasodilation, platelet inhibition.",
+            "Indications for Use": "Circuit thrombosis prevention.",
+            "Effect on Patient": "↓ platelet aggregation, vasodilation.",
+            "Adverse Reactions": "Hypotension.",
+            "Situations to Avoid": "Hypotension.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op (ECMO/CPB).",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Administered in circuit."
+        },
+        "Nitroglycerin": {
+            "Mechanism of Action": "NO donor → venodilation.",
+            "Indications for Use": "Myocardial ischemia, hypertension.",
+            "Effect on Patient": "↓ preload & mild afterload.",
+            "Adverse Reactions": "Hypotension, headache.",
+            "Situations to Avoid": "Severe hypotension.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "None."
+        },
+        "Nitroprusside": {
+            "Mechanism of Action": "NO donor → potent vasodilation.",
+            "Indications for Use": "Hypertensive crisis.",
+            "Effect on Patient": "↓ afterload.",
+            "Adverse Reactions": "Cyanide toxicity.",
+            "Situations to Avoid": "Prolonged use, renal failure.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "None."
+        },
+        "Vasopressin": {
+            "Mechanism of Action": "V1 receptor agonist.",
+            "Indications for Use": "Vasoplegia.",
+            "Effect on Patient": "↑ SVR, ↑ MAP.",
+            "Adverse Reactions": "Ischemia.",
+            "Situations to Avoid": "None specific.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Effective post-CPB."
+        },
+        "Phenylephrine": {
+            "Mechanism of Action": "Alpha agonist → vasoconstriction.",
+            "Indications for Use": "Hypotension.",
+            "Effect on Patient": "↑ SVR, ↑ MAP.",
+            "Adverse Reactions": "Reflex bradycardia.",
+            "Situations to Avoid": "Severe vasoconstriction.",
+            "Adjuvants": "None.",
+            "Use": "Intra-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Common intra-op."
+        },
+        "Norepinephrine": {
+            "Mechanism of Action": "Alpha > beta agonist.",
+            "Indications for Use": "Shock, low SVR.",
+            "Effect on Patient": "↑ MAP, mild ↑ CO.",
+            "Adverse Reactions": "Arrhythmias.",
+            "Situations to Avoid": "None specific.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Common post-CPB."
+        },
+        "Epinephrine": {
+            "Mechanism of Action": "Beta > alpha agonist.",
+            "Indications for Use": "Cardiac arrest, shock.",
+            "Effect on Patient": "↑ HR, ↑ CO.",
+            "Adverse Reactions": "Arrhythmias, hyperglycemia.",
+            "Situations to Avoid": "None specific.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Common post-CPB."
+        },
+        "Milrinone": {
+            "Mechanism of Action": "PDE-3 inhibitor → ↑ cAMP.",
+            "Indications for Use": "Low CO, RV failure.",
+            "Effect on Patient": "↑ CO, ↓ PVR.",
+            "Adverse Reactions": "Hypotension, arrhythmias.",
+            "Situations to Avoid": "Hypotension.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Common post-CPB."
+        },
+        "Levosimendan": {
+            "Mechanism of Action": "Calcium sensitizer + PDE inhibition.",
+            "Indications for Use": "Low output states.",
+            "Effect on Patient": "↑ contractility.",
+            "Adverse Reactions": "Hypotension, arrhythmias.",
+            "Situations to Avoid": "Hypotension.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "Moderate-high.",
+            "CPB/CNS Considerations": "Not widely available in US."
+        },
+        "Calcium Chloride": {
+            "Mechanism of Action": "Replenishes ionized calcium.",
+            "Indications for Use": "Hypocalcemia, myocardial depression.",
+            "Effect on Patient": "↑ contractility.",
+            "Adverse Reactions": "Arrhythmias if rapid.",
+            "Situations to Avoid": "Hypercalcemia.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Essential post-CPB."
+        },
+        "Calcium Gluconate": {
+            "Mechanism of Action": "Same as above.",
+            "Indications for Use": "Hypocalcemia.",
+            "Effect on Patient": "↑ contractility.",
+            "Adverse Reactions": "Less irritating than chloride.",
+            "Situations to Avoid": "Hypercalcemia.",
+            "Adjuvants": "None.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Same as chloride."
+        },
+        "Mannitol": {
+            "Mechanism of Action": "Osmotic diuretic.",
+            "Indications for Use": "Renal protection, cerebral edema.",
+            "Effect on Patient": "↑ urine output.",
+            "Adverse Reactions": "Fluid shifts.",
+            "Situations to Avoid": "Anuria.",
+            "Adjuvants": "None.",
+            "Use": "In prime/intra-op.",
+            "Potency": "Moderate.",
+            "CPB/CNS Considerations": "Often added to prime."
+        },
+        "Heparin": {
+            "Mechanism of Action": "Potentiates antithrombin.",
+            "Indications for Use": "Anticoagulation on CPB.",
+            "Effect on Patient": "Prevents clotting.",
+            "Adverse Reactions": "HIT, bleeding.",
+            "Situations to Avoid": "HIT.",
+            "Adjuvants": "None.",
+            "Use": "Pre-/intra-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Essential."
+        },
+        "Protamine": {
+            "Mechanism of Action": "Neutralizes heparin.",
+            "Indications for Use": "Reverse heparin post-CPB.",
+            "Effect on Patient": "Restores clotting.",
+            "Adverse Reactions": "Hypotension, anaphylaxis.",
+            "Situations to Avoid": "Fish allergy, prior reaction.",
+            "Adjuvants": "None.",
+            "Use": "Post-CPB.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Essential."
+        },
+        "Methylene Blue": {
+            "Mechanism of Action": "Inhibits NO-cGMP pathway.",
+            "Indications for Use": "Vasoplegia.",
+            "Effect on Patient": "↑ SVR.",
+            "Adverse Reactions": "Serotonin syndrome, blue urine.",
+            "Situations to Avoid": "SSRIs.",
+            "Adjuvants": "Vasopressors.",
+            "Use": "Intra-/post-op.",
+            "Potency": "High.",
+            "CPB/CNS Considerations": "Useful post-CPB."
+        }
     }
-
 
     drug_names = list(drug_data.keys())
 
