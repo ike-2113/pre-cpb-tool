@@ -256,6 +256,7 @@ if tool == "Drug Library":
     st.title("Drug Library")
     st.markdown("Search for a drug or select two to compare.")
 
+    # Drug Library is a completely separate entity. No Bypass Blueprint or Pre-CPB Tool code or UI here.
     # Example drug data structure (replace/add with your real data)
     drug_data = {
         "Heparin": {
@@ -1438,74 +1439,7 @@ if tool == "Drug Library":
             with col2:
                 st.write(f"**{key}:** {drug_data[compare[1]].get(key, '-')}")
 
-    # ---- Sidebar ----
-    with st.sidebar:
-        with open(streamlit_logo_path, "rb") as img_file:
-            st.image(img_file.read(), width=250)
-        st.markdown("## PDF Includes")
-        pdf_height = st.checkbox("Height", True)
-        pdf_weight = st.checkbox("Weight", True)
-        pdf_bmi = st.checkbox("BMI", True)
-        pdf_bsa = st.checkbox("BSA", True)
-        pdf_pre_hct = st.checkbox("Pre-op Hct", True)
-        pdf_pre_hgb = st.checkbox("Pre-op Hgb", True)
-        pdf_prime_vol = st.checkbox("Prime Vol", True)
-        pdf_prime_add = st.checkbox("Prime Additives", True)
-        pdf_target_hct = st.checkbox("Target Hct", True)
-        pdf_comorbid = st.checkbox("Comorbidities / Pathology", True)
-        pdf_cardio = st.checkbox("Cardioplegia", True)
-        pdf_cabg = st.checkbox("CABG Grafts", True)
-        pdf_arrest = st.checkbox("Arrest Plan", True)
-        st.markdown("""<sub><i>
-        Medical Disclaimer: The information provided in this application is strictly for educational purposes only and is not intended or implied to be a substitute for medical advice or instruction by a health professional. Information in this application may differ from the opinions of your institution. Consult with a recognized medical professional before making decisions based on the information in this application. The authors are not responsible for the use or interpretation you make of any information provided.
-        </i></sub>""", unsafe_allow_html=True)
 
-    # ---- Main Pre-CPB Tool UI ----
-    st.title("Bypass Blueprint")
-    unit_system = st.radio("Units", ["Metric (cm/kg)", "Imperial (in/lb)"])
-    if unit_system == "Imperial (in/lb)":
-        height_in = st.number_input("Height (in)", value=67)
-        weight_lb = st.number_input("Weight (lb)", value=154)
-        height = round(height_in * 2.54, 2)
-        weight = round(weight_lb * 0.453592, 2)
-    else:
-        height = st.number_input("Height (cm)", value=170)
-        weight = st.number_input("Weight (kg)", value=70)
-
-    pre_hct = st.number_input("Pre-op Hematocrit (%)", value=38.0)
-    pre_hgb = st.number_input("Pre-op Hemoglobin (g/dL)", value=pre_hct * 0.34)
-    prime_vol = st.number_input("Circuit Prime Volume (mL)", value=1400) if pdf_prime_vol else 0
-
-    base_prime = None
-    prime_additives = []
-    prime_osmo = 290
-    if pdf_prime_vol:
-        base_prime = st.selectbox("Base Prime Fluid", ["", "Plasmalyte A", "Normosol-R", "LR", "Other"])
-        if base_prime:
-            albumin = st.selectbox("Albumin", ["None", "5% Albumin", "25% Albumin"])
-            additives = ["Mannitol (g)", "Heparin (units)", "Bicarb (mEq)", "Calcium (mg)", "Magnesium (mg)"]
-            additive_amounts = {}
-            for item in additives:
-                val = st.text_input(f"{item} in Prime", value="")
-                if val: additive_amounts[item] = val
-            if albumin != "None": prime_additives.append(albumin)
-            prime_additives += [f"{k}: {v}" for k, v in additive_amounts.items()]
-            prime_osmo = calculate_prime_osmolality(prime_additives)
-            if prime_osmo < 270:
-                st.warning(f"Osmolality LOW: {prime_osmo} mOsm/kg")
-            elif prime_osmo > 310:
-                st.warning(f"Osmolality HIGH: {prime_osmo} mOsm/kg")
-            else:
-                st.success(f"Osmolality normal: {prime_osmo} mOsm/kg")
-
-    target_hct = st.number_input("Hematocrit Transfusion Threshold (%)", value=25.0)
-    procedure = st.selectbox("Procedure Type", ["CABG", "AVR", "MVR", "Transplant", "Hemiarch", "Bentall", "Full Arch", "Dissection Repair – Stanford Type A", "Dissection Repair – Stanford Type B", "LVAD", "Off-pump CABG", "ECMO Cannulation", "Standby", "Other"])
-    comorbidities = st.multiselect("Comorbidities", ["CKD", "Hypertension", "Jehovah’s Witness", "Anemia", "Aortic Disease", "Diabetes", "Redo Sternotomy", "None"])
-    valve_issues = st.multiselect("Valve Pathology", ["Aortic Stenosis", "Aortic Insufficiency", "Mitral Stenosis", "Mitral Regurgitation", "Tricuspid Regurgitation", "Valve Prolapse"])
-    blood_type = st.selectbox("Patient Blood Type", ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"])
-
-    if procedure in ["Dissection Repair – Stanford Type A", "Full Arch"] and pdf_arrest:
-        arrest_temp = st.number_input("Target Arrest Temperature (°C)", value=18)
         arrest_duration = st.number_input("Expected Arrest Duration (min)", value=30)
         neuro_strategy = st.selectbox("Neuroprotection Strategy", ["None", "RCP", "ACP"])
     else:
