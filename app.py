@@ -66,28 +66,91 @@ st.title("Bypass Blueprint")
 ## Removed hospital and surgeon selection
 # ---- STS Report Section ----
 with st.expander("STS Report", expanded=True):
+
     sts_date = st.date_input("Date of Procedure")
     sts_procedure = st.selectbox("Procedure Type (STS)", [
         "CABG", "Mitral", "Aortic", "Mitral + CABG",
         "Aortic + CABG", "Mitral Repair vs Replace + CABG"
     ])
-
     cross_clamp_time = st.number_input("Cross Clamp Time (min)", min_value=0, value=0)
     bypass_time = st.number_input("Bypass Time (min)", min_value=0, value=0)
-
     plegia_type = st.selectbox("Cardioplegia Type", ["4:1", "Del Nido", "Microplegia"])
     plegia_volume = st.number_input("Crystalloid Plegia Volume (mL)", min_value=0, value=0)
-
     st.markdown("### Transfusion")
     transfusion_given = st.radio("Was transfusion given?", ["No", "Yes"])
     transfusion_volume = st.text_input("Transfusion Volume (mL)", value="") if transfusion_given == "Yes" else ""
-
     st.markdown("### Hemoconcentrator")
     hemo_used = st.radio("Used Hemoconcentrator?", ["No", "Yes"])
     hemo_volume = st.text_input("Volume Removed (mL)", value="") if hemo_used == "Yes" else ""
-
     st.markdown("### Use of IMA")
     ima_used = st.radio("IMA Used?", ["No", "Yes"])
+
+    # ---- Email STS Report (moved here) ----
+    st.markdown("---")
+    st.markdown("### Email STS Report")
+    sts_email = st.text_input("Enter email to send STS report to:")
+    if sts_email:
+        import smtplib
+        from email.message import EmailMessage
+        import os
+        st.info(f"Sending STS report to {sts_email} using perfusionsentinel@gmail.com")
+        try:
+            # Build STS-only PDF
+            from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+            from reportlab.lib.styles import getSampleStyleSheet
+            from reportlab.lib.pagesizes import letter
+            from reportlab.lib import colors
+            import io
+            styles = getSampleStyleSheet()
+            sts_pdf_buffer = io.BytesIO()
+            doc = SimpleDocTemplate(sts_pdf_buffer, pagesize=letter)
+            story = []
+            story.append(Paragraph("<b>Perfusion Sentinel STS Report</b>", styles['Title']))
+            story.append(Spacer(1, 12))
+            sts_rows = [["ITEM", "DETAIL", ""]]
+            def wrap(text):
+                return Paragraph(text, styles["Normal"])
+            sts_rows.append(["Date of Procedure", wrap(str(sts_date)), ""])
+            sts_rows.append(["STS Procedure", wrap(sts_procedure), ""])
+            sts_rows.append(["Cross Clamp Time", wrap(f"{cross_clamp_time} min"), ""])
+            sts_rows.append(["Bypass Time", wrap(f"{bypass_time} min"), ""])
+            sts_rows.append(["Plegia Type", wrap(plegia_type), ""])
+            sts_rows.append(["Crystalloid Plegia Volume", wrap(f"{plegia_volume} mL"), ""])
+            sts_rows.append(["Transfusion Given", wrap(transfusion_given), ""])
+            if transfusion_given == "Yes":
+                sts_rows.append(["Transfusion Volume", wrap(f"{transfusion_volume} mL"), ""])
+            sts_rows.append(["Hemoconcentrator Used", wrap(hemo_used), ""])
+            if hemo_used == "Yes":
+                sts_rows.append(["Hemoconcentrator Volume", wrap(f"{hemo_volume} mL"), ""])
+            sts_rows.append(["IMA Used", wrap(ima_used), ""])
+            table = Table(sts_rows, colWidths=[120, 250, 130], hAlign="LEFT")
+            table.setStyle(TableStyle([
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("TEXTCOLOR", (1, 1), (1, -1), colors.red),
+                ("FONTSIZE", (0, 0), (-1, -1), 7),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+                ("TOPPADDING", (0, 0), (-1, -1), 6),
+            ]))
+            story.append(table)
+            doc.build(story)
+            # Email the STS-only PDF
+            msg = EmailMessage()
+            msg['Subject'] = 'Perfusion Sentinel STS Report'
+            msg['From'] = 'perfusionsentinel@gmail.com'
+            msg['To'] = sts_email
+            msg.set_content('Attached is your STS report PDF.')
+            msg.add_attachment(sts_pdf_buffer.getvalue(), maintype='application', subtype='pdf', filename='sts_report.pdf')
+            gmail_user = 'perfusionsentinel@gmail.com'
+            gmail_app_password = os.environ.get("gmail_app_password")
+            if not gmail_app_password:
+                raise RuntimeError("Gmail app password not found in environment variable 'gmail_app_password'. Please set it in your Render dashboard.")
+            with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+                smtp.starttls()
+                smtp.login(gmail_user, gmail_app_password)
+                smtp.send_message(msg)
+            st.success('Email sent successfully!')
+        except Exception as e:
+            st.error(f'Error sending email: {e}')
 
 with st.sidebar:
     with open(streamlit_logo_path, "rb") as img_file:
@@ -379,36 +442,6 @@ if hemo_used == "Yes":
     sts_rows.append(["Hemoconcentrator Volume", wrap(f"{hemo_volume} mL"), ""])
 sts_rows.append(["IMA Used", wrap(ima_used), ""])
 
-# ---- Email STS Report ----
-st.markdown("---")
-st.markdown("### Email STS Report")
-sts_email = st.text_input("Enter email to send STS report to:")
-if sts_email:
-    import smtplib
-    from email.message import EmailMessage
-    import os
-    st.info(f"Sending STS report to {sts_email} using perfusionsentinel@gmail.com")
-    try:
-        msg = EmailMessage()
-        msg['Subject'] = 'Perfusion Sentinel STS Report'
-        msg['From'] = 'perfusionsentinel@gmail.com'
-        msg['To'] = sts_email
-        msg.set_content('Attached is your STS report PDF.')
-        msg.add_attachment(pdf_buffer.getvalue(), maintype='application', subtype='pdf', filename='precpb_summary.pdf')
-
-        gmail_user = 'perfusionsentinel@gmail.com'
-        # Only use environment variable for Render deployment
-        gmail_app_password = os.environ.get("gmail_app_password")
-        if not gmail_app_password:
-            raise RuntimeError("Gmail app password not found in environment variable 'gmail_app_password'. Please set it in your Render dashboard.")
-
-        with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
-            smtp.starttls()
-            smtp.login(gmail_user, gmail_app_password)
-            smtp.send_message(msg)
-        st.success('Email sent successfully!')
-    except Exception as e:
-        st.error(f'Error sending email: {e}')
 
 build_parameter_table(story, "STS REPORT – PERFUSION SUMMARY", sts_rows)
 from reportlab.lib.enums import TA_RIGHT
