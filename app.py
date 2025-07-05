@@ -1345,18 +1345,13 @@ if tool == "Drug Library":
 
     drug_names = list(drug_data.keys())
 
-    # Unified search bar for both single and compare
-    search = st.text_input("Search or filter drugs:")
+
+    # --- Drug Library UI ---
+    # Search bar and dropdown for drug selection
+    search = st.text_input("Search for a drug:")
     filtered = [d for d in drug_names if search.lower() in d.lower()] if search else drug_names
 
-    # Show all filtered drugs as clickable buttons
-    st.markdown("#### Drug List")
-    for drug in filtered:
-        if st.button(drug, key=f"drug_{drug}"):
-            st.session_state["selected_drug"] = drug
-
-    # Show details for selected drug
-    selected_drug = st.session_state.get("selected_drug", None)
+    selected_drug = st.selectbox("Select a drug to view details:", filtered, key="drug_select")
     if selected_drug:
         st.subheader(selected_drug)
         for k, v in drug_data[selected_drug].items():
@@ -1364,7 +1359,7 @@ if tool == "Drug Library":
 
     st.markdown("---")
     st.markdown("### Compare Drugs")
-    compare = st.multiselect("Select up to 2 drugs to compare:", filtered, max_selections=2)
+    compare = st.multiselect("Select up to 2 drugs to compare:", filtered, max_selections=2, key="compare_select")
     if len(compare) == 2:
         st.write(f"#### {compare[0]} vs {compare[1]}")
         col1, col2 = st.columns(2)
