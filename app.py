@@ -179,8 +179,8 @@ if tool == "STS Report":
 # ---- Pre-CPB Tool Section ----
 
 # ---- Pre-CPB Tool Section ----
+
 if tool == "Pre-CPB Tool":
-    # Only show Pre-CPB Tool UI when selected
     # ---- Sidebar ----
     with st.sidebar:
         with open(streamlit_logo_path, "rb") as img_file:
@@ -249,6 +249,10 @@ if tool == "Pre-CPB Tool":
 
     if procedure in ["Dissection Repair – Stanford Type A", "Full Arch"] and pdf_arrest:
         arrest_temp = st.number_input("Target Arrest Temperature (°C)", value=18)
+
+    # ---- Outputs Section ----
+    # (Insert all original outputs and PDF generation code here)
+    # ...existing code for outputs and PDF generation...
 
 
 # ---- Drug Library Section ----
