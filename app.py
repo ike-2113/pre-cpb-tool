@@ -386,6 +386,7 @@ sts_email = st.text_input("Enter email to send STS report to:")
 if sts_email:
     import smtplib
     from email.message import EmailMessage
+    import os
     st.info(f"Sending STS report to {sts_email} using perfusionsentinel@gmail.com")
     try:
         msg = EmailMessage()
@@ -395,9 +396,9 @@ if sts_email:
         msg.set_content('Attached is your STS report PDF.')
         msg.add_attachment(pdf_buffer.getvalue(), maintype='application', subtype='pdf', filename='precpb_summary.pdf')
 
-        # --- IMPORTANT: Replace this with your actual Gmail App Password ---
         gmail_user = 'perfusionsentinel@gmail.com'
-        gmail_app_password = st.secrets["gmail_app_password"] if "gmail_app_password" in st.secrets else "YOUR_APP_PASSWORD"
+        # Try Streamlit secrets first, then environment variable (for Render), fallback to error string
+        gmail_app_password = st.secrets["gmail_app_password"] if "gmail_app_password" in st.secrets else os.environ.get("gmail_app_password", "YOUR_APP_PASSWORD")
 
         with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
             smtp.starttls()
