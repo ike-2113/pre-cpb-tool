@@ -397,8 +397,10 @@ if sts_email:
         msg.add_attachment(pdf_buffer.getvalue(), maintype='application', subtype='pdf', filename='precpb_summary.pdf')
 
         gmail_user = 'perfusionsentinel@gmail.com'
-        # Try Streamlit secrets first, then environment variable (for Render), fallback to error string
-        gmail_app_password = st.secrets["gmail_app_password"] if "gmail_app_password" in st.secrets else os.environ.get("gmail_app_password", "YOUR_APP_PASSWORD")
+        # Only use environment variable for Render deployment
+        gmail_app_password = os.environ.get("gmail_app_password")
+        if not gmail_app_password:
+            raise RuntimeError("Gmail app password not found in environment variable 'gmail_app_password'. Please set it in your Render dashboard.")
 
         with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
             smtp.starttls()
